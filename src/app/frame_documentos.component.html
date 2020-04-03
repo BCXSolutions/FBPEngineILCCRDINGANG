@@ -1,0 +1,30 @@
+<!-- Generado por Xml2Ang, Bcx Solutions -->
+<!-- Fecha: 06/01/2020 11:32:50 -->
+	<div class="cm-main">
+	<div class="cm-toolbar">
+		<mat-toolbar color="primary">
+			<span class="cm-title-text">Documentos: preingreso</span>
+			<span class="cm-title-spacer"></span>
+			<button type='button' mat-icon-button (click)="this.utilService.cmdHelp_click(this.dialog)"><mat-icon>help</mat-icon></button>
+		</mat-toolbar>
+	</div>
+	<form [formGroup]="form" autocomplete="off">
+	<div class="cm-botonera">
+		<button type='button' mat-raised-button  (click)="cmdCancelar_click()"><mat-icon>arrow_back</mat-icon>Volver</button>
+	</div>
+	<div class="inner-sidenav-content" id="innersidenav">
+	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">
+			<!-- Iframe para visualizar Documentos asociado a un operación de preingreso -->
+				<iframe id="frame" class="frameStyle" frameborder="0" [src]='url | safe' ></iframe> 
+			</div>
+			<!-- Fin Iframe Imprimir PDF -->
+		</div>
+		</div> <!--  fin de fila 1 -->
+	</div>
+	</div>
+	</form>
+	</div>
+<cm-wait [waitShow]="waitShow"></cm-wait>

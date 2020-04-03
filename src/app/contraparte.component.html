@@ -1,0 +1,79 @@
+<!-- Generado por Xml2Ang, Bcx Solutions -->
+<!-- Fecha: 06/01/2020 13:21:56 -->
+	<div class="cm-main">
+	<div class="cm-toolbar">
+		<mat-toolbar color="primary">
+			<span class="cm-title-text">Contraparte</span>
+			<span class="cm-title-spacer"></span>
+			<button type='button' mat-icon-button (click)="this.utilService.cmdHelp_click(this.dialog)"><mat-icon>help</mat-icon></button>
+		</mat-toolbar>
+	</div>
+	<form [formGroup]="form" autocomplete="off">
+	<div class="cm-botonera">
+		<button type='button' [disabled]="btnNuevo" class="bcx-btn-accion" mat-raised-button  (click)="cmdAgregar_click()"><mat-icon>check</mat-icon>Aceptar</button>
+		<button type='button' mat-raised-button  (click)="cmdCancelar_click()"><mat-icon>arrow_back</mat-icon>Volver</button>
+	</div>
+	<div class="inner-sidenav-content" id="innersidenav">
+	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<bcx-rut formControlName="bcxRut" placeholder="Rut Acreedor" mat-error="Rut Incorrecto" (focusout)="focusout_rut()"></bcx-rut>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+				<mat-form-field>
+				<input matInput formControlName="txtNombre" placeholder="Nombre" >
+				</mat-form-field>
+			</div>
+		</div>
+		</div> <!--  fin de fila 1 -->
+		<div class="mdc-layout-grid"> <!--  fila 2 -->
+		<div class="mdc-layout-grid__inner">
+			<!-- <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input matInput formControlName="txtCodigoBancoAcreedor" placeholder="Código Banco Acreedor" (focusout)="focusout_banco();">
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<button mat-icon-button [disabled]="btnBicCorr" (click)="cmdCancelar_click()"><mat-icon>help_outline</mat-icon></button>
+			</div>	
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+				<mat-form-field>
+				<input matInput formControlName="txtNombreBanco" placeholder="Nombre">
+				</mat-form-field>
+			</div> -->
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">	
+				<bcx-banco formControlName="txtCodigoBancoAcreedor" placeholder="Código Banco Acreedor" placeholderDes="Nombre" [isDisabled]="btnBicCorr" [data]="this"></bcx-banco>			
+			</div>
+		</div>
+		</div> <!--  fin de fila 2 -->
+		<div class="mdc-layout-grid"> <!--  fila 3 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<mat-form-field>
+				<input matInput formControlName="txtTasa" placeholder="Tipo de tasa">
+				<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-form-field>
+				<mat-select placeholder="Descripción" formControlName="cbbTasa" class="cm-in-combo">
+					<mat-option *ngFor="let item of cbbTasaArray" [value]="item.wss_tip_tas">{{item.wss_gls_tas}}</mat-option>
+				</mat-select>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<!--  BcxNumero -->
+				<bcx-numero formControlName="bcxSpread" placeholder="Spread" maxlength="16" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<!--  BcxNumero -->
+				<bcx-numero formControlName="bcxTasaFinal" placeholder="Tasa Final" maxlength="16" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
+			</div>
+		</div>
+		</div> <!--  fin de fila 3 -->
+	</div>
+	</div>
+	</form>
+	</div>
+<cm-wait [waitShow]="waitShow"></cm-wait>

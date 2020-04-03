@@ -1,0 +1,102 @@
+
+
+.example-container {
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+  }
+  
+  .example-sidenav-content {
+    display: flex;
+    height: 100%;
+    min-height: 93vh;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .example-sidenav {
+    padding: 20px;
+
+  }
+
+  .positionBotonRow {
+
+    margin-top: 20px;
+    width:100%
+     /* margin-left: 10%; */
+     /* margin-right: 10%; */
+     /* margin-bottom: 10%; */
+}
+
+.tamanioBotonIndividual {
+    
+    width:35ch;
+    height:20ch;
+    margin-left: 0%;
+}
+
+.positionBotonSalir {
+  display: "inline-block";
+  margin-top: 70%;
+  margin-left: 10%;
+  margin-right: 15%;
+  margin-bottom: 15%;
+}
+
+
+.positionBotonMenu {
+  display: "inline-block";
+  margin-top: 10%;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-bottom: 10%;
+
+}
+
+.visorBotonesStyle {
+  text-align: "center";
+
+  /* // display: "inline-block"; */
+  position: "static"!important;
+  align-content: "center";
+  width: 35%;
+  margin-left:15px;
+  /* // width:350px;
+  // min-width: 350px; */
+height: 100%;
+  min-height: 94vh;
+
+}
+
+.visorBotonesMenu {
+  text-align: "center";
+  margin: 0 auto;
+  /* // margin-top:10% ;
+  // margin-left: 10%;
+  // margin-right: 10%;
+  // margin-bottom: 10%; */
+  align-content: "center";
+  width:100%;
+  height: 100%;
+  min-height: 94vh;
+  display: "inline-block";
+}
+
+.positionBoton {
+  position: "static";
+  display: "inline";
+   width:100%;
+  margin-top: 15px;
+  margin-left: 45px;
+  margin-right: 15px;
+  margin-bottom: 15px;
+}
+
+.contenido_btn_pdf {
+
+  width:100%;
+  height: 100%;
+  align-content: "center";
+  display: "inline";
+
+}

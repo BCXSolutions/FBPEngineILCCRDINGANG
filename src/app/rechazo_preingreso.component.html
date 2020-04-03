@@ -1,0 +1,71 @@
+<!-- Generado por Xml2Ang, Bcx Solutions -->
+<!-- Fecha: 17/01/2020 10:00:13 -->
+	<div class="cm-main">
+	<div class="cm-toolbar">
+		<mat-toolbar color="primary">
+			<span class="cm-title-text">Rechazo : Preingreso</span>
+			<span class="cm-title-spacer"></span>
+			<button type='button' mat-icon-button (click)="this.utilService.cmdHelp_click(this.dialog)"><mat-icon>help</mat-icon></button>
+		</mat-toolbar>
+	</div>
+	<form [formGroup]="form" autocomplete="off">
+	<div class="cm-botonera">
+		<button type='button' tabindex="2" mat-raised-button  (click)="cmdAceptar_click()"><mat-icon>check</mat-icon>Aceptar</button>
+		<button type='button' tabindex="3" mat-raised-button  (click)="cmdVolver_click()"><mat-icon>arrow_back</mat-icon>Volver</button>
+	</div>	
+	<div class="inner-sidenav-content">
+	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input matInput formControlName="txtSolicitud" placeholder="Solicitud">
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input matInput formControlName="txtCliente" placeholder="Cliente">
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input matInput formControlName="txtProducto" placeholder="Producto">
+				</mat-form-field>
+			</div>
+		</div>
+		</div> <!--  fin de fila 3 -->
+		<div class="mdc-layout-grid"> <!--  fila 4 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input matInput formControlName="txtMoneda" placeholder="Moneda">
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input matInput formControlName="txtMonto" placeholder="Monto">
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input matInput formControlName="txtFechaVencimiento" placeholder="Fecha vencimiento">
+				</mat-form-field>
+			</div>
+		</div>
+		</div> <!--  fin de fila 4 -->
+	</div>
+	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">
+		<div class="mdc-layout-grid"> <!--  fila 5 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+				<mat-form-field>
+				<textarea tabindex="1" matInput formControlName="txtObservacion" placeholder="Observación"></textarea>
+				</mat-form-field>
+			</div>
+		</div>
+		</div> <!--  fin de fila 5 -->
+	</div>
+	</div>
+	</form>
+	</div>
+<cm-wait [waitShow]="waitShow"></cm-wait>

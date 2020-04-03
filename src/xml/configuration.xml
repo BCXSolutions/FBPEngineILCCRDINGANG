@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+    <flex_configuration>
+        <preferences>  
+            <webservice>       
+                <ruta>FBPEngineILCGENGENRST</ruta>  
+            </webservice>
+            <acerca-de>  
+                <titulo>"FBP Engine - Login"</titulo>   
+                <version>0.1.0</version>  
+                <fecha>17/10/2017</fecha>  
+                <derechos>© 2017 - 2019 BCX Solutions Limitada</derechos>  
+                <nombreWar>FBPENGINE40</nombreWar>  
+            </acerca-de>  
+        </preferences>  
+    </flex_configuration>  

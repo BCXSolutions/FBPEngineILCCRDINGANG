@@ -1,0 +1,70 @@
+<!-- Generado por Xml2Ang, Bcx Solutions -->
+<!-- Fecha: 03/03/2020 13:35:55 -->
+	<div class="cm-main">
+	<div class="cm-toolbar">
+		<mat-toolbar color="primary">
+			<span class="cm-title-text">Selección de Template Carta de Crédito Importaciones</span>
+			<span class="cm-title-spacer"></span>
+			<button type='button' mat-icon-button (click)="this.utilService.cmdHelp_click(this.dialog)"><mat-icon>help</mat-icon></button>
+		</mat-toolbar>
+	</div>
+	<form [formGroup]="form" autocomplete="off">
+	<div class="cm-botonera">
+		<button type='button' mat-raised-button  (click)="cmdBuscar_click()"><mat-icon>search</mat-icon>Buscar</button>
+		<button type='button' mat-raised-button  (click)="cmdAceptar_click()"><mat-icon>check</mat-icon>Aceptar</button>
+		<button type='button' mat-raised-button  [disabled]="cmdHabSiguiente" (click)="cmdProximos_click()"><mat-icon>skip_next</mat-icon>Proximos</button>
+		<button type='button' mat-raised-button  (click)="cmdVolver_click()"><mat-icon>arrow_back</mat-icon>Volver</button>
+	</div>
+	<div class="inner-sidenav-content">
+	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<mat-form-field>
+				<input matInput formControlName="txtMoneda" placeholder="Código" maxlength="4">
+				<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-form-field>
+				<mat-select placeholder="Descripción" formControlName="cbbMoneda" class="cm-in-combo">
+					<mat-option *ngFor="let item of cbbMonedaArray" [value]="item.wss_mon_cod">{{item.wss_mon_gls}}</mat-option>
+				</mat-select>
+				</mat-form-field>
+			</div>
+		</div>
+		</div> <!--  fin de fila 1 -->
+	<mat-form-field class="cm-in-filter">
+		<input matInput type="string" placeholder="Escriba para buscar..." formControlName="txtTableFilter">
+	</mat-form-field>
+	<ngx-datatable #grd class="material cm-datatable"
+		 [rows]="tableRows"
+		 [columns]="tableCols"
+		 [scrollbarV]="true"
+		 [rowHeight]="25"
+		 [headerHeight]="25"
+		 [footerHeight]="25"
+		 [selected]="tableSelected"
+		 [selectionType]="'single'"
+		 (select)="onTableSelect($event)"
+		 (activate)="onTableActivate($event)"
+		 (scroll)="onTableScroll($event)"
+		 (sort)="onTableSort($event)"
+		>
+		<ngx-datatable-footer *ngIf="true">
+			<ng-template ngx-datatable-footer-template let-rowCount="rowCount">
+				<div style="padding-left: 5px">Total: {{ rowCount }} filas</div>
+			</ng-template>
+		</ngx-datatable-footer>
+	</ngx-datatable>
+	<ng-template #rightTmpl let-value='value'>
+		<div style='text-align: right'>{{value}}</div>
+	</ng-template>
+	<ng-template #centerTmpl let-value='value'>
+		<div style='text-align: center'>{{value}}</div>
+	</ng-template>
+	</div>
+	</div>
+	</form>
+	</div>
+<cm-wait [waitShow]="waitShow"></cm-wait>

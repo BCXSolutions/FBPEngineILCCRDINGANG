@@ -1,0 +1,88 @@
+<!-- Generado por Xml2Ang, Bcx Solutions -->
+<!-- Fecha: 08/01/2020 16:59:52 -->
+	<div class="cm-main">
+	<div class="cm-toolbar">
+		<mat-toolbar color="primary">
+			<span class="cm-title-text">Generar Plan de Pagos</span>
+			<span class="cm-title-spacer"></span>
+			<button type='button' mat-icon-button (click)="this.utilService.cmdHelp_click(this.dialog)"><mat-icon>help</mat-icon></button>
+		</mat-toolbar>
+	</div>
+	<form [formGroup]="form" autocomplete="off">
+	<div class="cm-botonera">
+		<button type='button' mat-raised-button class="bcx-btn-accion" (click)="cmdGenerar_click()"><mat-icon>brightness_low</mat-icon>Generar</button>
+		<button type='button' mat-raised-button  (click)="cmdCancelar_click()"><mat-icon>arrow_back</mat-icon>Volver</button>
+	</div>
+	<div class="inner-sidenav-content" id="innersidenav">
+	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">
+		<br>
+		<span class="size_font_sub_label">Vencimientos capital</span>
+		<br>
+		<br>
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<bcx-numero formControlName="bcxNumeroVencimientoCapital" placeholder="Número" maxlength="3" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input matInput formControlName="txtFechaPrimerVencimiento" placeholder="Fecha primer vencimiento" maxlength="10" [matDatepicker]='dtpFechaPrimerVencimiento'>
+				<mat-datepicker-toggle matSuffix [for]='dtpFechaPrimerVencimiento'></mat-datepicker-toggle>
+				<mat-datepicker #dtpFechaPrimerVencimiento></mat-datepicker>
+				<mat-error class="cm-md-error">Fecha Incorrecta</mat-error>
+				</mat-form-field>
+			</div>
+		</div>
+		</div> <!--  fin de fila 1 -->
+		<div class="mdc-layout-grid"> <!--  fila 2 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<bcx-numero formControlName="txtDiasVc" placeholder="Días" maxlength="3" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<bcx-numero formControlName="txtMesVc" placeholder="Mes(es)" maxlength="3" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<bcx-numero formControlName="txtYearVc" placeholder="Año(s)" maxlength="3" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
+			</div>
+		</div>
+		</div> <!--  fin de fila 2 -->
+	</div>
+	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">
+		<br>
+		<span class="size_font_sub_label">Vencimientos solo intereses</span>
+		<br>
+		<br>
+		<div class="mdc-layout-grid"> <!--  fila 3 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<bcx-numero formControlName="bcxNumeroVencimientoSoloInt" placeholder="Número" maxlength="3" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>				
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input matInput formControlName="txtFechaPrimerVencimientoInt" placeholder="Fecha primer vencimiento" maxlength="10" [matDatepicker]='dtpFechaPrimerVencimientoInt'>
+				<mat-datepicker-toggle matSuffix [for]='dtpFechaPrimerVencimientoInt'></mat-datepicker-toggle>
+				<mat-datepicker #dtpFechaPrimerVencimientoInt></mat-datepicker>
+				<mat-error class="cm-md-error">Fecha Incorrecta</mat-error>
+				</mat-form-field>				
+			</div>
+		</div>
+		</div> <!--  fin de fila 3 -->
+		<div class="mdc-layout-grid"> <!--  fila 4 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<bcx-numero formControlName="txtDiasSi" placeholder="Días" maxlength="3" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<bcx-numero formControlName="txtMesSi" placeholder="Mes(es)" maxlength="3" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<bcx-numero formControlName="txtYearSi" placeholder="Año(s)" maxlength="3" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
+			</div>
+		</div>
+		</div> <!--  fin de fila 4 -->
+	</div>
+	</div>
+	</form>
+	</div>
+<cm-wait [waitShow]="waitShow"></cm-wait>

@@ -1,0 +1,143 @@
+<!-- Generado por Xml2Ang, Bcx Solutions -->
+<!-- Fecha: 02/12/2019 13:34:32 -->
+	<div class="cm-main">
+	<div class="cm-toolbar">
+		<mat-toolbar color="primary">
+			<span class="cm-title-text">Carta de crédito importación - Buscar</span>
+			<span class="cm-title-spacer"></span>
+			<button type='button' mat-icon-button (click)="this.utilService.cmdHelp_click(this.dialog)"><mat-icon>help</mat-icon></button> 
+		</mat-toolbar>
+	</div>
+	<form [formGroup]="form" autocomplete="off">
+	<div class="cm-botonera">
+		<button type='button' mat-raised-button  (click)="cmdBuscar_click()"><mat-icon>search</mat-icon>Buscar</button>
+		<button type='button' mat-raised-button [disabled]="cmdHabSiguiente"  (click)="cmdProximos_click()"><mat-icon>skip_next</mat-icon>Proximos</button>
+		<button type='button' mat-raised-button [disabled]="cmdHabAceptar"  (click)="cmdAceptar_click()"><mat-icon>check</mat-icon>Aceptar</button>
+		<button type='button' mat-raised-button  *ngIf="activar_preingreso"  (click)="cmdPreingreso_click()"><mat-icon>description</mat-icon>Preingreso</button>
+		<!-- <button type='button' mat-raised-button  (click)="cmdCancelar_click()"><mat-icon>cancel</mat-icon>Cancelar</button> -->
+	</div>
+	<div class="inner-sidenav-content" id="innersidenav">
+	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<!--  BcxNumero -->
+				<mat-form-field>
+				<input  matInput formControlName="bcxnumOpe" placeholder="Operación" maxlength="16">
+				</mat-form-field>
+			</div>
+	
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input matInput formControlName="txtDesde" placeholder="Desde" maxlength="10" [matDatepicker]='dtpDesde'>
+				<mat-datepicker-toggle matSuffix [for]='dtpDesde'></mat-datepicker-toggle>
+				<mat-datepicker #dtpDesde></mat-datepicker>
+				<mat-error class="cm-md-error">Fecha Incorrecta</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input matInput formControlName="txtHasta" placeholder="Hasta" maxlength="10" [matDatepicker]='dtpHasta'>
+				<mat-datepicker-toggle matSuffix [for]='dtpHasta'></mat-datepicker-toggle>
+				<mat-datepicker #dtpHasta></mat-datepicker>
+				<mat-error class="cm-md-error">Fecha Incorrecta</mat-error>
+				</mat-form-field>
+			</div>		
+		</div>
+		</div> <!--  fin de fila 1 -->
+		<div class="mdc-layout-grid"> <!--  fila 2 -->
+		<div class="mdc-layout-grid__inner">
+		<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+			<bcx-rut formControlName="bcxRut" (focusout)="cargar_nombre()" [_markAsTouched] = "bcxRut_markAsTouched" placeholder="Rut" mat-error="Rut Incorrecto"></bcx-rut>
+		</div>
+		<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+			<mat-form-field>
+			<input  matInput formControlName="txtNombre" placeholder="Nombre">
+			</mat-form-field>
+		</div> 
+
+	
+		<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<mat-form-field>
+				<input matInput formControlName="txtSucursal" placeholder="Sucursal" maxlength="4">
+				<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-form-field>
+				<mat-select placeholder="Descripción" formControlName="cbbCodSucursal" class="cm-in-combo">
+					<mat-option *ngFor="let item of cbbCodSucursalArray" [value]="item.wss_cod_suc">{{item.wss_gls_suc}}</mat-option>
+				</mat-select>
+				</mat-form-field>
+			</div>
+		</div>	
+	   </div>
+		<div class="mdc-layout-grid"> <!--   fila 3 -->
+		<div class="mdc-layout-grid__inner">	 
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+				<mat-radio-group formControlName="optBusquedaOperacion">
+					<mat-radio-button value="T">Todas</mat-radio-button>
+					<mat-radio-button value="S">Sin negociar</mat-radio-button>
+					<mat-radio-button value="N">Negociadas</mat-radio-button>
+					<mat-radio-button value="P">BBVA Net-Cash Solicitudes Pendientes</mat-radio-button>
+				</mat-radio-group>
+			</div>
+	
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<mat-form-field>
+				<input matInput formControlName="txtCanal" placeholder="Canal" maxlength="4">
+				<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-form-field>
+				<mat-select placeholder="Descripción" formControlName="cbbCodCanal" class="cm-in-combo">
+					<mat-option *ngFor="let item of cbbCodCanalArray" [value]="item.wss_cod_cnl">{{item.wss_gls_cnl}}</mat-option>
+				</mat-select>
+				</mat-form-field>
+			</div>
+		</div>	
+		</div>
+		<div class="mdc-layout-grid"> <!--  fila 4 -->
+		<div class="mdc-layout-grid__inner">			
+		</div>
+		</div> <!--  fin de fila 4 -->
+	</div>	
+	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">	
+	<mat-form-field class="cm-in-filter">
+		<input matInput type="string" placeholder="Escriba para buscar..." formControlName="txtTableFilter">
+	</mat-form-field>
+	<ngx-datatable #grd class="material" style="height: 250px;"
+		 [rows]="tableRows"
+		 [columns]="tableCols"
+		 [scrollbarV]="true"
+		 [rowHeight]="25"
+		 [headerHeight]="25"
+		 [footerHeight]="25"
+		 [selected]="tableSelected"
+		 [selectionType]="'single'"
+		 (select)="onTableSelect($event)"
+		 (activate)="onTableActivate($event)"
+		 (scroll)="onTableScroll($event)"
+		 (sort)="onTableSort($event)"
+	
+		>
+		<ngx-datatable-footer *ngIf="true">
+			<ng-template ngx-datatable-footer-template let-rowCount="rowCount">
+				<div style="padding-left: 5px">Total: {{ rowCount }} filas</div>
+			</ng-template>
+		</ngx-datatable-footer>
+	</ngx-datatable>
+	<ng-template #rightTmpl let-value='value'>
+		<div style='text-align: right'>{{value}}</div>
+	</ng-template>
+	<ng-template #centerTmpl let-value='value'>
+		<div style='text-align: center'>{{value}}</div>
+	</ng-template>
+	</div>
+	</div>
+	</form>
+	</div>
+				<!-- Iframe Imprimir PDF -->
+		<!-- <iframe id="frame" frameborder="0" [src]='url | safe' style="display: none"></iframe> -->
+<cm-wait [waitShow]="waitShow"></cm-wait>

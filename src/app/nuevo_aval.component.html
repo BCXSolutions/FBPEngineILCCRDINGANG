@@ -1,0 +1,42 @@
+<!-- Generado por Xml2Ang, Bcx Solutions -->
+<!-- Fecha: 03/01/2020 15:25:36 -->
+	<div class="cm-main">
+	<div class="cm-toolbar">
+		<mat-toolbar color="primary">
+			<span class="cm-title-text">Ingreso Avales o Codeudor</span>
+			<span class="cm-title-spacer"></span>
+			<button type='button' mat-icon-button (click)="this.utilService.cmdHelp_click(this.dialog)"><mat-icon>help</mat-icon></button>
+		</mat-toolbar>
+	</div>
+	<form [formGroup]="form" autocomplete="off">
+	<div class="cm-botonera">
+		<button type='button' mat-raised-button class="bcx-btn-accion"  (click)="cmdAgregar_click()"><mat-icon>check</mat-icon>Aceptar</button>
+		<button type='button' mat-raised-button  (click)="cmdCancelar_click()"><mat-icon>arrow_back</mat-icon>Volver</button>
+	</div>
+	<div class="inner-sidenav-content" id="innersidenav">
+	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<bcx-rut formControlName="bcxRut" placeholder="Rut" mat-error="Rut Incorrecto"></bcx-rut>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<br>
+				<mat-radio-group formControlName="optGroupAvalCod">
+					<span>Aval&nbsp;&nbsp;</span>
+					<mat-radio-button value="1"></mat-radio-button>
+					<span>Codeudor&nbsp;&nbsp;</span>
+					<mat-radio-button value="2"></mat-radio-button>
+				</mat-radio-group>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<!--  BcxNumero -->
+				<bcx-numero formControlName="bcxPorAval" placeholder="% Aval" maxlength="8" separador="true" decimales="2" mat-error="Valor Incorrecto"></bcx-numero>
+			</div>
+		</div>
+		</div> <!--  fin de fila 1 -->
+	</div>
+	</div>
+	</form>
+	</div>
+<cm-wait [waitShow]="waitShow"></cm-wait>

@@ -1,0 +1,513 @@
+<!-- Generado por Xml2Ang, Bcx Solutions -->
+<!-- Fecha: 09/12/2019 17:41:43 -->
+	<div class="cm-main">
+	<div class="cm-toolbar">
+		<mat-toolbar color="primary">
+			<span class="cm-title-text">{{pageName}}</span>
+			<span class="cm-title-spacer"></span>
+			<button type='button' mat-icon-button (click)="this.utilService.cmdHelp_click(this.dialog)"><mat-icon>help</mat-icon></button>
+		</mat-toolbar>
+	</div>
+	<form [formGroup]="form" autocomplete="off">
+	<div class="cm-botonera">
+		<button type='button' mat-raised-button tabindex="42" *ngIf="ocultarBotonRechazo" (click)="cmdRechazar_click()"><mat-icon>clear</mat-icon>Rechazar</button>
+		<button type='button' mat-raised-button tabindex="43" *ngIf="ocultarBotonDocumentos" (click)="cmdDocumentos_click()"><mat-icon>folder_open</mat-icon>Documentos</button>
+		<button type='button' mat-raised-button tabindex="44" (click)="cmdPlanDePago_click()" [disabled]="btnPlanPago"><mat-icon>brightness_low</mat-icon>Plan de pago</button>	
+		<button type='button' mat-raised-button tabindex="45" (click)="cmdAvales_click()" [disabled]="btnAvales"><mat-icon>group_add</mat-icon>Avales</button>
+		<button type='button' mat-raised-button tabindex="46" (click)="cmdOtrasGarantias_click()" [disabled]="btnOtrasGarantias"><mat-icon>verified_user</mat-icon>Otras garantías</button>
+		<button type='button' mat-raised-button tabindex="47" *ngIf="ocultarbtnContraparte" (click)="cmdContraParte_click()" [disabled]="btnContraparte"><mat-icon>location_city</mat-icon>Contraparte</button>
+		<button type='button' mat-raised-button tabindex="48" (click)="cmdComisiones_click()" [disabled]="btnComisiones"><mat-icon>attach_money</mat-icon>Comisiones</button>
+		<button type='button' mat-raised-button tabindex="49" (click)="cmdDatosAdicionales_click()" [disabled]="btnDatosAdicionales"><mat-icon>chrome_reader_mode</mat-icon>Datos adicionales</button>
+		<button type='button' mat-raised-button tabindex="51" *ngIf="ocultarBotonLimpiar" (click)="cmdLimpiar_click()" class="bcx-btn-accion"><mat-icon>delete_sweep</mat-icon>Limpiar</button>
+		<button type='button' mat-raised-button tabindex="52" (click)="cmdCursar_click()" [disabled]="habilitarBtnCursar" class="bcx-btn-accion"><mat-icon>check</mat-icon>Cursar</button>
+		<button type='button' mat-raised-button tabindex="53" *ngIf="ocultarBotonvolver" (click)="cmdCancelar_click()" class="bcx-btn-accion"><mat-icon>arrow_back</mat-icon>Volver</button>
+	</div>
+<div class="inner-sidenav-content" id="innersidenav">
+	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad cm-width">	
+		<br>
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input matInput formControlName="txtNumeroOperacion" placeholder="Numero Operación">
+				</mat-form-field>
+			</div>
+			<div *ngIf="ocultarNumeroSolicitud" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input matInput formControlName="txtNumeroSolicitud" placeholder="Numero Solicitud">
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input matInput formControlName="txtFechaIngreso" placeholder="Fecha ingreso" maxlength="10" [matDatepicker]='dtpFechaIngreso'>
+				<mat-datepicker-toggle matSuffix [for]='dtpFechaIngreso' disabled></mat-datepicker-toggle>
+				<mat-datepicker #dtpFechaIngreso></mat-datepicker>
+				<mat-error class="cm-md-error">Fecha Incorrecta</mat-error>
+				</mat-form-field>
+			</div>		
+		</div>
+		</div>	
+	</div>
+	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad cm-width">
+		<br>
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input matInput tabindex="1" formControlName="txtFamiliaProducto" placeholder="Familia Producto" (focusout)="focusout_familia_de_producto()" maxlength="2">
+				<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-form-field>
+				<mat-select placeholder="" formControlName="cbbCodFamiliaProducto" class="cm-in-combo" (openedChange)="focusout_familia_de_producto()">
+					<mat-option *ngFor="let item of cbbCodFamiliaProductoArray" [value]="item.wss_cod_fprd">{{item.wss_gls_fprd}}</mat-option>
+				</mat-select>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3" style="margin-top: 19px;">
+				<mat-checkbox tabindex="2" formControlName="chkEnterada" (click)="selecEnterada()">Enterada en efectivo</mat-checkbox>
+			</div>	
+		</div>
+		</div> <!--  fin de fila 1 -->
+		<div class="mdc-layout-grid"> <!--  fila 2 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<bcx-rut  id="bcxRutId"  [tabindex]="3"  formControlName="bcxRut" (focusout)="focusout_cargar_datos_cliente()"   placeholder="Rut" mat-error="Rut Incorrecto"></bcx-rut>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-form-field>
+				<input tabindex="4" matInput formControlName="txtNombre" placeholder="Nombre">
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+				<mat-form-field>
+				<input tabindex="5" matInput formControlName="txtDireccion" placeholder="Dirección" >
+				</mat-form-field>
+			</div>
+
+		</div>
+		</div> <!--  fin de fila 2 -->
+		<div class="mdc-layout-grid"> <!--  fila 3 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<mat-form-field>
+				<input tabindex="6" matInput formControlName="txtCodSucursal" placeholder="Sucursal" maxlength="4">
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-form-field>
+				<mat-select  placeholder="" formControlName="cbbCodSucursal" class="cm-in-combo">
+					<mat-option  *ngFor="let item of cbbCodSucursalArray" [value]="item.wss_cod_suc">{{item.wss_gls_suc}}</mat-option>
+				</mat-select>
+				</mat-form-field>
+			</div>	
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input tabindex="7" matInput formControlName="txtCiudad" placeholder="Ciudad/Pais">
+				</mat-form-field>
+			</div>					
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input tabindex="8" matInput #txtReferenciaCliente formControlName="txtReferenciaCliente" placeholder="Referencia cliente" maxlength="16">
+				</mat-form-field>
+			</div>
+		</div>
+		</div> <!--  fin de fila 3 -->
+		<div class="mdc-layout-grid"> <!--  fila 4 -->
+		<div class="mdc-layout-grid__inner">
+
+		</div>
+		</div> <!--  fin de fila 4 -->
+	</div>
+
+	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad cm-width">
+		<div class="mdc-layout-grid"> 
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+					<span>Generación de avisos y mensajes SWIFT</span>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+					<mat-radio-group  formControlName="optMensajesSWIFT">
+						<mat-radio-button [tabIndex]="9" value="S">Si</mat-radio-button>
+						<mat-radio-button [tabIndex]="10" value="N">No</mat-radio-button>
+					</mat-radio-group>
+				</div>	
+			</div>
+		</div>
+	</div>
+
+	<!-- Condiciones Financiamiento-->
+    <div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad cm-width">	
+		<br>
+			<span class="size_font_label">Condiciones financiamiento</span>
+		<br>
+		<br>
+		<div class="mdc-layout-grid"> <!--  fila 5 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<mat-form-field>
+				<input tabindex="11" matInput formControlName="txtCodProducto" placeholder="Producto" maxlength="4">
+				<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-form-field>
+				<mat-select placeholder="" formControlName="cbbProducto" class="cm-in-combo">
+					<mat-option *ngFor="let item of cbbProductoArray" [value]="item.wss_cod_prd">{{item.wss_gls_prd}}</mat-option>
+				</mat-select>
+				</mat-form-field>
+			</div>
+		</div>
+		</div> <!--  fin de fila 5 -->
+		<div class="mdc-layout-grid"> <!--  fila 6 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<mat-form-field>
+				<input tabindex="12" matInput formControlName="txtCodMoneda" placeholder="Moneda" (focusout)="focusout_codigo_moneda()" (change)="change_codigo_moneda()" maxlength="4">
+				<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-form-field>
+				<mat-select placeholder="" formControlName="cbbMoneda" class="cm-in-combo" (openedChange)="this.close_combobox_moneda($event)">
+					<mat-option *ngFor="let item of cbbMonedaArray" [value]="item.wss_cod_mon">{{item.wss_gls_mon}}</mat-option>
+				</mat-select>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<!--  BcxNumero -->
+				<bcx-numero [tabindex]="13" formControlName="bcxMonto" placeholder="Monto" maxlength="15" separador="true" decimales="6" mat-error="Valor Incorrecto" (focusout)="focusout_monto()"></bcx-numero>
+			</div>
+		</div>
+		<br>
+			<span class="size_font_sub_label">Intereses</span>
+		<br>
+		</div> <!--  fin de fila 6 -->
+		<div class="mdc-layout-grid"> <!--  fila 7 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<mat-form-field>
+				<input tabindex="14" matInput formControlName="txtTipoTasa" placeholder="Tipo Tasa" (focusout)="focus_tipo_de_tasa()" (ngModelChange)="this.change_TN($event)" maxlength="4">
+				<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-form-field>
+				<mat-select placeholder="" formControlName="cbbTipoTasa" class="cm-in-combo" (openedChange)="this.close_tasa_tn($event)">
+					<mat-option *ngFor="let item of cbbTipoTasaArray" [value]="item.wss_tip_tas">{{item.wss_gls_tas}}</mat-option>
+				</mat-select>
+				</mat-form-field>
+			</div>
+			<!-- <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<mat-select placeholder="" formControlName="cbbTipoTasa0" class="cm-in-combo" (openedChange)="this.close_tasa_tn($event)">
+					<mat-option *ngFor="let item of cbbTipoTasa0Array" [value]="item.cod">{{item.glosa}}</mat-option>
+				</mat-select>
+				</mat-form-field>
+			</div> -->
+		</div>
+		</div>			
+		<div class="mdc-layout-grid"> <!--  fila 7 -->
+		<div class="mdc-layout-grid__inner">	
+
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<!--  BcxNumero -->
+				<bcx-numero [tabindex]="15" formControlName="bcxValorBase" placeholder="Valor Base" maxlength="10" separador="true" decimales="6" mat-error="Valor Incorrecto" (focusout)="Cambiar_tasa()"></bcx-numero>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<!--  BcxNumero -->
+				<bcx-numero [tabindex]="16" formControlName="bcxCostoFondo" placeholder="Costo de Fondo" maxlength="10" separador="true" decimales="6" mat-error="Valor Incorrecto" (focusout)="Cambiar_tasa()"></bcx-numero>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<!--  BcxNumero -->
+				<bcx-numero [tabindex]="17"  formControlName="bcxSpread" placeholder="Spread" maxlength="10" separador="true" decimales="6" mat-error="Valor Incorrecto" (focusout)="Cambiar_tasa()"></bcx-numero>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<!--  BcxNumero -->
+				<bcx-numero [tabindex]="18"  formControlName="bcxTasaFinal" placeholder="Tasa Final" maxlength="10" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
+			</div>
+		</div>
+		</div> <!--  fin de fila 7 -->
+		<br>
+			<span class="size_font_sub_label">Plazo</span>
+		<br>
+		<div class="mdc-layout-grid"> <!--  fila 8 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input tabindex="19"  matInput formControlName="txtOtorgamiento" placeholder="Otorgamiento" maxlength="10" [matDatepicker]='dtpOtorgamiento' (focusout)="ofunc_calcular_fecha(1);"  (ngModelChange)="copiarFechaOtorgamiento()">
+				<mat-datepicker-toggle matSuffix [for]='dtpOtorgamiento'></mat-datepicker-toggle>
+				<mat-datepicker #dtpOtorgamiento></mat-datepicker>
+				<mat-error class="cm-md-error">Fecha Incorrecta</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input tabindex="20" matInput formControlName="txtInicioCobroIn" [tabindex]="2" placeholder="Inicio Cobro intereses" maxlength="10" [matDatepicker]='dtpInicioCobroIn'>
+				<mat-datepicker-toggle matSuffix [for]='dtpInicioCobroIn'></mat-datepicker-toggle>
+				<mat-datepicker #dtpInicioCobroIn></mat-datepicker>
+				<mat-error class="cm-md-error">Fecha Incorrecta</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<mat-form-field>
+				<input tabindex="21"  matInput formControlName="txtDiasPlazos" placeholder="Dias Plazos" maxlength="4" (focusout)="ofunc_calcular_fecha(2);">
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input tabindex="22" matInput formControlName="txtVencimiento" placeholder="Vencimiento" maxlength="10" [matDatepicker]='dtpVencimiento' (focusout)="ofunc_calcular_fecha(3);">
+				<mat-datepicker-toggle matSuffix [for]='dtpVencimiento'></mat-datepicker-toggle>
+				<mat-datepicker #dtpVencimiento></mat-datepicker>
+				<mat-error class="cm-md-error">Fecha Incorrecta</mat-error>
+				</mat-form-field>
+			</div>
+			<div *ngIf="this.habIndCobrInt.value" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-checkbox tabindex="23" formControlName="indCobrInt">Cobro intereses anticipados</mat-checkbox>
+			</div>	
+		</div>
+		</div> 
+		
+		<!--  fin de fila 8 -->
+
+		<br>
+		<br>
+			<span class="size_font_sub_label">Datos de referencia</span>
+		<br>
+		<div class="mdc-layout-grid"> <!--  fila 10 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<!--  BcxNumero -->
+				<bcx-numero [tabindex]="24" formControlName="bcxNumero" placeholder="Número" maxlength="16" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<!--  BcxNumero -->
+				<bcx-numero [tabindex]="25" formControlName="bcxCorrelativo" placeholder="Correlativo" maxlength="4" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<!--  TexTinput -->
+				<mat-form-field>
+					<input tabindex="26" matInput formControlName="bcxReferenciaExterna" placeholder="Referencia Externa" maxlength="16">
+				</mat-form-field>
+			</div>
+		</div>
+		</div> <!--  fin de fila 9 -->
+
+	<!-- 	<div class="mdc-layout-grid">  
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<br>
+					<span class="size_font_sub_label">Garantías</span>
+				<br>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">				
+			</div>
+			<div *ngIf="ocultarbtnContraparte" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">	
+				<br>
+					<span  class="size_font_sub_label">Contraparte</span>
+				<br>			
+			</div>
+			<div  *ngIf="ocultarbtnContraparte" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">				
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<br>
+					<span class="size_font_sub_label">Comisiones</span>
+				<br>			
+			</div>
+		</div>
+		</div>
+
+		<div class="mdc-layout-grid">  fila 10 
+
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<br>
+					<span>Avales&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<button type='button' mat-mini-fab (click)="cmdAvales_click()" [disabled]="btnAvales"><mat-icon>group_add</mat-icon></button>
+				<br>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<br>
+					<span>Otras Garantías&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<button type='button' mat-mini-fab (click)="cmdOtrasGarantias_click()" [disabled]="btnOtrasGarantias"><mat-icon>check</mat-icon></button>
+				<br>			
+			</div>	
+			<div *ngIf="ocultarbtnContraparte"  class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<br>
+					<span >Ingresar Contraparte&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<button  type='button' mat-mini-fab (click)="cmdContraParte_click()" [disabled]="btnContraparte"><mat-icon>location_city</mat-icon></button>
+				<br>		
+			</div>	
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<br>
+					<span>Modificar Comisiones&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<button type='button' mat-mini-fab (click)="cmdComisiones_click()" [disabled]="btnComisiones"><mat-icon>attach_money</mat-icon></button>
+				<br>			
+			</div>				
+		</div>
+		</div>fila 10 -->
+	
+		<div class="mdc-layout-grid"> 
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-checkbox  tabindex="27" class="bcx_middleCheck" [checked]="chbkSinImpuesto_selected" *ngIf="activar_chbkSinImpuesto" [disabled]="habilitarChbkSinImpuesto" formControlName="chbkSinImpuesto" (change)="chbkSinImpuesto_change()">Sin cobro de impuesto</mat-checkbox>
+			</div>				
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-form-field *ngIf="activar_cmbCausalNoCobro">
+				<mat-select placeholder=""   formControlName="cmbCausalNoCobro" class="cm-in-combo">
+					<mat-option *ngFor="let item of cmbCausalNoCobroArray" [value]="item.wss_tye_cod_cex">{{item.wss_tye_gls_cex}}</mat-option>
+				</mat-select>
+				</mat-form-field>
+			</div>
+		</div>	 
+    	</div>
+	</div>
+
+	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad cm-width" *ngIf="this.destino_de_fondos_hiden.value">	
+		<br>
+		<span class="size_font_label">Origen / Destino de fondos - Operación</span>
+		<br>
+		<br>
+		<!--Origenes de fondo Operaciones / Comisiones y gastos -->
+		<div class="mdc-layout-grid"> <!--  fila 11 -->
+		<div class="mdc-layout-grid__inner">			
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" >
+				<mat-radio-group  formControlName="optMonedaOperacion" (change)="change_optionButton_optMonedaOperacion()">
+					<mat-radio-button [tabIndex]="28" value="X">MX</mat-radio-button>
+					<mat-radio-button [tabIndex]="29" *ngIf="this.habCamposStby.value" value="N">MN</mat-radio-button>
+				</mat-radio-group>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<mat-form-field>
+				<input tabindex="30" matInput formControlName="txtCodigoOperacion" placeholder="Código" maxlength="4" (ngModelChange)="habilita_cuenta_corriente_operacion();">
+				<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-form-field>
+				<mat-select placeholder="" formControlName="cbbCodigoOperacion" class="cm-in-combo">
+					<mat-option *ngFor="let item of cbbCodigoOperacionArray" [value]="item.cod_DES">{{item.gls_DES}}</mat-option>
+				</mat-select>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-form-field>
+				<mat-select  tabindex="31" placeholder="Cuenta Corriente" formControlName="cbbCuentaCorrienteOperacion" class="cm-in-combo">
+					<mat-option *ngFor="let item of cbbCuentaCorrienteOperacionArray" [value]="item.fld_cta_cod">{{item.fld_cta_cod}}</mat-option>
+				</mat-select>
+				</mat-form-field>
+			</div>
+		</div>
+		</div> <!--  fin de fila 11 -->
+		<div class="mdc-layout-grid"> <!--  fila 12 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">				
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<mat-form-field>
+				<input tabindex="32" matInput formControlName="txtSucursalOperacion" placeholder="Sucursal" maxlength="4">
+				<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-form-field>
+				<mat-select placeholder="" formControlName="cbbSucursalOperacion" class="cm-in-combo">
+					<mat-option *ngFor="let item of cbbSucursalOperacionArray" [value]="item.wss_cod_suc">{{item.wss_gls_suc}}</mat-option>
+				</mat-select>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<!--  BcxNumero -->
+				<bcx-numero *ngIf="this.habCamposStby.value" [tabindex]="33" id="bcxTipoCambioOperacion_id" formControlName="bcxTipoCambioOperacion" placeholder="Tipo de Cambio" maxlength="15" separador="true" decimales="8" mat-error="Valor Incorrecto"></bcx-numero>
+			</div>
+		</div>
+		</div> <!--  fin de fila 12 -->
+		<div class="mdc-layout-grid"> <!--  fila 12 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">				
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">					
+				<bcx-banco *ngIf="this.habCamposStby.value" [tabindex]="34" formControlName="txtBicCorresponsalOperacion" placeholder="BIC corresponsal" placeholderDes="Nombre Corresponsal" [isDisabled]="bloquearOperaciones" [data]="this"></bcx-banco>
+			</div>
+		</div>
+		</div>
+
+	</div>	
+	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad cm-width" >
+		<br>
+		<span class="size_font_label">Origen de fondos - Comisiones y Gastos</span>
+		<br>		
+		<br>
+		<div class="mdc-layout-grid"> <!--  fila 14 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-radio-group formControlName="optMonedaComyGas" (change)="change_optionButton_optMonedaComyGas();">
+					<mat-radio-button [tabIndex]="35" value="X">MX</mat-radio-button>
+					<mat-radio-button [tabIndex]="36" value="N">MN</mat-radio-button>
+				</mat-radio-group>
+			</div>		
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<mat-form-field>
+				<input matInput tabindex="37" formControlName="txtCodigoComyGas" maxlength="4" placeholder="Código" (ngModelChange)="habilita_cuenta_corriente_comcyg();">
+				<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-form-field>
+				<mat-select placeholder="" formControlName="cbbCodigoComyGas" class="cm-in-combo">
+					<mat-option *ngFor="let item of cbbCodigoComyGasArray" [value]="item.cod_DES">{{item.gls_DES}}</mat-option>
+				</mat-select>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-form-field>
+				<mat-select tabindex="38" placeholder="Cuenta Corriente" formControlName="cbbCuentaCorrienteComyGas" class="cm-in-combo">
+					<mat-option *ngFor="let item of cbbCuentaCorrienteComyGasArray" [value]="item.fld_cta_cod">{{item.fld_cta_cod}}</mat-option>
+				</mat-select>
+				</mat-form-field>
+			</div>
+		</div>
+		</div> <!--  fin de fila 15 -->
+		<div class="mdc-layout-grid"> <!--  fila 16 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">				
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<mat-form-field>
+				<input tabindex="39"  matInput formControlName="txtSucursalComyGas" placeholder="Sucursal" maxlength="4">
+				<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-form-field>
+				<mat-select placeholder="" formControlName="cbbSucursalComyGas" class="cm-in-combo">
+					<mat-option *ngFor="let item of cbbSucursalComyGasArray" [value]="item.wss_cod_suc">{{item.wss_gls_suc}}</mat-option>
+				</mat-select>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<!--  BcxNumero -->
+				<bcx-numero [tabindex]="40"  id="bcxTipoCambioComyGas_id" formControlName="bcxTipoCambioComyGas" placeholder="Tipo de Cambio" maxlength="15" separador="true" decimales="8" mat-error="Valor Incorrecto"></bcx-numero>
+			</div>
+		</div>
+		</div> <!--  fin de fila 16 -->
+
+		<div class="mdc-layout-grid"> <!--  fila 12 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">				
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">	
+				<bcx-banco [tabindex]="41" formControlName="txtBicCorresponsalComyGas" placeholder="BIC corresponsal" placeholderDes="Nombre Corresponsal" [isDisabled]="bloquearComyGas" [data]="this"></bcx-banco>			
+			</div>
+		</div>
+		</div>
+	</div>
+	</div>
+	</form>
+		<!-- Iframe Imprimir PDF -->
+		<iframe id="frame" frameborder="0" [src]='url | safe' style="display: none"></iframe> 
+		<!-- Fin Iframe Imprimir PDF -->
+	</div>
+
+<cm-wait [waitShow]="waitShow"></cm-wait>

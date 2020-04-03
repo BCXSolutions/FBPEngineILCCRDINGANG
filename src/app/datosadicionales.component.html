@@ -1,0 +1,1210 @@
+<!-- Generado por Xml2Ang, Bcx Solutions -->
+<!-- Fecha: 06/01/2020 13:21:56 -->
+	<div class="cm-main">
+	<div class="cm-toolbar">
+		<mat-toolbar color="primary">
+			<span class="cm-title-text">Datos adicionales</span>
+			<span class="cm-title-spacer"></span>
+			<button type='button' mat-icon-button (click)="this.utilService.cmdHelp_click(this.dialog)"><mat-icon>help</mat-icon></button>
+		</mat-toolbar>
+	</div>
+	<form [formGroup]="form" autocomplete="off">
+	<div class="cm-botonera">
+		<button type='button' tabindex="100" class="bcx-btn-accion" mat-raised-button [disabled]="form.invalid || btnBicReembolso" (click)="cmdAgregar_click()"><mat-icon>check</mat-icon>Cursar</button>
+		<button type='button' tabindex="101" mat-raised-button  (click)="cmdCancelar_click()"><mat-icon>arrow_back</mat-icon>Volver</button>
+	</div>
+	<div class="inner-sidenav-content" id="innersidenav">
+	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">
+		<br>
+		<span class="size_font_label">Condiciones carta de crédito</span>
+		<br>
+		<br>
+		<div class="mdc-layout-grid"> <!--  fila 2 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+					<input matInput tabindex="1" formControlName="txtFormaPagoBenef" placeholder="Forma de pago al beneficiario" (focusout)="ofunc_txtFormaPagoBenef_focusout($event)">
+					<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-form-field>
+					<mat-select placeholder="" formControlName="cbbFormaPagoBenef" class="cm-in-combo" (openedChange)="cbbFormaPagoBenef_openedChange($event)">
+						<mat-option *ngFor="let item of cbbFormaPagoBenefArray" [value]="item.wss_cod_fpag">{{item.wss_gls_fpag}}</mat-option>
+					</mat-select>
+				</mat-form-field>
+			</div>
+
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<bcx-numero [tabindex]="2" formControlName="bcxPorcentajeVista" (focusout)="ofunc_validar_tasa(this.bcxPorcentajeVista)" placeholder="Porcentaje vista" maxlength="11" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<bcx-numero [tabindex]="3" formControlName="bcxPorcentajePlazo" placeholder="Porcentaje plazo" maxlength="11" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
+			</div>
+		</div>
+		</div>
+		<div class="mdc-layout-grid"> <!--  fila 2 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+					<input tabindex="4" matInput formControlName="txtPlazoRigeDesde" placeholder="Plazo rige desde">
+					<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-form-field>
+					<mat-select placeholder="" formControlName="cbbPlazoRigeDesde" class="cm-in-combo">
+						<mat-option *ngFor="let item of cbbPlazoRigeDesdeArray" [value]="item.wss_cod_rdd">{{item.wss_gls_rdd}}</mat-option>
+					</mat-select>
+				</mat-form-field>
+			</div>	
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input matInput [tabindex]="5" formControlName="txtFechaSolicitud" placeholder="Fecha solicitud" maxlength="10" [matDatepicker]='dtpFechaSolicitud'>
+				<mat-datepicker-toggle matSuffix [for]='dtpFechaSolicitud'></mat-datepicker-toggle>
+				<mat-datepicker #dtpFechaSolicitud></mat-datepicker>
+				<mat-error class="cm-md-error">Fecha Incorrecta</mat-error>
+				</mat-form-field>
+			</div>
+		</div>
+		</div>
+	</div>	
+	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">
+		<br>
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+		<div class="mdc-layout-grid__inner">		
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">				
+				<span class="size_font_label">Crédito proveedor</span>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+				<ngx-datatable #grd class="material" style="width:250px;height:150px;"
+					 [rows]="tableRows"
+					 [columns]="tableCols"
+					 [scrollbarV]="true"
+					 [rowHeight]="25"
+					 [headerHeight]="25"
+					 [footerHeight]="25"
+					 [selected]="tableSelected"
+					 [selectionType]="'single'"
+					 (select)="onTableSelect($event)"
+					 (activate)="onTableActivate($event)"
+					 (scroll)="onTableScroll($event)"
+					 (sort)="onTableSort($event)"
+				
+					>
+					<ngx-datatable-footer *ngIf="true">
+						<ng-template ngx-datatable-footer-template let-rowCount="rowCount">
+							<div style="padding-left: 5px">Total: {{ rowCount }} filas</div>
+						</ng-template>
+					</ngx-datatable-footer>
+				</ngx-datatable>
+				<ng-template #rightTmpl let-value='value'>
+					<div style='text-align: right'>{{value}}</div>
+				</ng-template>
+				<ng-template #centerTmpl let-value='value'>
+					<div style='text-align: center'>{{value}}</div>
+				</ng-template>
+			</div>
+		</div>
+		</div>		
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+		<div class="mdc-layout-grid__inner">	
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-checkbox tabindex="7"  class="bcx_middleCheck" [checked]="false"  [disabled]="false" formControlName="chbkInteresCreditoProveedor" >Intereses crédito proveedor</mat-checkbox>
+			</div>	
+		</div>
+		</div>	
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+		<div class="mdc-layout-grid__inner">	
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<mat-form-field>
+				<input tabindex="8" matInput formControlName="txtTasaProveedor" placeholder="Tipo de tasa">
+				<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-form-field>
+				<mat-select placeholder="" formControlName="cbbTasaProveedor" class="cm-in-combo">
+					<mat-option *ngFor="let item of cbbTasaProveedorArray" [value]="item.wss_tip_tas">{{item.wss_gls_tas}}</mat-option>
+				</mat-select>
+				</mat-form-field>
+			</div>
+	
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<!--  BcxNumero -->
+				<bcx-numero [tabindex]="8" formControlName="bcxValorBase" placeholder="Valor base" maxlength="10" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
+			</div>	
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<!--  BcxNumero -->
+				<bcx-numero [tabindex]="9" formControlName="bcxCostoFondo" placeholder="Costo de fondo" maxlength="10" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
+			</div>						
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<!--  BcxNumero -->
+				<bcx-numero [tabindex]="10" formControlName="bcxSpread" placeholder="Spread" maxlength="10" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<!--  BcxNumero -->
+				<bcx-numero [tabindex]="11" formControlName="bcxMonto" placeholder="Monto" maxlength="15" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
+			</div>
+		</div>
+		</div>
+	</div>
+
+	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">
+		<br>
+		<span class="size_font_label">Financiamiento banco</span>
+		<br>
+		<br>
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">				
+				<span>Intereses Banco</span>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">			
+				<bcx-numero [tabindex]="12" matInput formControlName="txtDesdeApeANego" maxlength="10" separador="true" decimales="6" placeholder="Desde apertura a negociación"></bcx-numero>			
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">								
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">			
+				<bcx-numero [tabindex]="13" matInput formControlName="txtDesdeNegoAVcto" maxlength="10" separador="true" decimales="6" placeholder="Desde negociación a vencimiento crédito"></bcx-numero>		
+			</div>
+		</div>
+		</div>	
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+					<mat-form-field>
+					<input tabindex="14" matInput formControlName="txtTasaFinanciamiento" placeholder="Tipo de tasa">
+					<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
+					</mat-form-field>
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+					<mat-form-field>
+					<mat-select placeholder="Descripción" formControlName="cbbTasaFinanciamiento" class="cm-in-combo">
+						<mat-option *ngFor="let item of cbbTasaFinanciamientoArray" [value]="item.wss_tip_tas">{{item.wss_gls_tas}}</mat-option>
+					</mat-select>
+					</mat-form-field>
+				</div>
+		
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+					<!--  BcxNumero -->
+					<bcx-numero [tabindex]="15" formControlName="bcxValorBaseBco" placeholder="Valor base" maxlength="10" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+					<!--  BcxNumero -->
+					<bcx-numero [tabindex]="16" formControlName="bcxCostoFondoBco" placeholder="Costo de fondo" maxlength="10" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
+				</div>						
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+					<!--  BcxNumero -->
+					<bcx-numero [tabindex]="17" formControlName="bcxSpreadBco" placeholder="Spread" maxlength="10" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+					<mat-form-field>
+						<input tabindex="18" matInput formControlName="txtDiasPlazoBco" placeholder="Dias plazo">
+					</mat-form-field>
+				</div>
+			</div>
+			</div>
+	</div>
+	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">
+		<br>
+		<span class="size_font_label">Otras condiciones</span>
+		<br>
+		<br>
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<mat-form-field>
+				<input tabindex="19" matInput formControlName="txtReembolso" placeholder="Reembolso">
+				<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<mat-select placeholder="Descripción" formControlName="cbbReembolso" class="cm-in-combo">
+					<mat-option *ngFor="let item of cbbReembolsoArray" [value]="item.Cod">{{item.Nom}}</mat-option>
+				</mat-select>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<mat-form-field>
+				<input tabindex="20" matInput formControlName="txtZonaFranca" placeholder="Zona franca">
+				<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<mat-select placeholder="Descripción" formControlName="cbbZonaFranca" class="cm-in-combo">
+					<mat-option *ngFor="let item of cbbZonaFrancaArray" [value]="item.Cod">{{item.Nom}}</mat-option>
+				</mat-select>
+				</mat-form-field>
+			</div>
+		</div>
+		</div>	
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+		<div class="mdc-layout-grid__inner">	
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-checkbox tabindex="21" class="bcx_middleCheck" [checked]="false"  [disabled]="false" formControlName="chbkEnteradaEfectivo" >Enterada en efectivo</mat-checkbox>
+			</div>	
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-checkbox tabindex="22" class="bcx_middleCheck" [checked]="false"  [disabled]="false" formControlName="chbkDomestica" >Doméstica</mat-checkbox>
+			</div>	
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-checkbox tabindex="23" class="bcx_middleCheck" [checked]="false"  [disabled]="false" formControlName="chbkTercerosPaises" >Terceros países</mat-checkbox>
+			</div>	
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-checkbox tabindex="24" class="bcx_middleCheck" [checked]="false"  [disabled]="false" formControlName="chbkRefinanciamiento" >Refinanciamiento</mat-checkbox>
+			</div>	
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<button tabindex="25" type='button' [disabled]="false" mat-mini-fab  (click)="cmdAgregar_click()"><mat-icon>more_horiz</mat-icon></button>
+			</div>				
+		</div>
+		</div>	
+	</div>
+	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">
+		<br>
+		<span class="size_font_label">Emisión carta de crédito de importación</span>
+		<br>
+		<br>
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
+				<span>Banco corresponsal (Receptor) BIC</span>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">					
+				<bcx-banco #txtBicRecep  [tabindex]="26" id="txtBicRecep" formControlName="txtBicRecep" placeholder="" placeholderDes="Nombre" [isDisabled]="false" [data]="this"></bcx-banco>
+			</div>
+		</div>
+		</div>	
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">			
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input matInput #txtDireCorre tabindex="27" formControlName="txtDireCorre" placeholder="Dirección" maxlength="35">
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input matInput tabindex="28" formControlName="txtCiuCorre" placeholder="Ciudad" maxlength="35">
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input matInput tabindex="29" formControlName="txtPaisCorre" placeholder="País" maxlength="35">
+				</mat-form-field>
+			</div>
+		</div>
+		</div>	
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+		<div class="mdc-layout-grid__inner">
+		</div>
+		</div>
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
+				<span>[M] Forma de la carta de crédito [40A]</span>
+			</div>	
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<mat-form-field>
+				<input matInput tabindex="30" formControlName="txtFlc" placeholder="" maxlength="4"> 
+				<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-form-field>
+				<mat-select placeholder="" formControlName="cbbFlc" class="cm-in-combo">
+					<mat-option *ngFor="let item of cbbFlcArray" [value]="item.wss_cod_flc">{{item.wss_gls_flc}}</mat-option>
+				</mat-select>
+				</mat-form-field>
+			</div>
+		</div>
+		</div>
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
+					<span>[M] Número de la carta de crédito [20]</span>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+					<mat-form-field>
+					<input tabindex="31" matInput formControlName="txtNumeroCartaCredito" placeholder="">
+					</mat-form-field>
+				</div>
+			</div>
+		</div>
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
+					<span>[M] Fecha de emisión [31C]</span>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+					<mat-form-field>
+					<input tabindex="32" matInput formControlName="txtFechaEmision" placeholder="">
+					</mat-form-field>
+				</div>
+			</div>
+		</div>
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
+					<span>[M] Reglas aplicables UCP [40E]</span>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+					<mat-form-field>
+					<input  tabindex="33" matInput formControlName="txtUcp" placeholder="">
+					</mat-form-field>
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+					<mat-form-field>
+					<mat-select placeholder="" formControlName="cbbUcp" class="cm-in-combo">
+						<mat-option *ngFor="let item of cbbUcpArray" [value]="item.wss_cod_rucp">{{item.wss_gls_rucp}}</mat-option>
+					</mat-select>
+					</mat-form-field>
+				</div>
+				<div *ngIf="txtUcpVisible" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+					<mat-form-field>
+					<input  tabindex="33" matInput formControlName="txtUcpOtra" placeholder="">
+					</mat-form-field>
+				</div>
+			</div>
+		</div>	
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
+					<span>[M] Días plazo validez</span>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+					<mat-form-field>
+					<input tabindex="34" matInput formControlName="txtDiasValidez" placeholder="" maxlength="4">
+					</mat-form-field>
+				</div>
+			</div>
+		</div>		
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
+					<span>[M] Fecha de expiración [31D]</span>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+					<mat-form-field>
+						<input tabindex="35" matInput formControlName="txtFechaExpiracion" placeholder="" maxlength="10" [matDatepicker]='dtpFechaExpiracion'>
+						<mat-datepicker-toggle matSuffix [for]='dtpFechaExpiracion'></mat-datepicker-toggle>
+						<mat-datepicker #dtpFechaExpiracion></mat-datepicker>
+						<mat-error class="cm-md-error">Fecha Incorrecta</mat-error>
+					</mat-form-field>
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+					<mat-form-field>
+					<input tabindex="36" matInput formControlName="txtLugarExpiracion" placeholder="Lugar" maxlength="4">
+					</mat-form-field>
+				</div>
+			</div>
+		</div>	
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
+					<span>[O] Banco ordenante BIC [51a]</span>
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">					
+					<bcx-banco [tabindex]="36" id="txtBicBancoOrdenante" formControlName="txtBicBancoOrdenante" placeholder="" placeholderDes="Nombre" [isDisabled]="false" [data]="this"></bcx-banco>
+				</div>
+			</div>
+		</div>	
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">					
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+					<mat-form-field>
+					<input tabindex="37" #txtDireOrdenante matInput formControlName="txtDireOrdenante" placeholder="Dirección">
+					</mat-form-field>
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+					<mat-form-field>
+					<input tabindex="38" matInput formControlName="txtCiuOrdenante" placeholder="Ciudad">
+					</mat-form-field>
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+					<mat-form-field>
+					<input tabindex="39"  matInput formControlName="txtPaisOrdenante" placeholder="País">
+					</mat-form-field>
+				</div>
+			</div>
+		</div>
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+					<span>[M] Ordenante [50]</span>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+					<mat-form-field>
+					<input tabindex="40" matInput formControlName="txtBicOrde50" placeholder="">
+					</mat-form-field>
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+					<button tabindex="41" type='button' [disabled]="false" mat-mini-fab  (click)="cmdAgregar_click()"><mat-icon>more_horiz</mat-icon></button>
+				</div>	
+			</div>
+		</div>			
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">																			
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+					<mat-form-field>
+					<input tabindex="42" matInput formControlName="txtOrdeNom50" placeholder="Nombre">
+					</mat-form-field>
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+					<mat-form-field>
+					<input tabindex="43" matInput formControlName="txtOrdeDire50" placeholder="Dirección">
+					</mat-form-field>
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+					<mat-form-field>
+					<input tabindex="44" matInput formControlName="txtOrCiuPa50" placeholder="Ciudad">
+					</mat-form-field>
+				</div>
+			</div>
+		</div>
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
+					<span>[M] Beneficiario [59] </span>
+				</div>
+			</div>
+		</div>	
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">		
+					<span>Número cuenta corriente</span>			
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+					<mat-form-field>
+					<input tabindex="45" #txtDireOrdenante matInput formControlName="txtBeneBic59" placeholder="Nombre 1">
+					</mat-form-field>
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+					<mat-form-field>
+					<input tabindex="46" matInput formControlName="txtBeneNombre59" placeholder="Nombre 2">
+					</mat-form-field>
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+					<mat-form-field>
+					<input tabindex="47"  matInput formControlName="txtBeneDire59" placeholder="Dirección">
+					</mat-form-field>
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+					<mat-form-field>
+					<input tabindex="48"  matInput formControlName="txtBeneCiu59" placeholder="Ciudad">
+					</mat-form-field>
+				</div>
+			</div>
+		</div>		
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">																		
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+					<mat-form-field>
+					<input tabindex="49" matInput formControlName="txtPais" placeholder="País">
+					</mat-form-field>
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+					<mat-form-field>
+					<mat-select placeholder="Descripción" formControlName="cbbPais" class="cm-in-combo">
+						<mat-option *ngFor="let item of cbbPaisArray" [value]="item.wss_cod_pais">{{item.wss_gls_pais}}</mat-option>
+					</mat-select>
+					</mat-form-field>
+				</div>
+			</div>
+		</div>		
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+					<span>[M] Código moneda y monto [32B]</span>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+					<mat-form-field>
+					<input tabindex="50" matInput formControlName="txtCodMonMonto" placeholder="">
+					</mat-form-field>
+				</div>	
+			</div>
+		</div>	
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+					<span>[O] Porcentaje de tolerancia [39A]</span>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+					<mat-form-field>
+					<input tabindex="51" matInput formControlName="txtporcentaje" placeholder="">
+					</mat-form-field>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1 cm-label-contabilizadas" style="text-align: center;"> 
+					<span> + / - </span>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+					<mat-form-field>
+					<input tabindex="52" matInput formControlName="txtTolerancia" placeholder="">
+					</mat-form-field>
+				</div>
+			</div>
+		</div>		
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+					<span>[O] Monto adicional cubierto [39C]</span>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+					<mat-form-field>
+					<input tabindex="53" matInput formControlName="txtMontoAdicionalCubierto" placeholder="">
+					</mat-form-field>
+				</div>	
+			</div>
+		</div>
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+					<span>[M] Utilizable con... [41]</span>
+				</div>	
+			</div>
+		</div>
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+					<span>[C] Utilizable con BIC[41A]</span>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">					
+					<bcx-banco [tabindex]="54" formControlName="txtUtilizableCon" placeholder="" placeholderDes="Nombre" [isDisabled]="false" [data]="this"></bcx-banco>
+				</div>
+			</div>				
+		</div>
+		<div class="mdc-layout-grid"> 
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+					<span>[C] Utilizable con cualquiera en… [41D]</span>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+					<mat-form-field appearance="outline">
+					<textarea rows="5" tabindex="55" matInput formControlName="txtUtilizableConCualquiera" placeholder=""></textarea>
+					</mat-form-field>
+				</div>	
+			</div>
+		</div>
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+					<span>Por</span>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">					
+					<mat-form-field>
+					<input tabindex="56" matInput formControlName="txtPor" placeholder="">
+					</mat-form-field>
+				</div>
+			</div>				
+		</div>
+		<div class="mdc-layout-grid"> 
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+					<span>[O] Giros a.. (Tenor) [42C]</span>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+					<mat-form-field appearance="outline">
+					<textarea tabindex="57" rows="5" matInput formControlName="txtGirosATenor" placeholder=""></textarea>
+					</mat-form-field>
+				</div>	
+			</div>
+		</div>
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
+					<span>[O] Girado BIC [42a]</span>
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">					
+					<bcx-banco [tabindex]="58" id="txtBicGirado" formControlName="txtBicGirado" placeholder="" placeholderDes="Nombre" [isDisabled]="false" [data]="this"></bcx-banco>
+				</div>
+			</div>
+		</div>	
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">			
+				</div>
+				<!-- <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+					<mat-form-field>
+					<input matInput formControlName="txtGirNom" placeholder="Nombre">
+					</mat-form-field>
+				</div> -->
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+					<mat-form-field>
+					<input matInput tabindex="59" formControlName="txtGirDire" placeholder="Dirección">
+					</mat-form-field>
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+					<mat-form-field>
+					<input tabindex="60" matInput formControlName="txtGirCiu" placeholder="Ciudad">
+					</mat-form-field>
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+					<mat-form-field>
+					<input tabindex="61" matInput formControlName="txtGirPais" placeholder="País">
+					</mat-form-field>
+				</div>
+			</div>
+		</div>	
+		<div class="mdc-layout-grid"> 
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+					<span>[O] Detalle pago mixto [42M]</span>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+					<mat-form-field appearance="outline">
+					<textarea tabindex="62" rows="8" matInput formControlName="txtDetallePagoMixto" placeholder=""></textarea>
+					</mat-form-field>
+				</div>	
+			</div>
+		</div>			
+		<div class="mdc-layout-grid"> 
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+					<span>[O] Detalle pago diferido/negociación [42P]</span>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+					<mat-form-field appearance="outline">
+					<textarea tabindex="63" rows="6" matInput formControlName="txtDetallePagoDiferido" placeholder=""></textarea>
+					</mat-form-field>
+				</div>	
+			</div>
+		</div>	
+
+		<div class="mdc-layout-grid"> 
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+					<span>[O] Embarque parcial [43P]</span>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+					<mat-radio-group  tabindex="64" formControlName="optEmbarqueParcial">
+						<mat-radio-button value="S">Permitido</mat-radio-button>
+						<mat-radio-button value="N">No permitido</mat-radio-button>
+						<mat-radio-button value="C">Condicional</mat-radio-button>
+					</mat-radio-group>
+				</div>	
+			</div>
+		</div>	
+
+		<div class="mdc-layout-grid"> 
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+					<span>[O] Transbordo [43T]</span>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+					<mat-radio-group tabindex="65" formControlName="optTransbordo">
+						<mat-radio-button value="S">Permitido</mat-radio-button>
+						<mat-radio-button value="N">No permitido</mat-radio-button>
+						<mat-radio-button value="C">Condicional</mat-radio-button>
+					</mat-radio-group>
+				</div>	
+			</div>
+		</div>	
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
+					<span>[M] Vía de transporte</span>																		
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+					<mat-form-field>
+					<input tabindex="66" matInput formControlName="txtViaTransporte" placeholder="Código">
+					</mat-form-field>
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+					<mat-form-field>
+					<mat-select placeholder="Descripción" formControlName="cbbViaTransporte" class="cm-in-combo">
+						<mat-option *ngFor="let item of cbbViaTransporteArray" [value]="item.wss_cod_viat">{{item.wss_gls_viat}}</mat-option>
+					</mat-select>
+					</mat-form-field>
+				</div>
+			</div>
+		</div>
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+					<span>[O] Lugar de despacho [44A]</span>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">					
+					<mat-form-field>
+					<input tabindex="67" matInput formControlName="txtLugarDespacho" placeholder="">
+					</mat-form-field>
+				</div>
+			</div>				
+		</div>
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+					<span>[O] Puerto de embarque [44E]</span>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">					
+					<mat-form-field>
+					<input tabindex="68" matInput formControlName="txtPuertoEmbarque" placeholder="">
+					</mat-form-field>
+				</div>
+			</div>				
+		</div>
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+					<span>[O] Puerto de descarga [44F]</span>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">					
+					<mat-form-field>
+					<input tabindex="69" matInput formControlName="txtPuertoDescarga" placeholder="">
+					</mat-form-field>
+				</div>
+			</div>				
+		</div>
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+					<span>[O] Lugar de destino [44B]</span>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">					
+					<mat-form-field>
+					<input tabindex="70" matInput formControlName="txtLugarDestino44" placeholder="">
+					</mat-form-field>
+				</div>
+			</div>				
+		</div>
+
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+					<span>[O] Días presentación documentos</span>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">					
+					<mat-form-field>
+					<input tabindex="71" matInput formControlName="txtDiasPresentacionDoc" placeholder="">
+					</mat-form-field>
+				</div>
+			</div>				
+		</div>		
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+			<div class="mdc-layout-grid__inner">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+					<span>[O] Ultima fecha de embarque [44C]</span>
+				</div>	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">					
+					<mat-form-field>
+						<input tabindex="72" matInput formControlName="txtFechaEmbarque" placeholder="" maxlength="10" [matDatepicker]='dtpFechaEmbarque'>
+						<mat-datepicker-toggle matSuffix [for]='dtpFechaEmbarque'></mat-datepicker-toggle>
+						<mat-datepicker #dtpFechaEmbarque></mat-datepicker>
+						<mat-error class="cm-md-error">Fecha Incorrecta</mat-error>
+					</mat-form-field>
+				</div>
+			</div>	
+			<div class="mdc-layout-grid"> 
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+						<span>[O] Período de embarque [44D]</span>
+					</div>	
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+						<mat-form-field appearance="outline">
+						<textarea tabindex="73" rows="8" matInput formControlName="txtPeriodoEmbarque44" placeholder="" maxlength="395"></textarea>
+						</mat-form-field>
+					</div>	
+				</div>
+			</div>				
+			<div class="mdc-layout-grid"> 
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+						<span>[O] Descripción de mercaderías y/o servicios [45A]</span>
+					</div>	
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+						<mat-form-field appearance="outline">
+						<textarea tabindex="74" rows="10" matInput formControlName="txtMercaderias" placeholder="" maxlength="52000"></textarea>
+						</mat-form-field>
+					</div>	
+				</div>
+			</div>
+			<div class="mdc-layout-grid"> <!--  fila 1 -->
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
+						<span>[M] Clausula de compra</span>																		
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+						<mat-form-field>
+						<input tabindex="75" matInput formControlName="txtClausulaCompra" placeholder="Código">
+						</mat-form-field>
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+						<mat-form-field>
+						<mat-select placeholder="Descripción" formControlName="cbbClausulaCompra" class="cm-in-combo">
+							<mat-option *ngFor="let item of cbbClausulaCompraArray" [value]="item.wss_cod_clacom">{{item.wss_gls_clacom}}</mat-option>
+						</mat-select>
+						</mat-form-field>
+					</div>					
+				</div>
+			</div>				
+			<div class="mdc-layout-grid"> <!--  fila 1 -->
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
+						<span>[O] Documentos requeridos [46]</span>																		
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+						<button tabindex="76" type='button' [disabled]="false" mat-mini-fab  (click)="cmdDocumentosRequeridos_click()"><mat-icon>more_horiz</mat-icon></button>
+					</div>
+				</div>
+			</div>
+			<div class="mdc-layout-grid"> <!--  fila 1 -->
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+						<span>[O] Facturas a nombre de</span>
+					</div>	
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">					
+						<mat-form-field>
+						<input tabindex="77" matInput formControlName="txtFacturasANombre" placeholder="">
+						</mat-form-field>
+					</div>
+				</div>				
+			</div>	
+			<div class="mdc-layout-grid"> 
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+						<span>[O] Docto. de embarque avisar a</span>
+					</div>	
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
+						<mat-radio-group tabindex="78" formControlName="optGrpDcto">
+							<mat-radio-button value="S">Solicitante</mat-radio-button>
+							<mat-radio-button value="O">Otro</mat-radio-button>
+						</mat-radio-group>
+						<mat-form-field style="width:430px;">
+							<input tabindex="75" matInput formControlName="txtDocOtro" placeholder="">
+						</mat-form-field>
+					</div>
+					<!-- <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">					
+					</div>	 -->
+				</div>
+			</div>	
+			<div class="mdc-layout-grid"> 
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+						<span>[M] Instrucción confirmación [49]</span>
+					</div>	
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
+						<mat-radio-group tabindex="79" formControlName="optInstruccionConfirmacion">
+							<mat-radio-button value="S">Confirm</mat-radio-button>
+							<mat-radio-button value="N">Without</mat-radio-button>
+							<mat-radio-button value="M">May Add</mat-radio-button>
+						</mat-radio-group>
+					</div>
+				</div>
+			</div>
+
+			<div *ngIf="false" class="mdc-layout-grid"> 
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+						<mat-form-field appearance="outline">
+						<textarea tabindex="" rows="10" matInput formControlName="txtMarcasEspe" placeholder="" maxlength="197"></textarea>
+						</mat-form-field>
+					</div>	
+				</div>
+			</div>
+
+			<div class="mdc-layout-grid"> 
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+						<span>[O]Condiciones adicionales [47A]</span>
+					</div>	
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+						<mat-form-field appearance="outline">
+						<textarea tabindex="80" rows="10" matInput formControlName="txtCondicionesAdicio47" placeholder="" maxlength="52000"></textarea>
+						</mat-form-field>
+					</div>	
+				</div>
+			</div>
+			<div class="mdc-layout-grid"> 
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+						<span>Condiciones especiales de pago para beneficiario [49G]</span>
+					</div>	
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+						<mat-form-field appearance="outline">
+						<textarea tabindex="81" rows="8" matInput formControlName="txtCondicionesEspecialesPagoBeneficiario" placeholder="" maxlength="52000"></textarea>
+						</mat-form-field>
+					</div>	
+				</div>
+			</div>
+			<div class="mdc-layout-grid"> 
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+						<span>Condiciones especiales de pago para banco receptor [49H]</span>
+					</div>	
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+						<mat-form-field appearance="outline">
+						<textarea tabindex="82" rows="8" matInput formControlName="txtCondicionesEspecialesPagoBancoReceptor" placeholder="" maxlength="52000"></textarea>
+						</mat-form-field>
+					</div>	
+				</div>
+			</div>		
+			<div class="mdc-layout-grid"> 
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+						<span>[O] Gastos [71D]</span>
+					</div>	
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
+						<mat-radio-group tabindex="83" formControlName="optGrpGst">
+							<mat-radio-button value="B">Beneficiario</mat-radio-button>
+							<mat-radio-button value="S">Solicitante</mat-radio-button>
+							<mat-radio-button value="N">Ninguno</mat-radio-button>
+						</mat-radio-group>
+					</div>
+				</div>
+			</div>
+			<div class="mdc-layout-grid"> 
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+						<span>Texto Narrativo</span>
+					</div>	
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+						<mat-form-field appearance="outline">
+						<textarea tabindex="84" rows="8" matInput formControlName="txtExcepto" placeholder="" maxlength="105"></textarea>
+						</mat-form-field>
+					</div>	
+				</div>
+			</div>
+			<div class="mdc-layout-grid"> <!--  fila 1 -->
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+						<span>[O] Periodo de presentación en dias</span>
+					</div>	
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">					
+						<mat-form-field>
+						<input tabindex="85" matInput formControlName="txtNumeroPeriodoPresentacion" placeholder="">
+						</mat-form-field>
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1" style="margin-top:10px;">
+						<mat-checkbox class="bcx_middleCheck" [checked]="false"  [disabled]="false" formControlName="chkPeriodoPresentacion">Otra fecha</mat-checkbox>
+					</div>	
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">					
+						<mat-form-field>
+						<input tabindex="86" matInput formControlName="txtPeriodoPresentacion" placeholder="">
+						</mat-form-field>
+					</div>
+				</div>				
+			</div>
+			<div class="mdc-layout-grid"> <!--  fila 1 -->
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+						<span>Emite MT740</span>
+					</div>	
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="margin-top:10px;">
+						<mat-checkbox tabindex="87" class="bcx_middleCheck" [checked]="false"  [disabled]="false" formControlName="chk740" ></mat-checkbox>
+					</div>	
+				</div>				
+			</div>
+			<div class="mdc-layout-grid"> <!--  fila 1 -->
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
+						<span>[O] Banco reembolsador BIC [53A]</span>
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">					
+						<bcx-banco [tabindex]="88"  id="txtBicReembolso" formControlName="txtBicReembolso" placeholder="" placeholderDes="Nombre" [isDisabled]="false" [data]="this"></bcx-banco>
+					</div>
+				</div>
+			</div>	
+			<div class="mdc-layout-grid"> <!--  fila 1 -->
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">			
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+						<mat-form-field>
+						<input tabindex="89" matInput formControlName="txtReemDire" placeholder="Dirección">
+						</mat-form-field>
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+						<mat-form-field>
+						<input tabindex="90" matInput formControlName="txtReemCiu" placeholder="Ciudad">
+						</mat-form-field>
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+						<mat-form-field>
+						<input tabindex="91" matInput formControlName="txtReemPais" placeholder="País">
+						</mat-form-field>
+					</div>
+				</div>
+			</div>
+			<div class="mdc-layout-grid"> 
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+						<span>Reglas URR aplicables</span>
+					</div>	
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
+						<mat-radio-group tabindex="89" formControlName="optURR">
+							<mat-radio-button value="S">NOTURR</mat-radio-button>
+							<mat-radio-button value="N">URR LATEST VERSION</mat-radio-button>
+						</mat-radio-group>
+					</div>
+				</div>
+			</div>		
+			<div class="mdc-layout-grid"> 
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+						<span>[O] Número de reembolso Aladi [78]</span>
+					</div>	
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+						<mat-form-field>
+							<input tabindex="90" matInput formControlName="txtNumeroAladi78" placeholder="">
+						</mat-form-field>
+					</div>
+				</div>
+			</div>
+			<div class="mdc-layout-grid"> 
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+						<span>[O] Instrucciones para el [78] banco pagador/aceptante/negociador</span>
+					</div>	
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
+						<mat-form-field appearance="outline">
+						<textarea tabindex="91" rows="8" matInput formControlName="txtInstrucciones78" maxlength="7943"></textarea>
+						</mat-form-field>
+					</div>	
+				</div>
+			</div>
+			<div class="mdc-layout-grid"> <!--  fila 1 -->
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
+						<span>[O] Banco avisador BIC [57a]</span>
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">					
+						<bcx-banco [tabindex]="92" id="txtBicAvisador" formControlName="txtBicAvisador" placeholder="" placeholderDes="Nombre" [isDisabled]="false" [data]="this"></bcx-banco>
+					</div>
+				</div>
+			</div>	
+			<div class="mdc-layout-grid"> <!--  fila 1 -->
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">			
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+						<mat-form-field>
+						<input tabindex="93" matInput formControlName="txtAviDire" placeholder="Dirección">
+						</mat-form-field>
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+						<mat-form-field>
+						<input tabindex="94" matInput formControlName="txtAviCiu" placeholder="Ciudad">
+						</mat-form-field>
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+						<mat-form-field>
+						<input tabindex="95" matInput formControlName="txtAviPais" placeholder="País">
+						</mat-form-field>
+					</div>
+				</div>
+			</div>	
+			<div class="mdc-layout-grid"> <!--  fila 1 -->
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
+						<span>[O] Banco participante con confirmación requerida  BIC [58A]</span>
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">					
+						<bcx-banco [tabindex]="96" id="txtBicParticipante" formControlName="txtBicParticipante" placeholder="" placeholderDes="Nombre" [isDisabled]="false" [data]="this"></bcx-banco>
+					</div>
+				</div>
+			</div>	
+			<div class="mdc-layout-grid"> <!--  fila 1 -->
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">			
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+						<mat-form-field>
+						<input tabindex="97" matInput formControlName="txtParticipanteDire" placeholder="Dirección">
+						</mat-form-field>
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+						<mat-form-field>
+						<input tabindex="98" matInput formControlName="txtParticipanteCiu" placeholder="Ciudad">
+						</mat-form-field>
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+						<mat-form-field>
+						<input tabindex="99" matInput formControlName="txtParticipantePais" placeholder="País">
+						</mat-form-field>
+					</div>
+				</div>
+			</div>
+			<div class="mdc-layout-grid"> 
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+						<span>[O] Información del remitente al receptor[72Z]</span>
+					</div>	
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+						<mat-form-field appearance="outline">
+						<textarea tabindex="100" rows="8" matInput formControlName="txtInfoRemitente72" placeholder=""></textarea>
+						</mat-form-field>
+					</div>	
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">
+		<div class="mdc-layout-grid"> 
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<bcx-rut formControlName="bcxRut" placeholder="Rut Acreedor" mat-error="Rut Incorrecto" (focusout)="focusout_rut()"></bcx-rut>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+				<mat-form-field>
+				<input matInput formControlName="txtNombre" placeholder="Nombre" >
+				</mat-form-field>
+			</div>
+		</div>
+		</div> 
+		<div class="mdc-layout-grid"> 
+		<div class="mdc-layout-grid__inner">
+				 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input matInput formControlName="txtCodigoBancoAcreedor" placeholder="Código Banco Acreedor" (focusout)="focusout_banco();">
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<button mat-icon-button [disabled]="btnBicCorr" (click)="cmdCancelar_click()"><mat-icon>help_outline</mat-icon></button>
+			</div>	
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+				<mat-form-field>
+				<input matInput formControlName="txtNombreBanco" placeholder="Nombre">
+				</mat-form-field>
+			</div> 
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">	
+				<bcx-banco formControlName="txtCodigoBancoAcreedor" placeholder="Código Banco Acreedor" placeholderDes="Nombre" [isDisabled]="btnBicCorr" [data]="this"></bcx-banco>			
+			</div>
+		</div>
+		</div> 
+		<div class="mdc-layout-grid"> 
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<mat-form-field>
+				<input matInput formControlName="txtTasa" placeholder="Tipo de tasa">
+				<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-form-field>
+				<mat-select placeholder="Descripción" formControlName="cbbTasa" class="cm-in-combo">
+					<mat-option *ngFor="let item of cbbTasaArray" [value]="item.wss_tip_tas">{{item.wss_gls_tas}}</mat-option>
+				</mat-select>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+		
+				<bcx-numero formControlName="bcxSpread" placeholder="Spread" maxlength="16" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+			
+				<bcx-numero formControlName="bcxTasaFinal" placeholder="Tasa Final" maxlength="16" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
+			</div>
+		</div>
+		</div> 
+	</div> -->
+	</div>
+	</form>
+	</div>
+<cm-wait [waitShow]="waitShow"></cm-wait>

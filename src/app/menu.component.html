@@ -1,0 +1,43 @@
+<div class="cm-main">
+    <div class="cm-toolbar">
+        <mat-toolbar color="primary">
+            <span style="margin-left:10px;"></span> 
+            <span class="cm-title-text">Importaciones - Carta de crédito</span>
+            <span class="cm-title-spacer"></span>
+            <button type='button' mat-icon-button (click)="this.utilService.cmdHelp_click(this.dialog)"><mat-icon>help</mat-icon></button> 
+        </mat-toolbar > 
+    </div>
+    <div class="cm-botonera">
+            <button type='button' mat-raised-button  (click)="cmdVolver_click()"><mat-icon>arrow_back</mat-icon>Volver</button> 
+    </div>
+
+    <form [formGroup]="form" autocomplete="off">
+			<div class=" cm-margin-bottom cm-bottom-pad-small">				
+				<div class="mdl-grid" > 						
+					<div class="visorBotonesMenu" style="text-align:center">
+						<div class="positionBotonMenu">	                           
+                             
+                                <div style="display:inline;margin-left: 20px;margin-top: 20px;width: 50%;">
+                                    <button type='button' style="text-align:center;"  class="tamanioBotonIndividual"  mat-raised-button  (click)="cmdAbrir_click()"><mat-icon>&#xE0E1;</mat-icon>Abrir</button>	
+                                </div>   
+                                <div style="display:inline;margin-left: 20px;margin-top: 20px;width: 50%;">     
+                                    <button type='button' class="tamanioBotonIndividual"  mat-raised-button  (click)="cmdNueva_click()"><mat-icon>&#xE614;</mat-icon>Nueva</button>
+                                </div> 	
+                 
+                  
+                                <div  style="display:inline;margin-left: 20px;margin-top: 20px;width: 50%;">	    
+                                </div>  
+                                <div style="display:inline;margin-left: 20px;margin-top: 20px;width: 50%;">	    
+                                </div>  
+                         
+                        </div>
+                    </div>    
+                </div>	
+            </div>    	
+	</form> <!---->
+	</div>
+<cm-wait [waitShow]="waitShow"></cm-wait>
+
+
+    
+
