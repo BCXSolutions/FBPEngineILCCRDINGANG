@@ -17,6 +17,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
  * Obtencion de datos de Web Service SOAP.
  * BLC, 5/12/2019: Devolvemos un objeto en handleErrorRest
  * BLC, 10/01/2020: getRestEx, deleteRest
+ * BLC, 11/03/2020: resultRest
  * 
  */
 @Injectable()
@@ -165,6 +166,7 @@ export class CmWsHostService {
     return throwError(err);
     //return this.handleErrorEx(error, "Web Service: " + url, true);
   }
+
   /**
    * Para SOAP 
    * @param httpError 
@@ -724,9 +726,22 @@ export class CmWsHostService {
     res => this.resultRest(res);
 
 
+    /**
+     * 
+     * @param res Para Spring, el error viene por aca
+     */
   resultRest(res: any): CmWsResult {
     console.log(res)
     let result: CmWsResult = new CmWsResult();
+    if (res.faultInfo)
+    {
+      //this.handleErrorSpring(res);
+      result.setError(true);
+      result.setErrorMsg(res.faultInfo);
+      result.setReturnValue(0);
+      return result;
+    }
+  
     result.setTableRows(this.gridFromRest(res));
     result.setOutput(res.itemout);
     result.setReturnValue(res.returnValue);

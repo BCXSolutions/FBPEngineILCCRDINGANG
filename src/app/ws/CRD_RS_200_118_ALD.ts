@@ -3,38 +3,34 @@ import { Injectable }      from '@angular/core';
 import {CmWsHostService
        , CmWsResult } from '@bcxang';
 /*
- * Service : CRD_RS_200_111_TXT_LCI.ts 
+ * Service : CRD_RS_200_118_ALD.ts 
  * Objetivo: Llamado a Web Service REST
- * Autor   : Generado por BcxWSql (BCX Solutions) a partir de CRD_RS_200_111_TXT_LCI.sql
- * Fecha   : 15/04/2020 10:39:50
+ * Autor   : Generado por BcxWSql (BCX Solutions) a partir de CRD_RS_200_118_ALD.sql
+ * Fecha   : 08/04/2020 15:09:09
  */
 @Injectable()
-export class CRD_RS_200_111_TXT_LCI 
+export class CRD_RS_200_118_ALD 
 {
     constructor (private hostService: CmWsHostService) {}
   /**
-   * Invoca a CRD_RS_200_111_TXT_LCI
+   * Invoca a CRD_RS_200_118_ALD
    * @param responseFunc Callback de respuesta
    * @param errFunc Callback de error
-   * @param wss_cod_prd Producto: CEX, LEX, etcÓ
-   * @param wss_tip_txt "MERCA", "INESP", "INREE", "LIBRE"
    * @param wss_num_opr Nro Operacion
-   * @param wss_lin_txt linea de texto
+   * @param wss_ind_ald Indicador aladi
    * @param wss_usercode Usuario
    */                
     call (responseFunc : ( r: CmWsResult) => void
         , errFunc : ( r: string) => void
-		, wss_cod_prd: string // String
-		, wss_tip_txt: string // String
 		, wss_num_opr: string // String
-		, wss_lin_txt: string // String
+		, wss_ind_ald: string // String
 		, wss_usercode: string // String
 	): void 
 	{
    // URL to web Service
-    const url: string        = this.hostService.getRuta() + '/FBP/CRD_RS_200_111_TXT_LCI';  
+    const url: string        = this.hostService.getRuta() + '/FBP/CRD_RS_200_118_ALD';  
    const data: any = {
- wss_cod_prd: wss_cod_prd, wss_tip_txt: wss_tip_txt, wss_num_opr: wss_num_opr, wss_lin_txt: wss_lin_txt, wss_usercode: wss_usercode
+wss_num_opr: wss_num_opr, wss_ind_ald: wss_ind_ald, wss_usercode: wss_usercode
 	};
 	  
    this.hostService.postRest(url, data)

@@ -1,0 +1,73 @@
+<!-- Generado por Xml2Ang, Bcx Solutions -->
+<!-- Fecha: 16/04/2020 15:10:11 -->
+	<div class="cm-main">
+	<div class="cm-toolbar">
+		<mat-toolbar color="primary">
+			<span class="cm-title-text">{{titleAux}}</span>
+			<span class="cm-title-spacer"></span>
+			<button type='button' mat-icon-button (click)="this.utilService.cmdHelp_click(this.dialog)"><mat-icon>help</mat-icon></button>
+		</mat-toolbar>
+	</div>
+	<form [formGroup]="form" autocomplete="off">
+	<div class="cm-botonera">
+		<button type='button' mat-raised-button [disabled]="btnAceptar" (click)="cmdAceptar_click()"><mat-icon>check</mat-icon>Aceptar</button>
+		<button type='button' mat-raised-button  (click)="cmdVolver_click()"><mat-icon>arrow_back</mat-icon>Volver</button>
+	</div>
+	<div class="inner-sidenav-content">
+	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">				
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<mat-form-field>
+				<input matInput formControlName="txtOri" placeholder="Original" maxlength="2">
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<mat-form-field>
+				<input matInput formControlName="txtCopia" placeholder="Copia" maxlength="2">
+				</mat-form-field>
+			</div>
+		</div>
+		</div> <!--  fin de fila 1 -->
+		<div class="mdc-layout-grid"> <!--  fila 2 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<div style="margin-top:22px">Descripción</div>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+				<mat-form-field>
+				<input matInput formControlName="txtGlosa" placeholder=""  maxlength="64">
+				</mat-form-field>
+			</div>
+		</div>
+		</div> <!--  fin de fila 2 -->
+		<div class="mdc-layout-grid"> <!--  fila 2 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<div style="margin-top:22px">A la orden de</div>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+				<mat-form-field>
+				<input matInput formControlName="txtOrden" placeholder="" maxlength="65" (ngModelChange)="ofunc_mayuscula(this.txtOrden);">
+				</mat-form-field>
+			</div>
+		</div>
+		</div> <!--  fin de fila 2 -->
+		<div class="mdc-layout-grid"> <!--  fila 3 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">				
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+				<mat-form-field appearance="outline">
+				<textarea  rows="8" matInput formControlName="txtTextoLibre" placeholder="" [maxlength]="maxlengthAux" (ngModelChange)="ofunc_mayuscula(this.txtTextoLibre);"></textarea>
+				</mat-form-field>
+			</div>
+		</div>
+		</div> <!--  fin de fila 3 -->
+	</div>
+	</div>
+	</form>
+	</div>
+<cm-wait [waitShow]="waitShow"></cm-wait>

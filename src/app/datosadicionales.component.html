@@ -39,7 +39,7 @@
 				<bcx-numero [tabindex]="2" formControlName="bcxPorcentajeVista" (focusout)="ofunc_validar_tasa(this.bcxPorcentajeVista)" placeholder="Porcentaje vista" maxlength="11" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
-				<bcx-numero [tabindex]="3" formControlName="bcxPorcentajePlazo" placeholder="Porcentaje plazo" maxlength="11" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
+				<bcx-numero [tabindex]="3" formControlName="bcxPorcentajePlazo" (focusout)="ofunc_eval_porce();ofunc_validar_tasa(this.bcxPorcentajeVista)" placeholder="Porcentaje plazo" maxlength="11" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
 			</div>
 		</div>
 		</div>
@@ -60,7 +60,7 @@
 			</div>	
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 				<mat-form-field>
-				<input matInput [tabindex]="5" formControlName="txtFechaSolicitud" placeholder="Fecha solicitud" maxlength="10" [matDatepicker]='dtpFechaSolicitud'>
+				<input matInput [tabindex]="5" formControlName="txtFechaSolicitud" placeholder="Fecha solicitud" maxlength="10" [matDatepicker]='dtpFechaSolicitud' (focusout)="ofunc_val_fec_pro()">
 				<mat-datepicker-toggle matSuffix [for]='dtpFechaSolicitud'></mat-datepicker-toggle>
 				<mat-datepicker #dtpFechaSolicitud></mat-datepicker>
 				<mat-error class="cm-md-error">Fecha Incorrecta</mat-error>
@@ -76,27 +76,18 @@
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">				
 				<span class="size_font_label">Crédito proveedor</span>
 			</div>
-			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
-				<ngx-datatable #grd class="material" style="width:250px;height:150px;"
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<ngx-datatable  #mydatatable class="material" style="width:250px;height:200px;"
 					 [rows]="tableRows"
 					 [columns]="tableCols"
 					 [scrollbarV]="true"
-					 [rowHeight]="25"
-					 [headerHeight]="25"
-					 [footerHeight]="25"
-					 [selected]="tableSelected"
-					 [selectionType]="'single'"
-					 (select)="onTableSelect($event)"
-					 (activate)="onTableActivate($event)"
-					 (scroll)="onTableScroll($event)"
-					 (sort)="onTableSort($event)"
-				
-					>
-					<ngx-datatable-footer *ngIf="true">
-						<ng-template ngx-datatable-footer-template let-rowCount="rowCount">
-							<div style="padding-left: 5px">Total: {{ rowCount }} filas</div>
-						</ng-template>
-					</ngx-datatable-footer>
+					 [rowHeight]="35"
+					 [headerHeight]="35"
+			
+					 [columnMode]="ColumnMode.force" 
+					 [limit]="20"									 
+					 [scrollbarH]="false">
+
 				</ngx-datatable>
 				<ng-template #rightTmpl let-value='value'>
 					<div style='text-align: right'>{{value}}</div>
@@ -104,13 +95,23 @@
 				<ng-template #centerTmpl let-value='value'>
 					<div style='text-align: center'>{{value}}</div>
 				</ng-template>
+				<ng-template #editable1Tmpl  let-rowIndex="rowIndex" let-value="value" let-row="row">
+					<mat-form-field>
+						<input matInput [disabled]="false" style="width:35px;" maxlength="3" autofocus (focusout)="updateValue($event, 'col1', rowIndex)" type="text" [value]="value"/>
+					</mat-form-field>
+				</ng-template>
+				<ng-template #editable2Tmpl  let-rowIndex="rowIndex" let-value="value" let-row="row">
+					<mat-form-field>
+						<input matInput [disabled]="false" style="width:35px;" maxlength="3" autofocus (focusout)="updateValue($event, 'col2', rowIndex)" type="text" [value]="value"/>
+					</mat-form-field>
+				</ng-template> 
 			</div>
 		</div>
 		</div>		
 		<div class="mdc-layout-grid"> <!--  fila 1 -->
 		<div class="mdc-layout-grid__inner">	
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-				<mat-checkbox tabindex="7"  class="bcx_middleCheck" [checked]="false"  [disabled]="false" formControlName="chbkInteresCreditoProveedor" >Intereses crédito proveedor</mat-checkbox>
+				<mat-checkbox tabindex="7"  class="bcx_middleCheck" (change)="ofunc_hab()" [checked]="false" [disabled]="false" formControlName="chbkInteresCreditoProveedor" >Intereses crédito proveedor</mat-checkbox>
 			</div>	
 		</div>
 		</div>	
@@ -118,7 +119,7 @@
 		<div class="mdc-layout-grid__inner">	
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
 				<mat-form-field>
-				<input tabindex="8" matInput formControlName="txtTasaProveedor" placeholder="Tipo de tasa">
+				<input tabindex="8" matInput formControlName="txtTasaProveedor" placeholder="Tipo de tasa" (focusout)="focusout_txtTasaProveedor()">
 				<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
 				</mat-form-field>
 			</div>
@@ -132,19 +133,19 @@
 	
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 				<!--  BcxNumero -->
-				<bcx-numero [tabindex]="8" formControlName="bcxValorBase" placeholder="Valor base" maxlength="10" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
+				<bcx-numero [tabindex]="8" formControlName="bcxValorBase" (change)="change_tasas_proveedor_grl()"  (focusout)="ofunc_validar_tasa(this.bcxValorBase)" placeholder="Valor base" maxlength="10" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
 			</div>	
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 				<!--  BcxNumero -->
-				<bcx-numero [tabindex]="9" formControlName="bcxCostoFondo" placeholder="Costo de fondo" maxlength="10" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
+				<bcx-numero [tabindex]="9" formControlName="bcxCostoFondo" (change)="change_tasas_proveedor_grl()" (focusout)="ofunc_validar_spread()"  placeholder="Costo de fondo" maxlength="10" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
 			</div>						
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 				<!--  BcxNumero -->
-				<bcx-numero [tabindex]="10" formControlName="bcxSpread" placeholder="Spread" maxlength="10" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
+				<bcx-numero [tabindex]="10" formControlName="bcxSpread" (focusout)="ofunc_validar_spread()" placeholder="Spread" maxlength="10" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 				<!--  BcxNumero -->
-				<bcx-numero [tabindex]="11" formControlName="bcxMonto" placeholder="Monto" maxlength="15" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
+				<bcx-numero [tabindex]="11" formControlName="bcxMonto" (change)="ofunc_39C()" placeholder="Monto" maxlength="15" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
 			</div>
 		</div>
 		</div>
@@ -161,12 +162,12 @@
 				<span>Intereses Banco</span>
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">			
-				<bcx-numero [tabindex]="12" matInput formControlName="txtDesdeApeANego" maxlength="10" separador="true" decimales="6" placeholder="Desde apertura a negociación"></bcx-numero>			
+				<bcx-numero [tabindex]="12" matInput formControlName="txtDesdeApeANego" (focusout)="ofunc_validar_tasa(this.txtDesdeApeANego)" maxlength="10" separador="true" decimales="6" placeholder="Desde apertura a negociación"></bcx-numero>			
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">								
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">			
-				<bcx-numero [tabindex]="13" matInput formControlName="txtDesdeNegoAVcto" maxlength="10" separador="true" decimales="6" placeholder="Desde negociación a vencimiento crédito"></bcx-numero>		
+				<bcx-numero [tabindex]="13" matInput formControlName="txtDesdeNegoAVcto" (focusout)="ofunc_validar_tasa(this.txtDesdeNegoAVcto)" maxlength="10" separador="true" decimales="6" placeholder="Desde negociación a vencimiento crédito"></bcx-numero>		
 			</div>
 		</div>
 		</div>	
@@ -188,19 +189,19 @@
 		
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 					<!--  BcxNumero -->
-					<bcx-numero [tabindex]="15" formControlName="bcxValorBaseBco" placeholder="Valor base" maxlength="10" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
+					<bcx-numero [tabindex]="15" formControlName="bcxValorBaseBco" (focusout)="ofunc_validar_tasa(this.bcxValorBaseBco)" placeholder="Valor base" maxlength="10" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
 				</div>	
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 					<!--  BcxNumero -->
-					<bcx-numero [tabindex]="16" formControlName="bcxCostoFondoBco" placeholder="Costo de fondo" maxlength="10" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
+					<bcx-numero [tabindex]="16" formControlName="bcxCostoFondoBco" (focusout)="ofunc_write_nueva();ofunc_validar_spread_bco()" placeholder="Costo de fondo" maxlength="10" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
 				</div>						
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 					<!--  BcxNumero -->
-					<bcx-numero [tabindex]="17" formControlName="bcxSpreadBco" placeholder="Spread" maxlength="10" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
+					<bcx-numero [tabindex]="17" formControlName="bcxSpreadBco" (focusout)="ofunc_write_nueva();ofunc_validar_spread_bco()" placeholder="Spread" maxlength="10" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
 				</div>
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 					<mat-form-field>
-						<input tabindex="18" matInput formControlName="txtDiasPlazoBco" placeholder="Dias plazo">
+						<input tabindex="18" matInput formControlName="txtDiasPlazoBco" placeholder="Dias plazo" maxlength="4">
 					</mat-form-field>
 				</div>
 			</div>
@@ -215,26 +216,26 @@
 		<div class="mdc-layout-grid__inner">
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
 				<mat-form-field>
-				<input tabindex="19" matInput formControlName="txtReembolso" placeholder="Reembolso">
+				<input tabindex="19" maxlength="1" matInput formControlName="txtReembolso" placeholder="Reembolso" (focusout)="focusout_txtReembolso($event)">
 				<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
 				</mat-form-field>
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 				<mat-form-field>
-				<mat-select placeholder="Descripción" formControlName="cbbReembolso" class="cm-in-combo">
+				<mat-select placeholder="" formControlName="cbbReembolso" class="cm-in-combo" (openedChange)="ofunc_aladi();ofunc_inhi_rurr()">
 					<mat-option *ngFor="let item of cbbReembolsoArray" [value]="item.Cod">{{item.Nom}}</mat-option>
 				</mat-select>
 				</mat-form-field>
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
 				<mat-form-field>
-				<input tabindex="20" matInput formControlName="txtZonaFranca" placeholder="Zona franca">
+				<input tabindex="20" maxlength="1" matInput formControlName="txtZonaFranca" placeholder="Zona franca">
 				<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
 				</mat-form-field>
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 				<mat-form-field>
-				<mat-select placeholder="Descripción" formControlName="cbbZonaFranca" class="cm-in-combo">
+				<mat-select placeholder="" formControlName="cbbZonaFranca" class="cm-in-combo">
 					<mat-option *ngFor="let item of cbbZonaFrancaArray" [value]="item.Cod">{{item.Nom}}</mat-option>
 				</mat-select>
 				</mat-form-field>
@@ -253,10 +254,10 @@
 				<mat-checkbox tabindex="23" class="bcx_middleCheck" [checked]="false"  [disabled]="false" formControlName="chbkTercerosPaises" >Terceros países</mat-checkbox>
 			</div>	
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-				<mat-checkbox tabindex="24" class="bcx_middleCheck" [checked]="false"  [disabled]="false" formControlName="chbkRefinanciamiento" >Refinanciamiento</mat-checkbox>
+				<mat-checkbox tabindex="24" class="bcx_middleCheck" [checked]="false"  [disabled]="false"  formControlName="chbkRefinanciamiento" (change)="change_chbkRefinanciamiento()">Refinanciamiento</mat-checkbox>
 			</div>	
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
-				<button tabindex="25" type='button' [disabled]="false" mat-mini-fab  (click)="cmdAgregar_click()"><mat-icon>more_horiz</mat-icon></button>
+				<button tabindex="25" type='button' mat-mini-fab [disabled]="habBtnRefinanciamiento"  (click)="cmdAgregar_click()"><mat-icon>more_horiz</mat-icon></button>
 			</div>				
 		</div>
 		</div>	
@@ -272,7 +273,7 @@
 				<span>Banco corresponsal (Receptor) BIC</span>
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">					
-				<bcx-banco #txtBicRecep  [tabindex]="26" id="txtBicRecep" formControlName="txtBicRecep" placeholder="" placeholderDes="Nombre" [isDisabled]="false" [data]="this"></bcx-banco>
+				<bcx-banco class="hide-descripcion" #txtBicRecep  [tabindex]="26" id="txtBicRecep" (focusout)="focusout_txtBicRecep()" (change)="change_txtBicRecep()" formControlName="txtBicRecep" placeholder=""  [isDisabled]="false" [data]="this"></bcx-banco>
 			</div>
 		</div>
 		</div>	
@@ -280,19 +281,24 @@
 		<div class="mdc-layout-grid__inner">
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">			
 			</div>
-			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">	
 				<mat-form-field>
-				<input matInput #txtDireCorre tabindex="27" formControlName="txtDireCorre" placeholder="Dirección" maxlength="35">
+				<input matInput tabindex="27" (ngModelChange)="ofunc_seteo_mayuscula(this.txtNomCorre)" formControlName="txtNomCorre" placeholder="Nombre" maxlength="35">
+				</mat-form-field>		
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-form-field>
+				<input matInput #txtDireCorre tabindex="27" (ngModelChange)="ofunc_seteo_mayuscula(this.txtDireCorre)" formControlName="txtDireCorre" placeholder="Dirección" maxlength="35">
 				</mat-form-field>
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 				<mat-form-field>
-				<input matInput tabindex="28" formControlName="txtCiuCorre" placeholder="Ciudad" maxlength="35">
+				<input matInput tabindex="28" (ngModelChange)="ofunc_seteo_mayuscula(this.txtCiuCorre)" formControlName="txtCiuCorre" placeholder="Ciudad" maxlength="35">
 				</mat-form-field>
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 				<mat-form-field>
-				<input matInput tabindex="29" formControlName="txtPaisCorre" placeholder="País" maxlength="35">
+				<input matInput tabindex="29" (ngModelChange)="ofunc_seteo_mayuscula(this.txtPaisCorre)" formControlName="txtPaisCorre" placeholder="País" maxlength="35">
 				</mat-form-field>
 			</div>
 		</div>
@@ -308,7 +314,7 @@
 			</div>	
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
 				<mat-form-field>
-				<input matInput tabindex="30" formControlName="txtFlc" placeholder="" maxlength="4"> 
+				<input matInput tabindex="30" formControlName="txtFlc" placeholder="" maxlength="4" (change)="ofunc_seteo_mayuscula(this.txtFlc);"> 
 				<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
 				</mat-form-field>
 			</div>
@@ -340,7 +346,7 @@
 				</div>	
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
 					<mat-form-field>
-					<input tabindex="32" matInput formControlName="txtFechaEmision" placeholder="">
+					<input tabindex="32" matInput formControlName="txtFechaEmision" placeholder="" (focusout)="focusout_txtFechaEmision()">
 					</mat-form-field>
 				</div>
 			</div>
@@ -352,12 +358,12 @@
 				</div>	
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
 					<mat-form-field>
-					<input  tabindex="33" matInput formControlName="txtUcp" placeholder="">
+					<input  tabindex="33" matInput formControlName="txtUcp" placeholder="" (focusout)="focusout_txtUlc()"  (change)="ofunc_seteo_mayuscula(this.txtFlc);">
 					</mat-form-field>
 				</div>
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 					<mat-form-field>
-					<mat-select placeholder="" formControlName="cbbUcp" class="cm-in-combo">
+					<mat-select placeholder="" formControlName="cbbUcp" class="cm-in-combo" (openedChange)="closeHandler_cbbUcp()">
 						<mat-option *ngFor="let item of cbbUcpArray" [value]="item.wss_cod_rucp">{{item.wss_gls_rucp}}</mat-option>
 					</mat-select>
 					</mat-form-field>
@@ -376,7 +382,7 @@
 				</div>	
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
 					<mat-form-field>
-					<input tabindex="34" matInput formControlName="txtDiasValidez" placeholder="" maxlength="4">
+					<input tabindex="34" matInput formControlName="txtDiasValidez" placeholder="" maxlength="4" (focusout)="focusout_txtDiasValidez()">
 					</mat-form-field>
 				</div>
 			</div>
@@ -386,7 +392,7 @@
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
 					<span>[M] Fecha de expiración [31D]</span>
 				</div>	
-				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 					<mat-form-field>
 						<input tabindex="35" matInput formControlName="txtFechaExpiracion" placeholder="" maxlength="10" [matDatepicker]='dtpFechaExpiracion'>
 						<mat-datepicker-toggle matSuffix [for]='dtpFechaExpiracion'></mat-datepicker-toggle>
@@ -396,7 +402,7 @@
 				</div>
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 					<mat-form-field>
-					<input tabindex="36" matInput formControlName="txtLugarExpiracion" placeholder="Lugar" maxlength="4">
+					<input tabindex="36" matInput formControlName="txtLugarExpiracion" (ngModelChange)="ofunc_seteo_mayuscula(this.txtLugarExpiracion)" placeholder="Lugar" maxlength="4">
 					</mat-form-field>
 				</div>
 			</div>
@@ -407,7 +413,7 @@
 					<span>[O] Banco ordenante BIC [51a]</span>
 				</div>
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">					
-					<bcx-banco [tabindex]="36" id="txtBicBancoOrdenante" formControlName="txtBicBancoOrdenante" placeholder="" placeholderDes="Nombre" [isDisabled]="false" [data]="this"></bcx-banco>
+					<bcx-banco class="hide-descripcion" [tabindex]="36" id="txtBicBancoOrdenante" (change)="change_txtBicBancoOrdenante()" (focusout)="focus_txtBicBancoOrdenante()" formControlName="txtBicBancoOrdenante" placeholder="" placeholderDes="Nombre" [isDisabled]="false" [data]="this"></bcx-banco>
 				</div>
 			</div>
 		</div>	
@@ -415,19 +421,24 @@
 			<div class="mdc-layout-grid__inner">
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">					
 				</div>
-				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">	
 					<mat-form-field>
-					<input tabindex="37" #txtDireOrdenante matInput formControlName="txtDireOrdenante" placeholder="Dirección">
+					<input tabindex="37"  matInput formControlName="txtNombreOrdenante" (ngModelChange)="ofunc_seteo_mayuscula(this.txtNombreOrdenante)" placeholder="Nombre">
+					</mat-form-field>				
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+					<mat-form-field>
+					<input tabindex="37" #txtDireOrdenante matInput formControlName="txtDireOrdenante" (ngModelChange)="ofunc_seteo_mayuscula(this.txtDireOrdenante)" placeholder="Dirección">
 					</mat-form-field>
 				</div>
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 					<mat-form-field>
-					<input tabindex="38" matInput formControlName="txtCiuOrdenante" placeholder="Ciudad">
+					<input tabindex="38" matInput formControlName="txtCiuOrdenante" (ngModelChange)="ofunc_seteo_mayuscula(this.txtCiuOrdenante)" placeholder="Ciudad">
 					</mat-form-field>
 				</div>
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 					<mat-form-field>
-					<input tabindex="39"  matInput formControlName="txtPaisOrdenante" placeholder="País">
+					<input tabindex="39"  matInput formControlName="txtPaisOrdenante" (ngModelChange)="ofunc_seteo_mayuscula(this.txtPaisOrdenante)" placeholder="País">
 					</mat-form-field>
 				</div>
 			</div>
@@ -439,7 +450,7 @@
 				</div>	
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 					<mat-form-field>
-					<input tabindex="40" matInput formControlName="txtBicOrde50" placeholder="">
+					<input tabindex="40" matInput formControlName="txtBicOrde50" placeholder="" (ngModelChange)="ofunc_seteo_mayuscula(this.txtBicOrde50)">
 					</mat-form-field>
 				</div>
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
@@ -453,17 +464,17 @@
 				</div>
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 					<mat-form-field>
-					<input tabindex="42" matInput formControlName="txtOrdeNom50" placeholder="Nombre">
+					<input tabindex="42" matInput formControlName="txtOrdeNom50" placeholder="Nombre" (ngModelChange)="ofunc_seteo_mayuscula(this.txtOrdeNom50)">
+					</mat-form-field>
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+					<mat-form-field>
+					<input tabindex="43" matInput formControlName="txtOrdeDire50" placeholder="Dirección" (ngModelChange)="ofunc_seteo_mayuscula(this.txtOrdeDire50)">
 					</mat-form-field>
 				</div>
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 					<mat-form-field>
-					<input tabindex="43" matInput formControlName="txtOrdeDire50" placeholder="Dirección">
-					</mat-form-field>
-				</div>
-				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-					<mat-form-field>
-					<input tabindex="44" matInput formControlName="txtOrCiuPa50" placeholder="Ciudad">
+					<input tabindex="44" matInput formControlName="txtOrCiuPa50" placeholder="Ciudad" (ngModelChange)="ofunc_seteo_mayuscula(this.txtOrCiuPa50)">
 					</mat-form-field>
 				</div>
 			</div>
@@ -482,22 +493,22 @@
 				</div>
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 					<mat-form-field>
-					<input tabindex="45" #txtDireOrdenante matInput formControlName="txtBeneBic59" placeholder="Nombre 1">
+					<input tabindex="45" #txtDireOrdenante matInput formControlName="txtBeneBic59" placeholder="Nombre 1" (ngModelChange)="ofunc_seteo_mayuscula(this.txtBeneBic59)" (focusOut)="ofunc_odenante()">
 					</mat-form-field>
 				</div>
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 					<mat-form-field>
-					<input tabindex="46" matInput formControlName="txtBeneNombre59" placeholder="Nombre 2">
+					<input tabindex="46" matInput formControlName="txtBeneNombre59" placeholder="Nombre 2" (ngModelChange)="ofunc_seteo_mayuscula(this.txtBeneNombre59)">
 					</mat-form-field>
 				</div>
-				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 					<mat-form-field>
-					<input tabindex="47"  matInput formControlName="txtBeneDire59" placeholder="Dirección">
+					<input tabindex="47"  matInput formControlName="txtBeneDire59" placeholder="Dirección" (ngModelChange)="ofunc_seteo_mayuscula(this.txtBeneDire59)">
 					</mat-form-field>
 				</div>
-				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" >
 					<mat-form-field>
-					<input tabindex="48"  matInput formControlName="txtBeneCiu59" placeholder="Ciudad">
+					<input tabindex="48"  matInput formControlName="txtBeneCiu59" placeholder="Ciudad" (ngModelChange)="ofunc_seteo_mayuscula(this.txtBeneCiu59)">
 					</mat-form-field>
 				</div>
 			</div>
@@ -508,12 +519,12 @@
 				</div>
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
 					<mat-form-field>
-					<input tabindex="49" matInput formControlName="txtPais" placeholder="País">
+					<input tabindex="49" matInput formControlName="txtPais" placeholder="País" (focusout)="focusout_txtPais(this.txtPais)">
 					</mat-form-field>
 				</div>
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 					<mat-form-field>
-					<mat-select placeholder="Descripción" formControlName="cbbPais" class="cm-in-combo">
+					<mat-select placeholder="" formControlName="cbbPais" class="cm-in-combo" (openedChange)="cbbPais_openedChange($event)">
 						<mat-option *ngFor="let item of cbbPaisArray" [value]="item.wss_cod_pais">{{item.wss_gls_pais}}</mat-option>
 					</mat-select>
 					</mat-form-field>
@@ -539,7 +550,7 @@
 				</div>	
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
 					<mat-form-field>
-					<input tabindex="51" matInput formControlName="txtporcentaje" placeholder="">
+					<input tabindex="51" matInput formControlName="txtporcentaje" placeholder="" (focusout)="focusout_txtporcentaje()">
 					</mat-form-field>
 				</div>	
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1 cm-label-contabilizadas" style="text-align: center;"> 
@@ -547,7 +558,7 @@
 				</div>	
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
 					<mat-form-field>
-					<input tabindex="52" matInput formControlName="txtTolerancia" placeholder="">
+					<input tabindex="52" matInput formControlName="txtTolerancia" placeholder="" (focusout)="focusout_txtTolerancia()">
 					</mat-form-field>
 				</div>
 			</div>
@@ -577,7 +588,7 @@
 					<span>[C] Utilizable con BIC[41A]</span>
 				</div>	
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">					
-					<bcx-banco [tabindex]="54" formControlName="txtUtilizableCon" placeholder="" placeholderDes="Nombre" [isDisabled]="false" [data]="this"></bcx-banco>
+					<bcx-banco class="hide-descripcion" [tabindex]="54" formControlName="txtUtilizableCon" (focusout)="focusout_txtUtilizableCon()" (ngModelChange)="change_txtUtilizableCon()" placeholder="" placeholderDes="Nombre" [isDisabled]="bloquearBtnUtilizableCon" [data]="this"></bcx-banco>
 				</div>
 			</div>				
 		</div>
@@ -588,7 +599,7 @@
 				</div>	
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 					<mat-form-field appearance="outline">
-					<textarea rows="5" tabindex="55" matInput formControlName="txtUtilizableConCualquiera" placeholder=""></textarea>
+					<textarea rows="5" tabindex="55" matInput formControlName="txtUtilizableConCualquiera" placeholder="" (ngModelChange)="ofunc_textArea_mayuscula_txtUt(this.txtUtilizableConCualquiera)"></textarea>
 					</mat-form-field>
 				</div>	
 			</div>
@@ -600,7 +611,7 @@
 				</div>	
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">					
 					<mat-form-field>
-					<input tabindex="56" matInput formControlName="txtPor" placeholder="">
+					<input tabindex="56" matInput formControlName="txtPor" placeholder="" (ngModelChange) = "ofunc_seteo_mayuscula(this.txtPor)">
 					</mat-form-field>
 				</div>
 			</div>				
@@ -612,7 +623,7 @@
 				</div>	
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 					<mat-form-field appearance="outline">
-					<textarea tabindex="57" rows="5" matInput formControlName="txtGirosATenor" placeholder=""></textarea>
+					<textarea tabindex="57" rows="5" matInput formControlName="txtGirosATenor" placeholder=""  (ngModelChange)="ofunc_textArea_mayuscula(this.txtGirosATenor)" maxlength="140"></textarea>
 					</mat-form-field>
 				</div>	
 			</div>
@@ -622,8 +633,8 @@
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
 					<span>[O] Girado BIC [42a]</span>
 				</div>
-				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">					
-					<bcx-banco [tabindex]="58" id="txtBicGirado" formControlName="txtBicGirado" placeholder="" placeholderDes="Nombre" [isDisabled]="false" [data]="this"></bcx-banco>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">				
+					<bcx-banco class="hide-descripcion" [tabindex]="58" id="txtBicGirado" formControlName="txtBicGirado" (focusout)="focusout_txtBicGirado()" (ngModelChange)="change_txtBicGirado()" placeholder="" placeholderDes="Nombre" [isDisabled]="false" [data]="this"></bcx-banco>
 				</div>
 			</div>
 		</div>	
@@ -631,24 +642,24 @@
 			<div class="mdc-layout-grid__inner">
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">			
 				</div>
-				<!-- <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-					<mat-form-field>
-					<input matInput formControlName="txtGirNom" placeholder="Nombre">
-					</mat-form-field>
-				</div> -->
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 					<mat-form-field>
-					<input matInput tabindex="59" formControlName="txtGirDire" placeholder="Dirección">
+					<input matInput formControlName="txtGirNom" placeholder="Nombre" (ngModelChange)="ofunc_seteo_mayuscula(this.txtGirNom)">
+					</mat-form-field>
+				</div>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+					<mat-form-field>
+					<input matInput tabindex="59" formControlName="txtGirDire" placeholder="Dirección" (ngModelChange)="ofunc_seteo_mayuscula(this.txtGirDire)">
 					</mat-form-field>
 				</div>
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 					<mat-form-field>
-					<input tabindex="60" matInput formControlName="txtGirCiu" placeholder="Ciudad">
+					<input tabindex="60" matInput formControlName="txtGirCiu" placeholder="Ciudad" (ngModelChange)="ofunc_seteo_mayuscula(this.txtGirCiu)">
 					</mat-form-field>
 				</div>
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 					<mat-form-field>
-					<input tabindex="61" matInput formControlName="txtGirPais" placeholder="País">
+					<input tabindex="61" matInput formControlName="txtGirPais" placeholder="País" (ngModelChange)="ofunc_seteo_mayuscula(this.txtGirPais)">
 					</mat-form-field>
 				</div>
 			</div>
@@ -660,7 +671,7 @@
 				</div>	
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 					<mat-form-field appearance="outline">
-					<textarea tabindex="62" rows="8" matInput formControlName="txtDetallePagoMixto" placeholder=""></textarea>
+					<textarea tabindex="62" rows="8" matInput formControlName="txtDetallePagoMixto" (ngModelChange)="ofunc_textArea_mayuscula(this.txtDetallePagoMixto)" placeholder=""></textarea>
 					</mat-form-field>
 				</div>	
 			</div>
@@ -672,7 +683,7 @@
 				</div>	
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 					<mat-form-field appearance="outline">
-					<textarea tabindex="63" rows="6" matInput formControlName="txtDetallePagoDiferido" placeholder=""></textarea>
+					<textarea tabindex="63" rows="6" matInput formControlName="txtDetallePagoDiferido" (ngModelChange)="ofunc_textArea_mayuscula(this.txtDetallePagoDiferido)" placeholder=""></textarea>
 					</mat-form-field>
 				</div>	
 			</div>
@@ -683,7 +694,7 @@
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
 					<span>[O] Embarque parcial [43P]</span>
 				</div>	
-				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
 					<mat-radio-group  tabindex="64" formControlName="optEmbarqueParcial">
 						<mat-radio-button value="S">Permitido</mat-radio-button>
 						<mat-radio-button value="N">No permitido</mat-radio-button>
@@ -698,7 +709,7 @@
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
 					<span>[O] Transbordo [43T]</span>
 				</div>	
-				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
 					<mat-radio-group tabindex="65" formControlName="optTransbordo">
 						<mat-radio-button value="S">Permitido</mat-radio-button>
 						<mat-radio-button value="N">No permitido</mat-radio-button>
@@ -714,26 +725,31 @@
 				</div>
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
 					<mat-form-field>
-					<input tabindex="66" matInput formControlName="txtViaTransporte" placeholder="Código">
+					<input tabindex="66" matInput formControlName="txtViaTransporte" placeholder="Código" (change)="change_txtViaTransporte()" (focusout)="focusout_txtViaTransporte()" maxlength="4">
 					</mat-form-field>
 				</div>
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 					<mat-form-field>
-					<mat-select placeholder="Descripción" formControlName="cbbViaTransporte" class="cm-in-combo">
+					<mat-select placeholder="" formControlName="cbbViaTransporte" class="cm-in-combo" (openedChange)="cbbViaTransporte_openedChange()">
 						<mat-option *ngFor="let item of cbbViaTransporteArray" [value]="item.wss_cod_viat">{{item.wss_gls_viat}}</mat-option>
 					</mat-select>
+					</mat-form-field>
+				</div>
+				<div *ngIf="visTxtOtroVia" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+					<mat-form-field>
+					<input tabindex="66" matInput formControlName="txtOtroVia" placeholder="" (ngModelChange)="ofunc_seteo_mayuscula(this.txtOtroVia)">
 					</mat-form-field>
 				</div>
 			</div>
 		</div>
 		<div class="mdc-layout-grid"> <!--  fila 1 -->
 			<div class="mdc-layout-grid__inner">
-				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas" >	
 					<span>[O] Lugar de despacho [44A]</span>
 				</div>	
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">					
 					<mat-form-field>
-					<input tabindex="67" matInput formControlName="txtLugarDespacho" placeholder="">
+					<input tabindex="67" matInput formControlName="txtLugarDespacho" placeholder="" (ngModelChange)="ofunc_seteo_mayuscula(this.txtLugarDespacho)">
 					</mat-form-field>
 				</div>
 			</div>				
@@ -745,7 +761,7 @@
 				</div>	
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">					
 					<mat-form-field>
-					<input tabindex="68" matInput formControlName="txtPuertoEmbarque" placeholder="">
+					<input tabindex="68" matInput formControlName="txtPuertoEmbarque" placeholder="" (ngModelChange)="ofunc_seteo_mayuscula(this.txtPuertoEmbarque)">
 					</mat-form-field>
 				</div>
 			</div>				
@@ -757,7 +773,7 @@
 				</div>	
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">					
 					<mat-form-field>
-					<input tabindex="69" matInput formControlName="txtPuertoDescarga" placeholder="">
+					<input tabindex="69" matInput formControlName="txtPuertoDescarga" placeholder="" (ngModelChange)="ofunc_seteo_mayuscula(this.txtPuertoDescarga)">
 					</mat-form-field>
 				</div>
 			</div>				
@@ -769,7 +785,7 @@
 				</div>	
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">					
 					<mat-form-field>
-					<input tabindex="70" matInput formControlName="txtLugarDestino44" placeholder="">
+					<input tabindex="70" matInput formControlName="txtLugarDestino44" placeholder="" (ngModelChange)="ofunc_seteo_mayuscula(this.txtLugarDestino44)">
 					</mat-form-field>
 				</div>
 			</div>				
@@ -782,7 +798,7 @@
 				</div>	
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">					
 					<mat-form-field>
-					<input tabindex="71" matInput formControlName="txtDiasPresentacionDoc" placeholder="">
+					<input tabindex="71" matInput formControlName="txtDiasPresentacionDoc" placeholder="" (focusout)="ofunc_calc_fecha_embarque(2)">
 					</mat-form-field>
 				</div>
 			</div>				
@@ -794,7 +810,7 @@
 				</div>	
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">					
 					<mat-form-field>
-						<input tabindex="72" matInput formControlName="txtFechaEmbarque" placeholder="" maxlength="10" [matDatepicker]='dtpFechaEmbarque'>
+						<input tabindex="72" matInput formControlName="txtFechaEmbarque" placeholder="" maxlength="10" [matDatepicker]='dtpFechaEmbarque' (focusout)="ofunc_calc_fecha_embarque(2)">
 						<mat-datepicker-toggle matSuffix [for]='dtpFechaEmbarque'></mat-datepicker-toggle>
 						<mat-datepicker #dtpFechaEmbarque></mat-datepicker>
 						<mat-error class="cm-md-error">Fecha Incorrecta</mat-error>
@@ -808,7 +824,7 @@
 					</div>	
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
 						<mat-form-field appearance="outline">
-						<textarea tabindex="73" rows="8" matInput formControlName="txtPeriodoEmbarque44" placeholder="" maxlength="395"></textarea>
+						<textarea tabindex="73" rows="8" matInput formControlName="txtPeriodoEmbarque44" placeholder="" maxlength="395" (focusout)="focusout_txtPeriodoEmbarque44()" (ngModelChange)="change_txtPeriodoEmbarque44()" (focusin)="this.varCount = 1;"></textarea>
 						</mat-form-field>
 					</div>	
 				</div>
@@ -820,7 +836,7 @@
 					</div>	
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 						<mat-form-field appearance="outline">
-						<textarea tabindex="74" rows="10" matInput formControlName="txtMercaderias" placeholder="" maxlength="52000"></textarea>
+						<textarea tabindex="74" rows="10" matInput formControlName="txtMercaderias" placeholder="" maxlength="52000" (focusout)="focusout_txtMercaderias()" (ngModelChange)="change_txtMercaderias()"></textarea>
 						</mat-form-field>
 					</div>	
 				</div>
@@ -861,7 +877,7 @@
 					</div>	
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">					
 						<mat-form-field>
-						<input tabindex="77" matInput formControlName="txtFacturasANombre" placeholder="">
+						<input tabindex="77" matInput formControlName="txtFacturasANombre" placeholder="" (change)="ofunc_seteo_mayuscula(this.txtFacturasANombre)">
 						</mat-form-field>
 					</div>
 				</div>				
@@ -872,12 +888,12 @@
 						<span>[O] Docto. de embarque avisar a</span>
 					</div>	
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
-						<mat-radio-group tabindex="78" formControlName="optGrpDcto">
+						<mat-radio-group tabindex="78" formControlName="optGrpDcto" (change)="ofunc_habi()" >
 							<mat-radio-button value="S">Solicitante</mat-radio-button>
 							<mat-radio-button value="O">Otro</mat-radio-button>
 						</mat-radio-group>
 						<mat-form-field style="width:430px;">
-							<input tabindex="75" matInput formControlName="txtDocOtro" placeholder="">
+							<input tabindex="75" matInput formControlName="txtDocOtro" placeholder="" (change)="ofunc_seteo_mayuscula(this.txtDocOtro)">
 						</mat-form-field>
 					</div>
 					<!-- <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">					
@@ -890,7 +906,7 @@
 						<span>[M] Instrucción confirmación [49]</span>
 					</div>	
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
-						<mat-radio-group tabindex="79" formControlName="optInstruccionConfirmacion">
+						<mat-radio-group tabindex="79" formControlName="optInstruccionConfirmacion" (change)="ofunc_instruccion_confirm();habilitaParticipante()">
 							<mat-radio-button value="S">Confirm</mat-radio-button>
 							<mat-radio-button value="N">Without</mat-radio-button>
 							<mat-radio-button value="M">May Add</mat-radio-button>
@@ -903,7 +919,7 @@
 				<div class="mdc-layout-grid__inner">
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 						<mat-form-field appearance="outline">
-						<textarea tabindex="" rows="10" matInput formControlName="txtMarcasEspe" placeholder="" maxlength="197"></textarea>
+						<textarea tabindex="" rows="10" matInput formControlName="txtMarcasEspe" placeholder="" maxlength="197" (ngModelChange)="ofunc_textArea_mayuscula(this.txtMarcasEspe)"></textarea>
 						</mat-form-field>
 					</div>	
 				</div>
@@ -916,7 +932,7 @@
 					</div>	
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 						<mat-form-field appearance="outline">
-						<textarea tabindex="80" rows="10" matInput formControlName="txtCondicionesAdicio47" placeholder="" maxlength="52000"></textarea>
+						<textarea tabindex="80" rows="10" matInput formControlName="txtCondicionesAdicio47" placeholder="" maxlength="52000" (focusout)="focusout_txtCondicionesAdicio47()" (ngModelChange)="change_txtCondicionesAdicio47()" (focusin)="this.varCount = 1;"></textarea>
 						</mat-form-field>
 					</div>	
 				</div>
@@ -928,7 +944,7 @@
 					</div>	
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 						<mat-form-field appearance="outline">
-						<textarea tabindex="81" rows="8" matInput formControlName="txtCondicionesEspecialesPagoBeneficiario" placeholder="" maxlength="52000"></textarea>
+						<textarea tabindex="81" rows="8" matInput formControlName="txtCondicionesEspecialesPagoBeneficiario" placeholder="" maxlength="52000" (focusout)="focusout_txtCondicionesEspecialesPagoBeneficiario()"  (ngModelChange)="ofunc_textArea_mayuscula(this.txtCondicionesEspecialesPagoBeneficiario)"></textarea>
 						</mat-form-field>
 					</div>	
 				</div>
@@ -940,7 +956,7 @@
 					</div>	
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 						<mat-form-field appearance="outline">
-						<textarea tabindex="82" rows="8" matInput formControlName="txtCondicionesEspecialesPagoBancoReceptor" placeholder="" maxlength="52000"></textarea>
+						<textarea tabindex="82" rows="8" matInput formControlName="txtCondicionesEspecialesPagoBancoReceptor" placeholder="" maxlength="52000" (focusout)="focusout_txtCondicionesEspecialesPagoBancoReceptor()" (ngModelChange)="ofunc_textArea_mayuscula(this.txtCondicionesEspecialesPagoBancoReceptor)"></textarea>
 						</mat-form-field>
 					</div>	
 				</div>
@@ -951,7 +967,7 @@
 						<span>[O] Gastos [71D]</span>
 					</div>	
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
-						<mat-radio-group tabindex="83" formControlName="optGrpGst">
+						<mat-radio-group tabindex="83" formControlName="optGrpGst" (change)="change_optGrpGst()">
 							<mat-radio-button value="B">Beneficiario</mat-radio-button>
 							<mat-radio-button value="S">Solicitante</mat-radio-button>
 							<mat-radio-button value="N">Ninguno</mat-radio-button>
@@ -966,7 +982,7 @@
 					</div>	
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 						<mat-form-field appearance="outline">
-						<textarea tabindex="84" rows="8" matInput formControlName="txtExcepto" placeholder="" maxlength="105"></textarea>
+						<textarea tabindex="84" rows="8" matInput formControlName="txtExcepto" placeholder="" maxlength="105" (ngModelChange)="ofunc_textArea_mayuscula(this.txtExcepto);"></textarea>
 						</mat-form-field>
 					</div>	
 				</div>
@@ -982,11 +998,11 @@
 						</mat-form-field>
 					</div>
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1" style="margin-top:10px;">
-						<mat-checkbox class="bcx_middleCheck" [checked]="false"  [disabled]="false" formControlName="chkPeriodoPresentacion">Otra fecha</mat-checkbox>
+						<mat-checkbox class="bcx_middleCheck" [checked]="false" [disabled]="false" formControlName="chkPeriodoPresentacion" (change)="habilitaPeriodoPresentacion()">Otra fecha</mat-checkbox>
 					</div>	
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">					
 						<mat-form-field>
-						<input tabindex="86" matInput formControlName="txtPeriodoPresentacion" placeholder="">
+						<input tabindex="86" matInput formControlName="txtPeriodoPresentacion" placeholder="" maxlength="35" (ngModelChange)="ofunc_seteo_mayuscula(this.txtPeriodoPresentacion)">
 						</mat-form-field>
 					</div>
 				</div>				
@@ -997,7 +1013,7 @@
 						<span>Emite MT740</span>
 					</div>	
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="margin-top:10px;">
-						<mat-checkbox tabindex="87" class="bcx_middleCheck" [checked]="false"  [disabled]="false" formControlName="chk740" ></mat-checkbox>
+						<mat-checkbox tabindex="87" class="bcx_middleCheck" [checked]="false"  [disabled]="false" formControlName="chk740" (change)="ofunc_valida_740();"></mat-checkbox>
 					</div>	
 				</div>				
 			</div>
@@ -1006,28 +1022,33 @@
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
 						<span>[O] Banco reembolsador BIC [53A]</span>
 					</div>
-					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">					
-						<bcx-banco [tabindex]="88"  id="txtBicReembolso" formControlName="txtBicReembolso" placeholder="" placeholderDes="Nombre" [isDisabled]="false" [data]="this"></bcx-banco>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">					 
+						<bcx-banco class="hide-descripcion" [tabindex]="88" id="txtBicReembolso" formControlName="txtBicReembolso" (focusout)="focusout_txtBicReembolso()" (ngModelChange)="change_txtBicReembolso()" placeholder="" placeholderDes="Nombre" [isDisabled]="false" [data]="this"></bcx-banco>
 					</div>
 				</div>
 			</div>	
 			<div class="mdc-layout-grid"> <!--  fila 1 -->
 				<div class="mdc-layout-grid__inner">
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">			
-					</div>
+					</div>					
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 						<mat-form-field>
-						<input tabindex="89" matInput formControlName="txtReemDire" placeholder="Dirección">
+						<input tabindex="89" matInput formControlName="txtReemNom" placeholder="Nombre" maxlength="35" (ngModelChange)="ofunc_seteo_mayuscula(this.txtReemNom)">
+						</mat-form-field>			
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+						<mat-form-field>
+						<input tabindex="89" matInput formControlName="txtReemDire" placeholder="Dirección" maxlength="35" (ngModelChange)="ofunc_seteo_mayuscula(this.txtReemDire)">
+						</mat-form-field>
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" >
+						<mat-form-field>
+						<input tabindex="90" matInput formControlName="txtReemCiu" placeholder="Ciudad" maxlength="35" (ngModelChange)="ofunc_seteo_mayuscula(this.txtReemCiu)">
 						</mat-form-field>
 					</div>
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 						<mat-form-field>
-						<input tabindex="90" matInput formControlName="txtReemCiu" placeholder="Ciudad">
-						</mat-form-field>
-					</div>
-					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-						<mat-form-field>
-						<input tabindex="91" matInput formControlName="txtReemPais" placeholder="País">
+						<input tabindex="91" matInput formControlName="txtReemPais" placeholder="País" maxlength="35" (ngModelChange)="ofunc_seteo_mayuscula(this.txtReemPais)">
 						</mat-form-field>
 					</div>
 				</div>
@@ -1038,7 +1059,7 @@
 						<span>Reglas URR aplicables</span>
 					</div>	
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
-						<mat-radio-group tabindex="89" formControlName="optURR">
+						<mat-radio-group tabindex="89" formControlName="optURR" (change)="ofunc_urr()">
 							<mat-radio-button value="S">NOTURR</mat-radio-button>
 							<mat-radio-button value="N">URR LATEST VERSION</mat-radio-button>
 						</mat-radio-group>
@@ -1064,7 +1085,7 @@
 					</div>	
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
 						<mat-form-field appearance="outline">
-						<textarea tabindex="91" rows="8" matInput formControlName="txtInstrucciones78" maxlength="7943"></textarea>
+						<textarea tabindex="91" rows="8" matInput formControlName="txtInstrucciones78" maxlength="7943" (focusout)="focusout_txtInstrucciones78()" (change)="change_txtInstrucciones78()"></textarea>
 						</mat-form-field>
 					</div>	
 				</div>
@@ -1075,27 +1096,32 @@
 						<span>[O] Banco avisador BIC [57a]</span>
 					</div>
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">					
-						<bcx-banco [tabindex]="92" id="txtBicAvisador" formControlName="txtBicAvisador" placeholder="" placeholderDes="Nombre" [isDisabled]="false" [data]="this"></bcx-banco>
+						<bcx-banco class="hide-descripcion" [tabindex]="92" id="txtBicAvisador" formControlName="txtBicAvisador" placeholder="" placeholderDes="Nombre" [isDisabled]="false" [data]="this" (focusout)="focusout_txtBicAvisador()" (ngModelChange)="change_txtBicAvisador()"></bcx-banco>
 					</div>
 				</div>
 			</div>	
 			<div class="mdc-layout-grid"> <!--  fila 1 -->
 				<div class="mdc-layout-grid__inner">
-					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">			
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">		
 					</div>
-					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">		
 						<mat-form-field>
-						<input tabindex="93" matInput formControlName="txtAviDire" placeholder="Dirección">
+						<input tabindex="93" matInput formControlName="txtAviNom" placeholder="Nombre" (ngModelChange)="ofunc_seteo_mayuscula(this.txtAviNom)">
+						</mat-form-field>						
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+						<mat-form-field>
+						<input tabindex="93" matInput formControlName="txtAviDire" placeholder="Dirección" (ngModelChange)="ofunc_seteo_mayuscula(this.txtAviDire)">
 						</mat-form-field>
 					</div>
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 						<mat-form-field>
-						<input tabindex="94" matInput formControlName="txtAviCiu" placeholder="Ciudad">
+						<input tabindex="94" matInput formControlName="txtAviCiu" placeholder="Ciudad" (ngModelChange)="ofunc_seteo_mayuscula(this.txtAviCiu)">
 						</mat-form-field>
 					</div>
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 						<mat-form-field>
-						<input tabindex="95" matInput formControlName="txtAviPais" placeholder="País">
+						<input tabindex="95" matInput formControlName="txtAviPais" placeholder="País" (ngModelChange)="ofunc_seteo_mayuscula(this.txtAviPais)">
 						</mat-form-field>
 					</div>
 				</div>
@@ -1106,7 +1132,7 @@
 						<span>[O] Banco participante con confirmación requerida  BIC [58A]</span>
 					</div>
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">					
-						<bcx-banco [tabindex]="96" id="txtBicParticipante" formControlName="txtBicParticipante" placeholder="" placeholderDes="Nombre" [isDisabled]="false" [data]="this"></bcx-banco>
+						<bcx-banco class="hide-descripcion" [tabindex]="96" id="txtBicParticipante" formControlName="txtBicParticipante" placeholder="" placeholderDes="Nombre" [isDisabled]="false" [data]="this" (focusout)="focusout_txtBicParticipante()" (ngModelChange)="change_txtBicParticipante()"></bcx-banco>
 					</div>
 				</div>
 			</div>	
@@ -1116,17 +1142,22 @@
 					</div>
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 						<mat-form-field>
-						<input tabindex="97" matInput formControlName="txtParticipanteDire" placeholder="Dirección">
+						<input tabindex="97" matInput formControlName="txtParticipanteNom" placeholder="Nombre" (ngModelChange)="ofunc_seteo_mayuscula(this.txtParticipanteNom)">
+						</mat-form-field>			
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+						<mat-form-field>
+						<input tabindex="97" matInput formControlName="txtParticipanteDire" placeholder="Dirección" (ngModelChange)="ofunc_seteo_mayuscula(this.txtParticipanteDire)">
 						</mat-form-field>
 					</div>
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 						<mat-form-field>
-						<input tabindex="98" matInput formControlName="txtParticipanteCiu" placeholder="Ciudad">
+						<input tabindex="98" matInput formControlName="txtParticipanteCiu" placeholder="Ciudad" (ngModelChange)="ofunc_seteo_mayuscula(this.txtParticipanteCiu)">
 						</mat-form-field>
 					</div>
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 						<mat-form-field>
-						<input tabindex="99" matInput formControlName="txtParticipantePais" placeholder="País">
+						<input tabindex="99" matInput formControlName="txtParticipantePais" placeholder="País" (ngModelChange)="ofunc_seteo_mayuscula(this.txtParticipantePais)">
 						</mat-form-field>
 					</div>
 				</div>
@@ -1138,7 +1169,7 @@
 					</div>	
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 						<mat-form-field appearance="outline">
-						<textarea tabindex="100" rows="8" matInput formControlName="txtInfoRemitente72" placeholder=""></textarea>
+						<textarea tabindex="100" rows="8" matInput maxlength="210" formControlName="txtInfoRemitente72" placeholder="" (ngModelChange)="ofunc_textArea_mayuscula(this.txtInfoRemitente72);"></textarea>
 						</mat-form-field>
 					</div>	
 				</div>

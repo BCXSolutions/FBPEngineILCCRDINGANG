@@ -69,9 +69,9 @@ export class CmUtilService {
   }
 
   deleteConfirmGeneric(dialog: MatDialog, msg: string, callback) {
-    let aux: string = "";
+    let aux: string = "¿Está seguro de eliminar registro";
     if (msg.length > 0)
-      aux = aux.replace("", msg);
+      aux = aux.replace("registro", msg);
     this.alertEx(dialog
       , aux
       , 1
@@ -148,7 +148,7 @@ export class CmUtilService {
     const tipoDialog: number = 0;
 
     let dialogRef: MatDialogRef<CmDialogAlertComponent> = dialog.open(CmDialogAlertComponent,
-      { width: '350px', height: '300px' });
+      { width: '350px', height: 'auto' });
     dialogRef.componentInstance.msg = helpMsg;
     dialogRef.componentInstance.title = helpTitle;
     dialogRef.componentInstance.isHelp = true;
@@ -168,7 +168,7 @@ export class CmUtilService {
   private alertEx(dialog: MatDialog, msg: string, tipoDialog: number, title: string, callback?: any): MatDialogRef<CmDialogAlertComponent> {
 
     let dialogRef: MatDialogRef<CmDialogAlertComponent> = dialog.open(CmDialogAlertComponent,
-      { width: '350px', height: '200px', disableClose: true });
+      { width: '350px', height: 'auto', disableClose: true });
     dialogRef.componentInstance.msg = msg;
     dialogRef.componentInstance.title = title;
     dialogRef.componentInstance.tipoAlerta = tipoDialog;

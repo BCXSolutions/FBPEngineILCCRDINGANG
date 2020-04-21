@@ -4,7 +4,7 @@
  * BLC, 22/02/2020: Cambiamos los import {Cm*} para Angular V9 
  */
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HammerModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from "@ngrx/store";
 import { HttpClientModule } from '@angular/common/http';
@@ -36,6 +36,7 @@ import { CmErrorComponent } from './cm-error.component';
     , BrowserAnimationsModule
     , StoreModule.forRoot({ timeout: CmTimeoutReducer })
     , CmRoutingModule
+    , HammerModule
   ],
   declarations: [
     CmBlankComponent

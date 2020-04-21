@@ -25,6 +25,12 @@ import { RechazoPreingresoComponent } from './rechazo_preingreso.component';
 import { frameDocumentosComponent } from './frame_documentos.component';
 import { DatosAdicionalesComponent } from './datosadicionales.component';
 import { TemplateComponent } from './template.component';
+import { DocumentosRequeridosComponent } from './documentosrequeridos.component';
+import { DocumentoSeguroComponent } from './detalledocumentoseguro.component';
+import { DocumentoTransporteComponent } from './documentotransporte.component';
+import { DocumentoNuevoComponent } from './documentonuevo.component';
+import { DocumentoIngresoNuevoComponent } from './documentoingresonuevo.component';
+
  
 
 /**   
@@ -49,6 +55,13 @@ const appRoutes: Routes = [
     ,{ path: 'comisiones/:numOpe/:codIng/:codPro/:codEve', component: ComisionesComponent, canActivate: [CmAuthGuardService]} 
     ,{ path: 'datosadicionales', component:DatosAdicionalesComponent, canActivate: [CmAuthGuardService]}
     ,{ path: 'template', component:TemplateComponent, canActivate: [CmAuthGuardService]}
+    ,{ path: 'documentosrequeridos',component:DocumentosRequeridosComponent, canActivate: [CmAuthGuardService]}
+    ,{ path: 'detalledocumentoseguro',component:DocumentoSeguroComponent, canActivate: [CmAuthGuardService]}
+    ,{ path: 'documentotransporte',component:DocumentoTransporteComponent, canActivate: [CmAuthGuardService]}
+    ,{ path: 'documentonuevo',component:DocumentoNuevoComponent, canActivate: [CmAuthGuardService]}
+    ,{ path: 'documentoingresonuevo',component:DocumentoIngresoNuevoComponent, canActivate: [CmAuthGuardService]}
+
+    
    //, { path: '**', component: Test160Component, canActivate: [CmAuthGuardService] }  
 
    

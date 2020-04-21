@@ -30,6 +30,14 @@ import { RechazoPreingresoComponent } from './rechazo_preingreso.component';
 import { frameDocumentosComponent } from './frame_documentos.component';
 import { DatosAdicionalesComponent } from './datosadicionales.component';
 import { TemplateComponent } from './template.component';
+import { DocumentosRequeridosComponent } from './documentosrequeridos.component';
+import { DocumentoSeguroComponent } from './detalledocumentoseguro.component';
+import { DocumentoTransporteComponent } from './documentotransporte.component';
+import { DocumentoNuevoComponent } from './documentonuevo.component';
+import { DocumentoIngresoNuevoComponent } from './documentoingresonuevo.component';
+
+
+
 // import { Test160Component } from './test160.component';  
 
 /**  
@@ -102,8 +110,26 @@ import { TemplateComponent } from './template.component';
  import { CRD_RS_200_151_CRD002 } from './ws/CRD_RS_200_151_CRD002';
  import { CRD_RS_200_152_TXT_LCI_INI } from './ws/CRD_RS_200_152_TXT_LCI_INI';
  import { CRD_RS_200_152_TXT_LCI } from './ws/CRD_RS_200_152_TXT_LCI';
-
-
+ import { CRD_RS_99_150_DOC } from './ws/CRD_RS_99_150_DOC';
+ import { CRD_RS_200_118_ALD } from './ws/CRD_RS_200_118_ALD';
+ import { CRD_RS_550_FEMB } from './ws/CRD_RS_550_FEMB';
+ import { CRD_RS_200_112_BCO_CNFR } from './ws/CRD_RS_200_112_BCO_CNFR';
+ import { BCX_RS_200_160_DOC } from './ws/BCX_RS_200_160_DOC';
+ import { CRD_RS_200_151_DOC } from './ws/CRD_RS_200_151_DOC';
+ import { BCX_RS_200_160_CNDENT } from './ws/BCX_RS_200_160_CNDENT';
+ import { CRD_RS_200_111_DOC } from './ws/CRD_RS_200_111_DOC';
+ import { CRD_RS_200_113_DOC } from './ws/CRD_RS_200_113_DOC';
+ import { CRD_RS_200_112_DOC_REQ } from './ws/CRD_RS_200_112_DOC_REQ';
+ import { CRD_RS_200_151_DOC_SEG } from './ws/CRD_RS_200_151_DOC_SEG';
+ import { CRD_RS_200_152_DOC_VAR_SEG } from './ws/CRD_RS_200_152_DOC_VAR_SEG';
+ import { CRD_RS_200_160_DOC_LCI } from './ws/CRD_RS_200_160_DOC_LCI';
+ import { CRD_RS_200_111_DOC_SEG } from './ws/CRD_RS_200_111_DOC_SEG';
+ import { CRD_RS_200_111_DOC_LCI } from './ws/CRD_RS_200_111_DOC_LCI';
+ import { CRD_RS_200_160_DOC_LCI_BL } from './ws/CRD_RS_200_160_DOC_LCI_BL';
+ import { CRD_RS_200_152_DOC_PRE } from './ws/CRD_RS_200_152_DOC_PRE';
+ import { CRD_RS_200_111_DOC_LCI_BL } from './ws/CRD_RS_200_111_DOC_LCI_BL';
+ import { CRD_RS_200_151_DOC_REQ } from './ws/CRD_RS_200_151_DOC_REQ';
+ 
  
  
 /**  
@@ -137,6 +163,11 @@ import { TemplateComponent } from './template.component';
     , frameDocumentosComponent
     , DatosAdicionalesComponent
     , TemplateComponent
+    , DocumentosRequeridosComponent
+    , DocumentoSeguroComponent
+    , DocumentoTransporteComponent
+    , DocumentoNuevoComponent
+    , DocumentoIngresoNuevoComponent
     // , Test160Component  
   ],  
   exports: [CmSharedModule],  
@@ -209,6 +240,26 @@ import { TemplateComponent } from './template.component';
    , CRD_RS_200_151_CRD002
    , CRD_RS_200_152_TXT_LCI_INI
    , CRD_RS_200_152_TXT_LCI
+   , CRD_RS_99_150_DOC
+   , CRD_RS_200_118_ALD
+   , CRD_RS_550_FEMB
+   , CRD_RS_200_112_BCO_CNFR
+   , BCX_RS_200_160_DOC
+   , CRD_RS_200_151_DOC
+   , BCX_RS_200_160_CNDENT
+   , CRD_RS_200_111_DOC
+   , CRD_RS_200_113_DOC
+   , CRD_RS_200_112_DOC_REQ
+   , CRD_RS_200_151_DOC_SEG
+   , CRD_RS_200_152_DOC_VAR_SEG
+   , CRD_RS_200_160_DOC_LCI
+   , CRD_RS_200_111_DOC_SEG
+   , CRD_RS_200_111_DOC_LCI
+   , CRD_RS_200_160_DOC_LCI_BL
+   , CRD_RS_200_152_DOC_PRE
+   , CRD_RS_200_111_DOC_LCI_BL
+   , CRD_RS_200_151_DOC_REQ
+   
   ]  
 })  
 export class AppUserModule { }

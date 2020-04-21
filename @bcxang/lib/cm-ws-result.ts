@@ -116,7 +116,7 @@ export class CmWsResult {
             let aux = Number(row[name]);
             if (isNaN(aux))
                 aux = 0;
-            row[nameFormat] =  aux.toLocaleString("es-ES", { minimumFractionDigits: dec });
+            row[nameFormat] =  aux.toLocaleString("de-DE", { minimumFractionDigits: dec });
       }
   }
   /**

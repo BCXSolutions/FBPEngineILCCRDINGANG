@@ -101,3 +101,8 @@
     [bcx-banco]
     - se agregó el evento focus al codigo banco.
     - se agregó error en codigo banco cuando es inválido.
+
+1.6.0 - 2020-03-25 - AIC
+## add
+    [bcx-banco]
+    - se actualizo librerias para Ang 9.   

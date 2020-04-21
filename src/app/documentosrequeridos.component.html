@@ -1,0 +1,154 @@
+<!-- Generado por Xml2Ang, Bcx Solutions -->
+<!-- Fecha: 02/12/2019 13:34:32 -->
+	<div class="cm-main">
+	<div class="cm-toolbar">
+		<mat-toolbar color="primary">
+			<span class="cm-title-text">Documentos requeridos</span>
+			<span class="cm-title-spacer"></span>
+			<button type='button' mat-icon-button (click)="this.utilService.cmdHelp_click(this.dialog)"><mat-icon>help</mat-icon></button> 
+		</mat-toolbar>
+	</div>
+	<form [formGroup]="form" autocomplete="off">
+	<div class="cm-botonera">
+		<button type='button' mat-raised-button (click)="cmdDetalle_click()"><mat-icon>zoom_in</mat-icon>Detalle</button>
+		<button type='button' mat-raised-button (click)="cmdIngresarDoc_click()"><mat-icon>folder_open</mat-icon>Ingresar otro documento</button>
+		<button type='button' mat-raised-button (click)="cmdCancelar_click()"><mat-icon>arrow_back</mat-icon>Volver</button>
+	</div>
+	<div class="inner-sidenav-content" id="innersidenav">
+	<!-- <div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad"> -->
+
+		<div class="mdc-layout-grid"> <!--  fila 2 -->
+		<div class="mdc-layout-grid__inner">
+	
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
+			<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">	
+				<div class="mdc-layout-grid"> <!--  fila 2 -->
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+						<mat-form-field>
+							<input matInput formControlName="txtDoc" placeholder="" maxlength="6">
+						<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
+						</mat-form-field>
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-7">
+						<mat-form-field>
+						<mat-select placeholder="" formControlName="cmbDoc" class="cm-in-combo">
+							<mat-option *ngFor="let item of cmbDocArray" [value]="item.wss_cod_doc">{{item.wss_gls_doc}}</mat-option>
+						</mat-select>
+						</mat-form-field>
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1" style="margin-top: 10px;">						
+						<button tabindex="76" color="primary" matTooltip="Insertar documento" type='button' [disabled]="false" mat-icon-button (click)="btnGo_click()"><mat-icon>fast_forward</mat-icon></button>
+					</div>
+				</div>
+				</div>
+				<!-- <div class="mdc-layout-grid"> 
+				<div class="mdc-layout-grid__inner">
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-7">
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+						<button tabindex="76" color="primary" matTooltip="Eliminar documento" type='button' [disabled]="false" mat-icon-button (click)="btnBack_click()"><mat-icon>fast_rewind</mat-icon></button>
+					</div>
+				</div>
+				</div> -->
+			</div>	
+			<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">		
+				<div class="mdc-layout-grid"> <!--   fila 3 -->
+				<div class="mdc-layout-grid__inner">	
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-7">				
+						<span>Condición entrega de documentos</span>
+					</div>
+				</div>
+				</div>			
+				<div class="mdc-layout-grid"> <!--   fila 3 -->
+				<div class="mdc-layout-grid__inner">									
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+						<mat-form-field>
+						<input matInput formControlName="txtCondicion" placeholder="" maxlength="4" (focusout)="focusout_txtCondicion()" (ngModelChange)="change_txtCondicion()">
+						<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
+						</mat-form-field>
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8">
+						<mat-form-field>
+						<mat-select placeholder="" formControlName="cmbCondicion" class="cm-in-combo" (openedChange)="cmbCondicion_openedChange()">
+							<mat-option *ngFor="let item of cmbCondicionArray" [value]="item.wss_cod_cnd_ent">{{item.wss_gls_cnd_ent}}</mat-option>
+						</mat-select>
+						</mat-form-field>
+					</div>
+				</div>
+				</div>	
+				<div class="mdc-layout-grid"> <!--   fila 3 -->
+				<div class="mdc-layout-grid__inner">	
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+						<div style="margin-top:22px">Otro</div>
+					</div>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8">
+						<mat-form-field>
+						<input matInput formControlName="txtOtro" placeholder="" maxlength="35">
+						</mat-form-field>
+					</div>					
+				</div>	
+				</div>
+			</div>	
+			<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">		
+				<div class="mdc-layout-grid"> <!--   fila 3 -->
+				<div class="mdc-layout-grid__inner">									
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+						<mat-checkbox tabindex="7"  class="bcx_middleCheck" formControlName="chkDocumento" (change)="change_chkDocumento()">Documentos Originales al Importador</mat-checkbox>
+					</div>	
+				</div>	
+				</div>	
+				
+				<div class="mdc-layout-grid"> <!--   fila 3 -->
+				<div class="mdc-layout-grid__inner">	
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-11">							
+						<mat-form-field appearance="outline">
+						<textarea rows="6" tabindex="55" matInput formControlName="txtTextoLibre" placeholder="" maxlength="6500" (ngModelChange)="ofunc_textArea_mayuscula_txtArea(this.txtTextoLibre)"></textarea>
+						</mat-form-field>
+					</div>		
+				</div>	
+				</div>	
+			</div>	
+			</div>	
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
+			<div class="cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">	
+				<ngx-datatable #grd class="material" style="height: 500px;"
+					[rows]="tableRows"
+					[columns]="tableCols"
+					[scrollbarV]="true"
+					[rowHeight]="25"
+					[headerHeight]="25"
+					[selected]="tableSelected"
+					[selectionType]="'single'"
+					(select)="onTableSelect($event)"
+					(activate)="onTableActivate($event)"
+					(scroll)="onTableScroll($event)"
+					(sort)="onTableSort($event)"		   
+				>
+				</ngx-datatable>
+				<!-- <ng-template #rightTmpl let-value='value'>
+					<div style='text-align: right'>{{value}}</div>
+				</ng-template>
+				<ng-template #centerTmpl let-value='value'>
+					<div style='text-align: center'>{{value}}</div>
+				</ng-template>	 -->
+				<ng-template #eliminarDocumento let-row='row' let-value='value'>
+					<mat-icon matTooltip="Eliminar documento" (click)="btnBack_click(row)" >delete</mat-icon>					
+				</ng-template>
+			</div>				
+			</div>
+		</div>	
+	    </div>
+		<div class="mdc-layout-grid"> <!--  fila 4 -->
+		<div class="mdc-layout-grid__inner">			
+		</div>
+		</div> <!--  fin de fila 4 -->
+	<!-- </div>		 -->
+	</div>
+	</form>
+	</div>
+				<!-- Iframe Imprimir PDF -->
+		<!-- <iframe id="frame" frameborder="0" [src]='url | safe' style="display: none"></iframe> -->
+<cm-wait [waitShow]="waitShow"></cm-wait>

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Optional, Self, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, ControlValueAccessor, NgControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { CmUtilService, CmWsResult, CmContextService, CmWsHostService } from '@bcxang';
 
 import { BCX_RS_200_160_BANK } from './services/BCX_RS_200_160_BANK.service';

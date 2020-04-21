@@ -43,7 +43,7 @@ export class CRD_RS_200_152_TXT_LCI_INI
 wss_num_opr: wss_num_opr, wss_for_pag: wss_for_pag, wss_ins_cnf: wss_ins_cnf, wss_pai_ben: wss_pai_ben, wss_tip_reem: wss_tip_reem, wss_iso_cor: wss_iso_cor, wss_iso_ree: wss_iso_ree, wss_usercode: wss_usercode
 	};
 	  
-   this.hostService.getRest(url, data)
+   this.hostService.postRest(url, data)
    						.subscribe(
                        result => responseFunc(result),
                        error =>  errFunc(error));

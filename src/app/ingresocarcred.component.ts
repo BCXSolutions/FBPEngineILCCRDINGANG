@@ -220,6 +220,10 @@ export class IngresoCarCredComponent implements OnInit
 	habChkEnterada:any;
 	cnvDes:any;
 	indicadorLlamada152Ope:any;
+	cOrde:any;
+	arrayTag50:any[]=[];
+	precarga:any;
+	opcion:any;
 
 	@ViewChild("txtReferenciaCliente") txtReferenciaClienteNative: ElementRef; 
 	@ViewChild("bcxRut") bcxRutNative: ElementRef; 
@@ -311,6 +315,9 @@ export class IngresoCarCredComponent implements OnInit
 		this.financiamiento_indicador_opcion = this.contextService.getUserData("financiamiento_indicador_opcion");
 		this.varCodTemplate = this.contextService.getUserData("varCodTemplate");
 		this.indicadorLlamada152Ope = this.contextService.getUserData("indicadorLlamada152Ope");
+		this.cOrde = this.contextService.getUserData("cOrde");
+		this.precarga = this.contextService.getUserData("precarga");
+		this.opcion = this.contextService.getUserData("opcion");
 
 
 		console.log('this.financiamiento_indicador_opcion: ',this.financiamiento_indicador_opcion)
@@ -1034,52 +1041,7 @@ export class IngresoCarCredComponent implements OnInit
 	// 	}
 	// }
 	/**
-	 * Llamamos al Web Service.
-	 */
-	private crdRs200151Ord50Call(): void
-	{
-		/* Mover los datos de la pantalla a los parametros del Web Service. 
-		IMPORTANTE: Para variables Rut, usar: this.utilService.toRut(this.variableRut.value); */ 
-		let wss_opr_num :string = "this.utilService.toString(this.xyz.value)";
-		let wss_usercode :string = "this.utilService.toString(this.xyz.value)";
-		 
-		// Activamos el simbolo de progress.
-		//this.waitShow = true;
-		// Invocamos el WS.
-		this.crdRs200151Ord50.call(
-			  (value) => this.crdRs200151Ord50Result(value)
-			, (value) => this.processFault(value)
-			, wss_opr_num
-			, wss_usercode
-		);
-
-		// Aca no puede haber nada que dependa del resultado (asincrono).
-
-	}
-	/**
-	 * Callback invocado por this.crdRs200151Ord50.call.
-	 * @param wsResult Parametros de salida, mensaje de error.
-	 */
-	crdRs200151Ord50Result(wsResult :CmWsResult): void
-	{
-		// Desactivamos el simbolo de progress.
-		this.waitShow = false;
-		/* Mover los parametros de salida a la pantalla. 
-		this.xyz.patchValue(wsResult.getResultString('wss_txt_ord1'));
-		this.xyz.patchValue(wsResult.getResultString('wss_txt_ord2'));
-		this.xyz.patchValue(wsResult.getResultString('wss_txt_ord3'));
-		this.xyz.patchValue(wsResult.getResultString('wss_txt_ord4'));
-		this.xyz.patchValue(wsResult.getResultString('wss_result_msg'));
-		 */
-		// A veces el Fault se viene por aca.
-		let hayError: boolean = wsResult.hayError();
-		if (hayError)
-		{
-			let msg: string = wsResult.getErrorMsg();
-			let code: string = wsResult.getErrorCode();
-			this.utilService.alert(this.dialog, msg + ' [' + code + ']');
-		}
-	}
+	
 	/**
 	 * Llamamos al Web Service.
 	 */
@@ -1204,7 +1166,6 @@ export class IngresoCarCredComponent implements OnInit
 		this.crdRs200111TxtLci.call(
 			  (value) => this.crdRs200111TxtLciResult(value)
 			, (value) => this.processFault(value)
-			, wss_sw_itr
 			, wss_cod_prd
 			, wss_tip_txt
 			, wss_num_opr
@@ -2605,9 +2566,9 @@ export class IngresoCarCredComponent implements OnInit
 	{
 		/* Mover los datos de la pantalla a los parametros del Web Service. 
 		IMPORTANTE: Para variables Rut, usar: this.utilService.toRut(this.variableRut.value); */ 
-		let wss_form_ind_secc :string = "this.utilService.toString(this.xyz.value)";
-		let wss_form_cod_ent :string = "this.xyz.value";
-		let wss_usercode :string = "this.utilService.toString(this.xyz.value)";
+		let wss_form_ind_secc :string = "ADI";
+		let wss_form_cod_ent :string = this.txtFamiliaProducto.value;
+		let wss_usercode :string = this.user_logueado;
 		 
 		// Activamos el simbolo de progress.
 		//this.waitShow = true;
@@ -2642,8 +2603,102 @@ export class IngresoCarCredComponent implements OnInit
 			let msg: string = wsResult.getErrorMsg();
 			let code: string = wsResult.getErrorCode();
 			this.utilService.alert(this.dialog, msg + ' [' + code + ']');
+		} else if(wsResult.getReturnValue()==0){
+			let wss_result_msg:string = wsResult.getResultString('wss_result_msg');
+			this.utilService.alert(this.dialog, wss_result_msg);
+		} else {
+			let codForm = wsResult.getResultString('wss_form_cod_form');
+			if(codForm == 'CRDI1'){
+				
+				
+
+				if(this.cOrde == 0){
+
+					this.ofunc_get_tag50();
+
+
+				} else {
+					this.ofunc_get_tag50();
+				}
+				
+				this.contextService.store(this);
+				this.contextService.setUserData("arrayTag50",this.arrayTag50);
+				this.contextService.setUserData("financiamiento_indicador_opcion",this.financiamiento_indicador_opcion);
+				this.contextService.setUserData("user_logueado",this.user_logueado);
+				this.contextService.setUserData("familiaProducto",this.txtFamiliaProducto.value);
+				this.contextService.setUserData("numOperacion", this.txtNumeroOperacion.value);
+				this.contextService.setUserData("bcxRut",this.bcxRut.value);
+				this.contextService.setUserData("WSS_D01_SGM", this.WSS_D01_SGM);
+				this.contextService.setUserData("varPlantillaGlobal",this.varPlantillaGlobal);
+				this.contextService.setUserData("varCodTemplateGlobal",this.varCodTemplateGlobal);		
+				this.contextService.setUserData("varInicioGlobal",this.varInicioGlobal);
+				this.contextService.setUserData("bicCor", this.bicCor);
+				this.contextService.setUserData("fechaProceso",this.txtFechaIngreso.value);	
+				this.contextService.setUserData("precarga", this.precarga);		
+				this.contextService.setUserData("opcion",this.opcion);
+				this.router.navigate(['/datosadicionales']);
+
+
+			} else if (codForm == 'CRDI2'){
+
+			}
 		}
 	}
+
+	ofunc_get_tag50(){
+		/* Mover los datos de la pantalla a los parametros del Web Service. 
+		IMPORTANTE: Para variables Rut, usar: this.utilService.toRut(this.variableRut.value); */ 
+		let wss_opr_num :string = this.txtNumeroOperacion.value;
+		let wss_usercode :string = this.user_logueado;
+		 
+		// Activamos el simbolo de progress.
+		//this.waitShow = true;
+		// Invocamos el WS.
+		this.crdRs200151Ord50.call(
+			  (value) => this.ofunc_result_tag50(value)
+			, (value) => this.processFault(value)
+			, wss_opr_num
+			, wss_usercode
+		);
+
+		// Aca no puede haber nada que dependa del resultado (asincrono).
+	} 
+
+	ofunc_result_tag50(wsResult:CmWsResult){
+		// Desactivamos el simbolo de progress.
+		this.waitShow = false;
+
+		let aux:any;
+		// A veces el Fault se viene por aca.
+		let hayError: boolean = wsResult.hayError();
+		if (hayError)
+		{
+			let msg: string = wsResult.getErrorMsg();
+			let code: string = wsResult.getErrorCode();
+			this.utilService.alert(this.dialog, msg + ' [' + code + ']');
+		} else if(wsResult.getReturnValue()==0){
+			let wss_result_msg:string = wsResult.getResultString('wss_result_msg');
+			this.utilService.alert(this.dialog, wss_result_msg);
+		} else {
+			debugger
+			this.arrayTag50[0] = wsResult.getResultString('wss_txt_ord1');
+			this.arrayTag50[1] = wsResult.getResultString('wss_txt_ord2');
+			this.arrayTag50[2] = wsResult.getResultString('wss_txt_ord3');
+			this.arrayTag50[3] = wsResult.getResultString('wss_txt_ord4');
+
+		/* Mover los parametros de salida a la pantalla. 
+			this.xyz.patchValue(wsResult.getResultString('wss_txt_ord1'));
+			this.xyz.patchValue(wsResult.getResultString('wss_txt_ord2'));
+			this.xyz.patchValue(wsResult.getResultString('wss_txt_ord3'));
+			this.xyz.patchValue(wsResult.getResultString('wss_txt_ord4'));
+			this.xyz.patchValue(wsResult.getResultString('wss_result_msg'));
+		 */
+		}
+
+	}
+
+
+
 	/**
 	 * Llamamos al Web Service.
 	 */
@@ -4236,25 +4291,7 @@ ofunc_carga_formularios(indicador_aux:string) {
 		this.router.navigate(['/avales']);
 	}
 	if(indicador_aux == 'DA'){		
-		debugger
-		this.contextService.store(this);
-		this.contextService.setUserData("financiamiento_indicador_opcion",this.financiamiento_indicador_opcion);
-		this.contextService.setUserData("user_logueado",this.user_logueado);
-		this.contextService.setUserData("familiaProducto",this.txtFamiliaProducto.value);
-		this.contextService.setUserData("numOperacion", this.txtNumeroOperacion.value);
-		this.contextService.setUserData("bcxRut",this.bcxRut.value);
-		this.contextService.setUserData("WSS_D01_SGM", this.WSS_D01_SGM);
-		this.contextService.setUserData("varPlantillaGlobal",this.varPlantillaGlobal);
-		this.contextService.setUserData("varCodTemplateGlobal",this.varCodTemplateGlobal);		
-		this.contextService.setUserData("varInicioGlobal",this.varInicioGlobal);
-		this.contextService.setUserData("bicCor", this.bicCor);
-
-		
-		console.log("WSS_D01_SGM Detalle: "+ this.WSS_D01_SGM);
-		this.contextService.setUserData("fechaProceso",this.txtFechaIngreso.value);
-
-	
-		this.router.navigate(['/datosadicionales']);
+		this.bcxRs200151FormCall();
 
 	}
 	if(indicador_aux == 'CURSAR'){		
@@ -4395,11 +4432,24 @@ ofunc_llena_formulario(){
 
 imprimir_doc_revisa(): void {
 		
-	this.url = this.hostService.getHost() + '/BCXGENPDF_WEB/generarPDF?wss_cod_apl=BKO&wss_cod_doc=DOCFNAING&wss_sol_num=&wss_ins_num=&wss_opr_num='+this.txtNumeroOperacion.value.trim()+',0&wss_cod_cli='+this.hostService.getTokenUser()+'&wss_doc_ver=0&wss_val_prm1=&wss_val_prm=';
-	if(this.url.indexOf("http:") < 0){
-		this.url = 'http://' +  this.url;
-	}
+// 	this.url = this.hostService.getHost() + '/BCXGENPDF_WEB/generarPDF?wss_cod_apl=BKO&wss_cod_doc=DOCFNAING&wss_sol_num=&wss_ins_num=&wss_opr_num='+this.txtNumeroOperacion.value.trim()+',0&wss_cod_cli='+this.hostService.getTokenUser()+'&wss_doc_ver=0&wss_val_prm1=&wss_val_prm=';
+// 	if(this.url.indexOf("http:") < 0){
+// 		this.url = 'http://' +  this.url;
+// 	}
+	/**
+   * Documento Revisa PDF.
+   */
 
+    let wss_cod_apl: string = 'DOCREV';
+    let fld_eva_num_ope: string = this.txtNumeroOperacion.value.replace(/^\s*|\s*$/g, '');
+    let fld_eva_num_doc_rev: string = '0';
+    let fld_eva_est_eve: string = '0';
+ 
+    this.url = this.hostService.getHost() + '/BCXGENPDF_WEB/generarPDF?wss_cod_apl='+wss_cod_apl+'&fld_eva_num_ope='+fld_eva_num_ope+'&fld_eva_num_doc_rev='+fld_eva_num_doc_rev+'&fld_eva_est_eve='+fld_eva_est_eve;
+    if(this.url.indexOf("http:") < 0){
+        this.url = 'http://' +  this.url;
+    }
+ 
 	const subscription = interval(3800)
 	.subscribe(() => {
 		this.seleccion_de_formulario();

@@ -88,6 +88,8 @@ export class MenuComponent implements OnInit, AfterViewChecked
 	WSS_D01_SGM:any;
 	WSS_D01_TIP:any;
 	WSS_D01_CODNUM:any;
+	cOrde:any;
+
 
 	@ViewChild('grd', {static: true}) table: any;
 	@ViewChild('rightTmpl', {static: true})  rightTmpl: TemplateRef<any>;
@@ -217,6 +219,7 @@ export class MenuComponent implements OnInit, AfterViewChecked
 	cmdNueva_click(): void
 	{
 		this.waitShow = false;
+
 		this.contextService.setUserData("pageName","Detalle crédito");
 		this.contextService.setUserData("user_logueado",this.user_logueado);
 		this.contextService.setUserData("WSS_D01_AREA","IMP");
@@ -224,6 +227,25 @@ export class MenuComponent implements OnInit, AfterViewChecked
 		this.contextService.setUserData("WSS_D01_TIP",this.WSS_D01_TIP);
 		this.contextService.setUserData("WSS_D01_CODNUM",this.WSS_D01_CODNUM);
 		this.contextService.setUserData("financiamiento_indicador_opcion", 'Nueva');
+		this.contextService.setUserData("cOrde", 0);
+		this.contextService.setUserData("precarga", false);
+		
+
+		// Application.application.numOpe="";
+		// Application.application.fmlProd=0;
+		// Application.application.setIdMoneda="";
+		// Application.application.numeroRut="";
+		// Application.application.fecPro="";
+		// Application.application.modMOn="";
+		// Application.application.bicCorr="";
+		// Application.application.consulta="";
+		// Application.application.cOrde=0;				    
+		// Application.application.iPago=false;
+		// Application.application.setEnmienda=0;				      
+		// Application.application.precarga=false;
+		// Application.application.varInicio = 0;
+
+
         this.router.navigate(['/ingresocartacredito']);
 	//	this.utilService.alert(this.dialog, 'No implementado');
 	}

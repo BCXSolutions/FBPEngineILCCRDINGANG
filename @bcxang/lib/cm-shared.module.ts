@@ -19,6 +19,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { StoreModule } from "@ngrx/store";
 
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
@@ -37,6 +38,8 @@ import { CmTimeoutReducer } from './cm-timeout.reducer';
 import { CmInitialState } from "./cm-istate";
 import { CmNumberPipe } from "./cm-number.pipe";
 import { BcxAngLibModule } from 'bcx-ang-lib';
+
+import { EmptyRowDirective } from './emptyRow.directive';
 
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MomentDateModule, MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -72,6 +75,7 @@ export const CM_DATE_FORMATS = {
   , CmNumberPipe
   , CmPasteDirective
   , CmPasteRestrictDirective
+  , EmptyRowDirective
 
 ],
   imports: [
@@ -115,6 +119,7 @@ export const CM_DATE_FORMATS = {
     , MatInputModule
     , MatProgressSpinnerModule
     , MatSelectModule
+    , MatTooltipModule
     , NgxDatatableModule
     , StoreModule
     , ReactiveFormsModule
@@ -128,6 +133,7 @@ export const CM_DATE_FORMATS = {
     , CmNumberPipe
     , CmPasteDirective
     , CmPasteRestrictDirective
+    , EmptyRowDirective
     , BcxAngLibModule
   ],
  

@@ -94,29 +94,29 @@ body {
 }
 
 .cm-main {
-    /** El siguiente es el color de fondo suave **/
-   /** background: #a1dbff; **/
-   background: #e0f7fa;/** "cyan-50" **/
-    padding-bottom: 10px;
-    margin: 0;
-    padding-left: 10px;
-    padding-right: 10px;
-    /*
-     overflow:hidden;
+  /** El siguiente es el color de fondo suave **/
+  /** background: #a1dbff; **/
+  background: #e0f7fa;/** "cyan-50" **/
+  padding-bottom: 10px;
+  margin: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+  /*
+  overflow:hidden;
   overflow:auto;
-     */
+  */
 
   // se modificó este estilo para solucionar sobre los botones flotantes - AIC -20200205
-	 position:absolute;
-    top:0;
-    left:0;
-    right:0;
-    bottom:0;
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
   height: 0;
 }
 .cm-toolbar {
-    margin-left: -10px;
-    margin-right: -10px;
+  margin-left: -10px;
+  margin-right: -10px;
 
   // se modificó este estilo para solucionar sobre los botones flotantes - AIC -20200205
   position: fixed;
@@ -136,11 +136,11 @@ body {
 {
     width: 100%;
 }
-.cm-in-rut
-{
-    width: 90px!important;
+// .cm-in-rut
+// {
+//     width: 90px!important;
    
-}
+// }
 .cm-in-width-2
 {
    /* Para los campos de entrada de los form */
@@ -402,10 +402,10 @@ Achicamos el alto del titulo
     // modificacion de posicion input de la grilla. 
     bottom: -18px;
 }
-    
+
 .cm-botonera {
     background: #e0f7fa;/** "cyan-50" **/
-    
+
      // se modificó este estilo para solucionar sobre los botones flotantes - AIC -20200205
     padding: 5px 10px;
     background: #e0f7fa;
@@ -562,11 +562,16 @@ md-sidenav-container {
     width: 100%;
 }
 .cm-botonera button,
-.cm-botonera a {
+.cm-botonera a,
+// AIC: 20200210 para el boton del modal eliminar.
+.cm-dialog-actions button {
     margin-right: 5px;
+    margin-top: 5px;
 }  
 .cm-botonera button:last-child,
-.cm-botonera a:last-child {
+.cm-botonera a:last-child,
+// AIC: 20200210 para el boton del modal eliminar.
+.cm-dialog-actions button:last-child {
     margin-right: 0;  
 }
 
@@ -623,4 +628,9 @@ md-sidenav-container {
 
 .bcx_middleCheck label{
     margin-top:10px;
+}
+
+// AIC: 20200210 oculta el asterisco en los campos obligatorios.
+.mat-placeholder-required {
+	display: none;
 }
