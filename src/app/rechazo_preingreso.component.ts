@@ -165,6 +165,7 @@ export class RechazoPreingresoComponent implements OnInit
 	cmdVolver_click(): void
 	{
 		this.waitShow = false;
+		this.contextService.setUserData('varPantalla','');
 		this.location.back();
 	}
 	/**

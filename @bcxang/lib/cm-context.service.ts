@@ -65,6 +65,7 @@ export class CmContextService {
              // no funciona bien mythis.form.controls[obj] = ctx.mythis.form.controls[obj];
             }
             if (ctx.mythis.tableRows != null) {
+              debugger
 			        mythis.tableRows = ctx.mythis.tableRows;
               mythis.tableRowsTemp = ctx.mythis.tableRowsTemp;
               if (ctx.mythis.table.sorts.length > 0)

@@ -30,6 +30,9 @@ import { DocumentoSeguroComponent } from './detalledocumentoseguro.component';
 import { DocumentoTransporteComponent } from './documentotransporte.component';
 import { DocumentoNuevoComponent } from './documentonuevo.component';
 import { DocumentoIngresoNuevoComponent } from './documentoingresonuevo.component';
+import { RefinanciamientoComponent } from './refinanciamiento.component';
+import { CartaStandbyComponent } from './cartastandby.component';
+import { CampoComponent } from './campo.component';
 
  
 
@@ -60,6 +63,10 @@ const appRoutes: Routes = [
     ,{ path: 'documentotransporte',component:DocumentoTransporteComponent, canActivate: [CmAuthGuardService]}
     ,{ path: 'documentonuevo',component:DocumentoNuevoComponent, canActivate: [CmAuthGuardService]}
     ,{ path: 'documentoingresonuevo',component:DocumentoIngresoNuevoComponent, canActivate: [CmAuthGuardService]}
+    ,{ path: 'refinanciamiento',component:RefinanciamientoComponent, canActivate: [CmAuthGuardService]}
+    ,{ path: 'campo', component:CampoComponent,canActivate: [CmAuthGuardService]}
+    ,{ path: 'cartastandby', component:CartaStandbyComponent,canActivate: [CmAuthGuardService] }
+    
 
     
    //, { path: '**', component: Test160Component, canActivate: [CmAuthGuardService] }  

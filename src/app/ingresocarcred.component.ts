@@ -5,6 +5,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DateAdapter, MatDialog, MatDialogRef } from '@angular/material';
 import { Location } from '@angular/common';
+import { SharedService } from './SharedService.service';
 // Componentes y objetos Bcx
 import { CmContextService
        , CmDialogAlertComponent
@@ -33,9 +34,6 @@ import { CRD_RS_200_152_OPR } from './ws/CRD_RS_200_152_OPR';
 import { CRD_RS_200_151_IND_PTR } from './ws/CRD_RS_200_151_IND_PTR';
 import { CRD_RS_200_112_CLI } from './ws/CRD_RS_200_112_CLI';
 import { CRD_RS_200_151_CRD001 } from './ws/CRD_RS_200_151_CRD001';
-// import { CRD_RS_200_112_COB_TYE } from './ws/CRD_RS_200_112_COB_TYE';
-// import { CRD_RS_200_160_TRN_CEX } from './ws/CRD_RS_200_160_TRN_CEX';
-// import { CRD_RS_200_151_COB_TYE } from './ws/CRD_RS_200_151_COB_TYE';
 import { BCX_RS_200_151_FORM } from './ws/BCX_RS_200_151_FORM';
 import { BCX_RS_200_160_FPRD } from './ws/BCX_RS_200_160_FPRD';
 import { BCX_RS_200_160_SUC } from './ws/BCX_RS_200_160_SUC';
@@ -47,6 +45,8 @@ import { BCX_RS_200_251_PDT } from './ws/BCX_RS_200_251_PDT';
 import { BCX_RS_99_260_CLN_cta } from './ws/BCX_RS_99_260_CLN_cta';
 import { BCX_RS_200_151_CLIAM } from './ws/BCX_RS_200_151_CLIAM';
 import { CRD_RS_200_151_OPR_ILC } from './ws/CRD_RS_200_151_OPR_ILC';
+import { BCX_RS_200_112_CLIAM } from './ws/BCX_RS_200_112_CLIAM';
+import { CRD_RS_200_160_TXT_LCI } from './ws/CRD_RS_200_160_TXT_LCI';
 import { FBP_RS_AUTH_SERVER } from '../../@bcxang/lib/ws/FBP_RS_AUTH_SERVER';
 import { interval } from 'rxjs';
 // import { start } from 'repl';
@@ -206,11 +206,12 @@ export class IngresoCarCredComponent implements OnInit
 	optMensajesSWIFT:any;
 
 	varCodTemplate:any;
-	varInicio:any;
+	varInicioPadre:any;
 	varPlantilla:any;
 	varPlantillaGlobal:any;
 	varCodTemplateGlobal:any;
-	varInicioGlobal:any = 0;
+	varInicio:any;
+	varPantalla:any;
 
 	varRutGlobal:any;
 	indCobrInt:any;
@@ -224,6 +225,16 @@ export class IngresoCarCredComponent implements OnInit
 	arrayTag50:any[]=[];
 	precarga:any;
 	opcion:any;
+	objetoGenerico:any[];
+
+	condicion:any;
+	varIden:any;
+	varCursar:any = 1;
+
+	valorReturn:any;
+	objectStandby:any;
+	varDatosadicionales:any;
+	varDatosadicionalesComisiones:any;
 
 	@ViewChild("txtReferenciaCliente") txtReferenciaClienteNative: ElementRef; 
 	@ViewChild("bcxRut") bcxRutNative: ElementRef; 
@@ -255,9 +266,6 @@ export class IngresoCarCredComponent implements OnInit
 		, private crdRs200151IndPtr: CRD_RS_200_151_IND_PTR
 		, private crdRs200112Cli: CRD_RS_200_112_CLI
 		, private crdRs200151Crd001: CRD_RS_200_151_CRD001
-		//, private crdRs200112CobTye: CRD_RS_200_112_COB_TYE
-		// , private crdRs200160TrnCex: CRD_RS_200_160_TRN_CEX
-		// , private crdRs200151CobTye: CRD_RS_200_151_COB_TYE
 		, private bcxRs200151Form: BCX_RS_200_151_FORM
 		, private bcxRs200160Fprd: BCX_RS_200_160_FPRD
 		, private bcxRs200160Suc: BCX_RS_200_160_SUC
@@ -269,8 +277,23 @@ export class IngresoCarCredComponent implements OnInit
 		, private bcxRs99260ClnCta: BCX_RS_99_260_CLN_cta
 		, private bcxRs200151Cliam: BCX_RS_200_151_CLIAM
 		, private crdRs200151OprIlc: CRD_RS_200_151_OPR_ILC
+		, private sharedService: SharedService
+		, private bcxRs200112Cliam: BCX_RS_200_112_CLIAM
+		, private bcxRs200160TxtLci: CRD_RS_200_160_TXT_LCI
 		, private fbpRsAuthServer: FBP_RS_AUTH_SERVER
-		){}
+		
+		){
+		
+			// if (this.sharedServiceIngreso.clickEventsubscriptionIngreso == undefined) {
+			// 	this.sharedServiceIngreso.clickEventsubscriptionIngreso = this.sharedServiceIngreso.getClickIngresoEvent().subscribe((object)=> {
+			// 		//objetoGenerico = object
+			// 		//this.ejecutar_funcion_sharedService(object);		
+			// 		this.crdRs200152OprCall(this.utilService.toRut(this.bcxRut.value), this.txtFamiliaProducto.value, this.varCodTemplate);
+		
+			// 	})
+			//   }
+
+		}
 	/**
 	 * Inicializamos todo.
 	 */
@@ -301,6 +324,8 @@ export class IngresoCarCredComponent implements OnInit
 		
 	// }
 	// init(){	
+
+	
 		this.dateAdapter.setLocale('es-CL');
 
 		// Numericos y uppercase.
@@ -314,10 +339,14 @@ export class IngresoCarCredComponent implements OnInit
 		this.wsResult_detalle = this.contextService.getUserData('wsResult_detalle');
 		this.financiamiento_indicador_opcion = this.contextService.getUserData("financiamiento_indicador_opcion");
 		this.varCodTemplate = this.contextService.getUserData("varCodTemplate");
-		this.indicadorLlamada152Ope = this.contextService.getUserData("indicadorLlamada152Ope");
 		this.cOrde = this.contextService.getUserData("cOrde");
 		this.precarga = this.contextService.getUserData("precarga");
 		this.opcion = this.contextService.getUserData("opcion");
+		this.varInicioPadre = this.contextService.getUserData("varInicioPadre");
+		this.varInicio = this.contextService.getUserData("varInicio");
+		this.varPantalla = this.contextService.getUserData("varPantalla");
+		this.varDatosadicionales = this.contextService.getUserData("varDatosadicionales");
+		
 
 
 		console.log('this.financiamiento_indicador_opcion: ',this.financiamiento_indicador_opcion)
@@ -332,7 +361,6 @@ export class IngresoCarCredComponent implements OnInit
 		this.deshabilita_campos();
 		this.indicadorHabContraparte = 'N';
 		this.indicadorDeOpcion.patchValue('A');
-		console.log('Nueva -> this.indicadorDeOpcion.value: ',this.indicadorDeOpcion.value);
 		this.ocultarbtnContraparte = true;
 		this.ocultarNumeroSolicitud = false;
 		this.ocultarBotonRechazo = false;
@@ -340,8 +368,8 @@ export class IngresoCarCredComponent implements OnInit
 		this.ocultarBotonvolver = false;
 		this.chboxSinImpuestos = 'N';
 		
- 		this.bcxRs200251PdtCall();
-		this.carga_tasa_t0(); 
+ 		// this.bcxRs200251PdtCall();
+		// this.carga_tasa_t0(); 
 
 
 			if (!ctxSw)
@@ -385,14 +413,6 @@ export class IngresoCarCredComponent implements OnInit
 					, (value) => this.processFault(value)
 					, this.user_logueado   //wss_usercode
 				);
-
-				//cmbCausalNoCobro
-				// this.wsFin.push(false);
-				// this.crdRs200160TrnCex.call (
-				// 	(value) => this.getComboData4(value)
-				// , (value) => this.processFault(value)
-				// , this.user_logueado  //wss_usercode
-				// );
 				
 				// cbbCodigoOperacion
 				this.wsFin.push(false);
@@ -411,15 +431,21 @@ export class IngresoCarCredComponent implements OnInit
 					,'2'   //wss_tip_odf
 					,this.user_logueado  //wss_usercode
 				);
-								
+						
+				this.bcxRs200251PdtCall();
+				this.carga_tasa_t0(); 
 		
 			} else {
 				
-				//this.indicadorDeOpcion = this.contextService.getUserData("indicadorDeOpcion");
-				console.log('D Nueva -> this.indicadorDeOpcion.value: ',this.indicadorDeOpcion.value);
-				if(this.varCodTemplate != undefined || this.varCodTemplate!=null || this.varCodTemplate!=''){
-					this.crdRs200152OprCall(this.utilService.toRut(this.bcxRut.value), this.txtFamiliaProducto.value, this.varCodTemplate);
-				} 
+				
+				if(this.varPantalla == 'template'){
+					if(this.varCodTemplate != undefined || this.varCodTemplate!=null || this.varCodTemplate!=''){
+
+						this.crdRs200152OprCall(this.utilService.toRut(this.bcxRut.value), this.txtFamiliaProducto.value, this.varCodTemplate);
+					} 
+					this.varPantalla = '';
+				}
+	
 				this.crdRs200151Crd001Call();
 				setTimeout(() => {					
 					this.waitShow = false;
@@ -525,9 +551,31 @@ export class IngresoCarCredComponent implements OnInit
 		this.txtBicCorresponsalOperacion.disable();
 		
 		this.validatorsDef();
-		//
+		
+	// if (this.sharedService.clickEventsubscription == undefined) {	
+		this.sharedService.clickEventsubscription = this.sharedService.getClickEvent().subscribe((object)=> {	
+			if(object[0]== 'CURSAR'){
+				this.condicion = object[1];
+				this.varIden = object[2];
+			} else if(object[0]== 'fechaVencimiento'){
+				this.txtVencimiento.patchValue(object[1]);
+				this.txtDiasPlazos.patchValue(object[2]);				
+			}
+	
+		})
+	//}	
 		
 	}
+
+	// ejecutar_funcion_sharedService(objetos:any){
+	// 	// if(this.objetoGenerico[0] == "Aceptar")	{
+	// 	// 	this.crdRs200152OprCall(this.utilService.toRut(this.objetoGenerico[1]), this.objetoGenerico[2], this.objetoGenerico[3]);
+	// 	// }if(this.objetoGenerico[0] == "Delete")	{
+	// 	// 	this.crdRs200152OprCall(this.utilService.toRut(this.objetoGenerico[1]), this.objetoGenerico[2], this.objetoGenerico[3]);
+	// 	// } 
+	// 	this.objetoGenerico = objetos;
+	// }
+
 
 	carga_tasa_t0() {
 		
@@ -685,9 +733,9 @@ export class IngresoCarCredComponent implements OnInit
 
 	ofunc_carga_generacion_avisos() {
 
-		let wss_cli_cod_cli: string // String
-		let wss_cod_mod: string // String
-		let wss_usercode: string // String
+		let wss_cli_cod_cli: string = this.utilService.toRut(this.bcxRut.value)// String
+		let wss_cod_mod: string = 'LCI';// String
+		let wss_usercode: string = this.user_logueado;// String
 
 		this.bcxRs200151Cliam.call(
 			(value) => this.bcxRs200151CliamResult(value)
@@ -1364,176 +1412,343 @@ export class IngresoCarCredComponent implements OnInit
 	{
 		/* Mover los datos de la pantalla a los parametros del Web Service. 
 		IMPORTANTE: Para variables Rut, usar: this.utilService.toRut(this.variableRut.value); */
-
+		
 
 		if(this.indicadorDeOpcion.value == 'C'){
 			//this.ofunc_calcula_mod_monto();
 			this.ofunc_carga_formularios(indicador_aux);
 			return;
 		} else {
-
-			let valorBase:number = Number(this.utilService.toDecimal(this.bcxCostoFondo.value));
-			let spreadSumar:number = Number(this.utilService.toDecimal(this.bcxSpread.value));
-			let resultado:number = valorBase + spreadSumar;		
-			this.spreadOculto = resultado;
-			let wss_num_opr :string = this.txtNumeroOperacion.value;	
-			let wss_fam_prd :string;
-			if(this.txtFamiliaProducto.value == ''){
-				wss_fam_prd = '0';
-			} else {
-				wss_fam_prd = this.txtFamiliaProducto.value;
-			}
-			let wss_cod_prd :string;
-			if(this.txtCodProducto.value == ''){
-				wss_cod_prd = '0';
-			} else {
-				wss_cod_prd = this.txtCodProducto.value;
-			}
-
-			let wss_cod_cli :string = this.utilService.toRut(this.bcxRut.value);
-
-			let wss_ofi :string;
-			if(this.txtCodSucursal.value == ''){
-				wss_ofi='0';
-			} else {
-				wss_ofi = this.txtCodSucursal.value;
-			}
-
-			let wss_ref_cli :string;
-			if(this.txtReferenciaCliente.value==''){
-				wss_ref_cli='';
-			} else {
-				wss_ref_cli = this.txtReferenciaCliente.value;
-			}
-
-			let wss_mon_ope :string;
-			if(this.txtCodMoneda.value == ''){
-				wss_mon_ope ='';
-			} else {
-				wss_mon_ope = this.txtCodMoneda.value;
-			}
-
-			let wss_mto_ori :string 
-			if(this.bcxMonto.value == '0,00'){
-				wss_mto_ori = this.utilService.toDecimal('0,00');
-			} else {
-				wss_mto_ori = this.utilService.toDecimal(this.bcxMonto.value);
-			}
-
-			let wss_tas_tip :string;
-			if(this.txtTipoTasa.value == ''){
-				wss_tas_tip = '0';
-			} else {
-				wss_tas_tip = this.txtTipoTasa.value;
-			}
-
-			let wss_tas_bas :string;
-			if(this.bcxValorBase.value == '0,000000'){
-				wss_tas_bas = this.utilService.toDecimal('0,000000');
-			} else {
-				wss_tas_bas = this.utilService.toDecimal(this.bcxValorBase.value);
-			}
 			
-			let wss_tas_spr :string = this.spreadOculto;
+			if(evalua == true) {
+				let valorBase:number = Number(this.utilService.toDecimal(this.bcxCostoFondo.value));
+				let spreadSumar:number = Number(this.utilService.toDecimal(this.bcxSpread.value));
+				let resultado:number = valorBase + spreadSumar;		
+				this.spreadOculto = resultado;
+				let wss_num_opr :string = this.txtNumeroOperacion.value;	
+				let wss_fam_prd :string;
+				if(this.txtFamiliaProducto.value == ''){
+					wss_fam_prd = '0';
+				} else {
+					wss_fam_prd = this.txtFamiliaProducto.value;
+				}
+				let wss_cod_prd :string;
+				if(this.txtCodProducto.value == ''){
+					wss_cod_prd = '0';
+				} else {
+					wss_cod_prd = this.txtCodProducto.value;
+				}
 
-			let wss_tas_tm2 :string
-			if(this.cbbTipoTasa0.value == ''){
-				wss_tas_tm2 = '0';
-			} else {
-				wss_tas_tm2  = '0';
-			}
+				let wss_cod_cli :string = this.utilService.toRut(this.bcxRut.value);
 
-			let wss_fec_otor :any; 
-			if(this.txtOtorgamiento.value == ''){
-				wss_fec_otor = '1753-01-01';
-			} else {
-				wss_fec_otor = this.utilService.toDate(this.txtOtorgamiento.value);
-			}
-	
-			let wss_dias_pzo :string = this.txtDiasPlazos.value;
-			if(this.txtDiasPlazos.value == ''){
-				wss_dias_pzo = '0';
-			} else {
-				wss_dias_pzo = this.txtDiasPlazos.value;
-			}
-			let wss_fec_vto :any;
-			if(this.txtVencimiento.value == ''){
-				wss_fec_vto = '1753-01-01';
-			} else {
-				wss_fec_vto = this.utilService.toDate(this.txtVencimiento.value);
-			}
+				let wss_ofi :string;
+				if(this.txtCodSucursal.value == ''){
+					wss_ofi='0';
+				} else {
+					wss_ofi = this.txtCodSucursal.value;
+				}
 
-			let wss_fec_ini_int :any;
-			if(this.txtInicioCobroIn.value == ''){
-				wss_fec_ini_int = this.utilService.toDate('01/01/1753');
-			} else {
-				wss_fec_ini_int = this.utilService.toDate(this.txtInicioCobroIn.value);
-			}
+				let wss_ref_cli :string;
+				if(this.txtReferenciaCliente.value==''){
+					wss_ref_cli='';
+				} else {
+					wss_ref_cli = this.txtReferenciaCliente.value;
+				}
 
-			let wss_opr_asoc :string;
-			if(this.bcxNumero.value == '0'){
-				wss_opr_asoc = '0';
-			} else {
-				wss_opr_asoc = this.bcxNumero.value;
-			}
-			
-			let wss_corr_opr :string;
-			if(this.bcxCorrelativo.value == '0'){
-				wss_corr_opr  = '0';
-			} else {
-				wss_corr_opr  = this.bcxCorrelativo.value;
-			}
+				let wss_mon_ope :string;
+				if(this.txtCodMoneda.value == ''){
+					wss_mon_ope ='';
+				} else {
+					wss_mon_ope = this.txtCodMoneda.value;
+				}
 
-			let wss_ref_ext :string;
-			if(this.bcxReferenciaExterna.value == ''){
-				wss_ref_ext = '';
-			} else {
-				wss_ref_ext = this.bcxReferenciaExterna.value;
-			}
-			let wss_opr_spr_cof :string;
-			if(this.bcxCostoFondo.value == '0,000000') {
-				wss_opr_spr_cof = this.utilService.toDecimal('0,000000');
-			} else {
-				wss_opr_spr_cof = this.utilService.toDecimal(this.bcxCostoFondo.value);
-			}
+				let wss_mto_ori :string 
+				if(this.bcxMonto.value == '0,00'){
+					wss_mto_ori = this.utilService.toDecimal('0,00');
+				} else {
+					wss_mto_ori = this.utilService.toDecimal(this.bcxMonto.value);
+				}
 
-			let wss_opr_spr_spr :string;
-			if(this.bcxSpread.value == '0,000000') {
-				wss_opr_spr_spr = this.utilService.toDecimal('0,000000');
-			} else {
-				wss_opr_spr_spr = this.utilService.toDecimal(this.bcxSpread.value);
-			}
+				let wss_tas_tip :string;
+				if(this.txtTipoTasa.value == ''){
+					wss_tas_tip = '0';
+				} else {
+					wss_tas_tip = this.txtTipoTasa.value;
+				}
 
-			let wss_usercode :string = this.user_logueado;
-			
+				let wss_tas_bas :string;
+				if(this.bcxValorBase.value == '0,000000'){
+					wss_tas_bas = this.utilService.toDecimal('0,000000');
+				} else {
+					wss_tas_bas = this.utilService.toDecimal(this.bcxValorBase.value);
+				}
+				
+				let wss_tas_spr :string = this.spreadOculto;
+
+				let wss_tas_tm2 :string
+				if(this.cbbTipoTasa0.value == ''){
+					wss_tas_tm2 = '0';
+				} else {
+					wss_tas_tm2  = '0';
+				}
+
+				let wss_fec_otor :any; 
+				if(this.txtOtorgamiento.value == ''){
+					wss_fec_otor = '1753-01-01';
+				} else {
+					wss_fec_otor = this.utilService.toDate(this.txtOtorgamiento.value);
+				}
 		
-			// Invocamos el WS.
-			this.crdRs200112OprIng.call(
-				(value) => this.crdRs200112OprIngResult(value,indicador_aux)
-				, (value) => this.processFault(value)
-				, wss_num_opr
-				, wss_fam_prd
-				, wss_cod_prd
-				, wss_cod_cli
-				, wss_ofi
-				, wss_ref_cli
-				, wss_mon_ope
-				, wss_mto_ori
-				, wss_tas_tip
-				, wss_tas_bas
-				, wss_tas_spr
-				, wss_tas_tm2
-				, wss_fec_otor
-				, wss_dias_pzo
-				, wss_fec_vto
-				, wss_fec_ini_int
-				, wss_opr_asoc
-				, wss_corr_opr
-				, wss_ref_ext
-				, wss_opr_spr_cof
-				, wss_opr_spr_spr
-				, wss_usercode
-			);
+				let wss_dias_pzo :string = this.txtDiasPlazos.value;
+				if(this.txtDiasPlazos.value == ''){
+					wss_dias_pzo = '0';
+				} else {
+					wss_dias_pzo = this.txtDiasPlazos.value;
+				}
+				let wss_fec_vto :any;
+				if(this.txtVencimiento.value == ''){
+					wss_fec_vto = '1753-01-01';
+				} else {
+					wss_fec_vto = this.utilService.toDate(this.txtVencimiento.value);
+				}
+
+				let wss_fec_ini_int :any;
+				if(this.txtInicioCobroIn.value == ''){
+					wss_fec_ini_int = this.utilService.toDate('01/01/1753');
+				} else {
+					wss_fec_ini_int = this.utilService.toDate(this.txtInicioCobroIn.value);
+				}
+
+				let wss_opr_asoc :string;
+				if(this.bcxNumero.value == '0'){
+					wss_opr_asoc = '0';
+				} else {
+					wss_opr_asoc = this.bcxNumero.value;
+				}
+				
+				let wss_corr_opr :string;
+				if(this.bcxCorrelativo.value == '0'){
+					wss_corr_opr  = '0';
+				} else {
+					wss_corr_opr  = this.bcxCorrelativo.value;
+				}
+
+				let wss_ref_ext :string;
+				if(this.bcxReferenciaExterna.value == ''){
+					wss_ref_ext = '';
+				} else {
+					wss_ref_ext = this.bcxReferenciaExterna.value;
+				}
+				let wss_opr_spr_cof :string;
+				if(this.bcxCostoFondo.value == '0,000000') {
+					wss_opr_spr_cof = this.utilService.toDecimal('0,000000');
+				} else {
+					wss_opr_spr_cof = this.utilService.toDecimal(this.bcxCostoFondo.value);
+				}
+
+				let wss_opr_spr_spr :string;
+				if(this.bcxSpread.value == '0,000000') {
+					wss_opr_spr_spr = this.utilService.toDecimal('0,000000');
+				} else {
+					wss_opr_spr_spr = this.utilService.toDecimal(this.bcxSpread.value);
+				}
+
+				let wss_usercode :string = this.user_logueado;
+				
+			
+				// Invocamos el WS.
+				this.crdRs200112OprIng.call(
+					(value) => this.crdRs200112OprIngResult(value,indicador_aux)
+					, (value) => this.processFault(value)
+					, wss_num_opr
+					, wss_fam_prd
+					, wss_cod_prd
+					, wss_cod_cli
+					, wss_ofi
+					, wss_ref_cli
+					, wss_mon_ope
+					, wss_mto_ori
+					, wss_tas_tip
+					, wss_tas_bas
+					, wss_tas_spr
+					, wss_tas_tm2
+					, wss_fec_otor
+					, wss_dias_pzo
+					, wss_fec_vto
+					, wss_fec_ini_int
+					, wss_opr_asoc
+					, wss_corr_opr
+					, wss_ref_ext
+					, wss_opr_spr_cof
+					, wss_opr_spr_spr
+					, wss_usercode
+				);
+				this.condicion = true;
+			} else {
+				let valorBase:number = Number(this.utilService.toDecimal(this.bcxCostoFondo.value));
+				let spreadSumar:number = Number(this.utilService.toDecimal(this.bcxSpread.value));
+				let resultado:number = valorBase + spreadSumar;		
+				this.spreadOculto = resultado;
+				let wss_num_opr :string = this.txtNumeroOperacion.value;	
+				let wss_fam_prd :string;
+				if(this.txtFamiliaProducto.value == ''){
+					wss_fam_prd = '0';
+				} else {
+					wss_fam_prd = this.txtFamiliaProducto.value;
+				}
+				let wss_cod_prd :string;
+				if(this.txtCodProducto.value == ''){
+					wss_cod_prd = '0';
+				} else {
+					wss_cod_prd = this.txtCodProducto.value;
+				}
+
+				let wss_cod_cli :string = this.utilService.toRut(this.bcxRut.value);
+
+				let wss_ofi :string;
+				if(this.txtCodSucursal.value == ''){
+					wss_ofi='0';
+				} else {
+					wss_ofi = this.txtCodSucursal.value;
+				}
+
+				let wss_ref_cli :string;
+				if(this.txtReferenciaCliente.value==''){
+					wss_ref_cli='';
+				} else {
+					wss_ref_cli = this.txtReferenciaCliente.value;
+				}
+
+				let wss_mon_ope :string;
+				if(this.txtCodMoneda.value == ''){
+					wss_mon_ope ='';
+				} else {
+					wss_mon_ope = this.txtCodMoneda.value;
+				}
+
+				let wss_mto_ori :string 
+				if(this.bcxMonto.value == '0,00'){
+					wss_mto_ori = this.utilService.toDecimal('0,00');
+				} else {
+					wss_mto_ori = this.utilService.toDecimal(this.bcxMonto.value);
+				}
+
+				let wss_tas_tip :string;
+				if(this.txtTipoTasa.value == ''){
+					wss_tas_tip = '0';
+				} else {
+					wss_tas_tip = this.txtTipoTasa.value;
+				}
+
+				let wss_tas_bas :string;
+				if(this.bcxValorBase.value == '0,000000'){
+					wss_tas_bas = this.utilService.toDecimal('0,000000');
+				} else {
+					wss_tas_bas = this.utilService.toDecimal(this.bcxValorBase.value);
+				}
+				
+				let wss_tas_spr :string = this.spreadOculto;
+
+				let wss_tas_tm2 :string
+				if(this.cbbTipoTasa0.value == ''){
+					wss_tas_tm2 = '0';
+				} else {
+					wss_tas_tm2  = '0';
+				}
+
+				let wss_fec_otor :any; 
+				if(this.txtOtorgamiento.value == ''){
+					wss_fec_otor = '1753-01-01';
+				} else {
+					wss_fec_otor = this.utilService.toDate(this.txtOtorgamiento.value);
+				}
+		
+				let wss_dias_pzo :string = this.txtDiasPlazos.value;
+				if(this.txtDiasPlazos.value == ''){
+					wss_dias_pzo = '0';
+				} else {
+					wss_dias_pzo = this.txtDiasPlazos.value;
+				}
+				let wss_fec_vto :any;
+				if(this.txtVencimiento.value == ''){
+					wss_fec_vto = '1753-01-01';
+				} else {
+					wss_fec_vto = this.utilService.toDate(this.txtVencimiento.value);
+				}
+
+				let wss_fec_ini_int :any;
+				if(this.txtInicioCobroIn.value == ''){
+					wss_fec_ini_int = this.utilService.toDate('01/01/1753');
+				} else {
+					wss_fec_ini_int = this.utilService.toDate(this.txtInicioCobroIn.value);
+				}
+
+				let wss_opr_asoc :string;
+				if(this.bcxNumero.value == '0'){
+					wss_opr_asoc = '0';
+				} else {
+					wss_opr_asoc = this.bcxNumero.value;
+				}
+				
+				let wss_corr_opr :string;
+				if(this.bcxCorrelativo.value == '0'){
+					wss_corr_opr  = '0';
+				} else {
+					wss_corr_opr  = this.bcxCorrelativo.value;
+				}
+
+				let wss_ref_ext :string;
+				if(this.bcxReferenciaExterna.value == ''){
+					wss_ref_ext = '';
+				} else {
+					wss_ref_ext = this.bcxReferenciaExterna.value;
+				}
+				let wss_opr_spr_cof :string;
+				if(this.bcxCostoFondo.value == '0,000000') {
+					wss_opr_spr_cof = this.utilService.toDecimal('0,000000');
+				} else {
+					wss_opr_spr_cof = this.utilService.toDecimal(this.bcxCostoFondo.value);
+				}
+
+				let wss_opr_spr_spr :string;
+				if(this.bcxSpread.value == '0,000000') {
+					wss_opr_spr_spr = this.utilService.toDecimal('0,000000');
+				} else {
+					wss_opr_spr_spr = this.utilService.toDecimal(this.bcxSpread.value);
+				}
+
+				let wss_usercode :string = this.user_logueado;
+				
+			
+				// Invocamos el WS.
+				this.crdRs200112OprIng.call(
+					(value) => this.crdRs200112OprIngResult(value,indicador_aux)
+					, (value) => this.processFault(value)
+					, wss_num_opr
+					, wss_fam_prd
+					, wss_cod_prd
+					, wss_cod_cli
+					, wss_ofi
+					, wss_ref_cli
+					, wss_mon_ope
+					, wss_mto_ori
+					, wss_tas_tip
+					, wss_tas_bas
+					, wss_tas_spr
+					, wss_tas_tm2
+					, wss_fec_otor
+					, wss_dias_pzo
+					, wss_fec_vto
+					, wss_fec_ini_int
+					, wss_opr_asoc
+					, wss_corr_opr
+					, wss_ref_ext
+					, wss_opr_spr_cof
+					, wss_opr_spr_spr
+					, wss_usercode
+				);
+				this.condicion = false;
+			}
 		}
 
 		// Aca no puede haber nada que dependa del resultado (asincrono).
@@ -1568,10 +1783,78 @@ export class IngresoCarCredComponent implements OnInit
 			this.waitShow = false;
 			this.utilService.alert(this.dialog, wss_result_msg);
 		} else {
-			this.ofunc_calcula_mod_monto();
+
+
+			if(this.condicion)this.grabar_generacion_avisos();
+	    	this.condicion=false;
+			this.ofunc_calcula_mod_monto();   		    			
 			this.ofunc_carga_formularios(indicador_aux);
 		}
 	}
+	/**
+	 * Llamamos al Web Service.
+	 */
+	private grabar_generacion_avisos(): void
+	{
+
+		/* Mover los datos de la pantalla a los parametros del Web Service. */
+		let wss_cli_cod_cli :string = this.utilService.toRut(this.bcxRut.value);
+		let wss_opr_num :string = this.utilService.toString(this.txtNumeroOperacion.value);
+		let wss_cod_mod :string = 'ILC';
+		let wss_cli_ind_dsc_avi :string;
+		if(this.optMensajesSWIFT.value = 'S'){
+			wss_cli_ind_dsc_avi = 'S';
+		} else {
+			wss_cli_ind_dsc_avi = 'N';
+		}
+		let wss_usercode :string = this.user_logueado;
+		  
+		// Activamos el simbolo de progress.
+		this.waitShow = true;
+		// Invocamos el WS.
+		this.bcxRs200112Cliam.call(
+			  (value) => this.ofunc_grabar_generacion_avisos(value)
+			, (value) => this.processFault(value)
+			, wss_cli_cod_cli
+			, wss_opr_num
+			, wss_cod_mod
+			, wss_cli_ind_dsc_avi
+			, wss_usercode
+		);
+
+		// Aca no puede haber nada que dependa del resultado (asincrono).
+
+	}
+	/**
+	 * Callback invocado por this.bcxRs200112Cliam.call.
+	 * @param wsResult Parametros de salida, mensaje de error.
+	 */
+	ofunc_grabar_generacion_avisos(wsResult :CmWsResult): void
+	{
+		// Desactivamos el simbolo de progress.
+		this.waitShow = false;
+		/* Mover los parametros de salida a la pantalla. 
+		this.xyz.patchValue(wsResult.getResultString('wss_result_msg'));
+		 */
+		// A veces el Fault se viene por aca.
+		let hayError: boolean = wsResult.hayError();
+		if (hayError)
+		{
+			let msg: string = wsResult.getErrorMsg();
+			let code: string = wsResult.getErrorCode();
+			this.utilService.alert(this.dialog, msg + ' [' + code + ']');
+		}else if(wsResult.getReturnValue()==0){
+			let wss_result_msg:any = wsResult.getResultString('wss_result_msg') ;
+			this.waitShow = false;
+			this.utilService.alert(this.dialog, wss_result_msg);
+		} else {
+
+			//this.crdRs200172OprIngCall();
+		}
+	}
+
+
+
 	/**
 	 * Llamamos al Web Service.
 	 */
@@ -1624,8 +1907,22 @@ export class IngresoCarCredComponent implements OnInit
 			wss_odf_opr_ccte = this.cbbCuentaCorrienteOperacion.value;
 		}
 
-		let wss_odf_opr_tc :string = this.utilService.toDecimal(this.bcxTipoCambioOperacion.value);
-		let wss_odf_opr_bco :string = this.utilService.toString(this.txtBicCorresponsalOperacion.value);
+		let wss_odf_opr_tc :string; 
+		if(this.bcxTipoCambioOperacion.value == '0,00000000' || this.bcxTipoCambioOperacion.value == ''){
+			wss_odf_opr_tc = '0'
+		} else {
+			wss_odf_opr_tc = this.utilService.toDecimal(this.bcxTipoCambioOperacion.value);
+		}
+
+
+		let wss_odf_opr_bco :string;
+
+		if(this.txtFamiliaProducto.value == '2'){
+			wss_odf_opr_bco="";
+		} else {
+			wss_odf_opr_bco=this.utilService.toString(this.txtBicCorresponsalOperacion.value);		 		
+		}
+
 		let wss_odf_cyg_ind :string;
 
 		if(this.optMonedaComyGas.value == 'X'){
@@ -1650,8 +1947,11 @@ export class IngresoCarCredComponent implements OnInit
 		
 
 		let wss_odf_cyg_ccte :string = this.utilService.toString(this.cbbCuentaCorrienteComyGas.value);
-		let wss_odf_cyg_tc :string = this.utilService.toDecimal(this.bcxTipoCambioOperacion.value);
+		let wss_odf_cyg_tc :string = this.utilService.toDecimal(this.bcxTipoCambioComyGas.value);
+
 		let wss_odf_cyg_bco :string = this.utilService.toString(this.txtBicCorresponsalComyGas.value);
+
+
 		let wss_usercode :string = this.user_logueado;
 	
 		// Activamos el simbolo de progress.
@@ -1688,17 +1988,13 @@ export class IngresoCarCredComponent implements OnInit
 	 */
 	crdRs200172OprIngResult(wsResult :CmWsResult): void
 	{
+		
 		// Desactivamos el simbolo de progress.
 		//this.waitShow = false;
 		/* Mover los parametros de salida a la pantalla. 
 		this.xyz.patchValue(wsResult.getResultString('wss_result_cod'));
 		this.xyz.patchValue(wsResult.getResultString('wss_result_msg'));
 		 */
-
-		
-
-
-
 		// A veces el Fault se viene por aca.
 		let hayError: boolean = wsResult.hayError();
 		if (hayError)
@@ -1711,21 +2007,29 @@ export class IngresoCarCredComponent implements OnInit
 			this.waitShow = false;
 			let wss_result_msg = wsResult.getResultString('wss_result_msg');		
 			this.utilService.alert(this.dialog, wss_result_msg);
-			
 		} else{
-			this.imprimir_doc_revisa();
-			
+			if(this.varCursar == 1){
+				this.imprimir_doc_revisa();
+			} 
+			// if(this.varCursar == 3){
+			// 	this.valorReturn = 3;
+			// }
 		}
 
-
-
-
 	}
+
+
+	ofunc_return_cero():any{ 
+		return this.valorReturn;
+	}
+
+
 	/**
 	 * Llamamos al Web Service.
 	 */
-	public crdRs200152OprCall(wss_cod_cli :string, wss_fam_prd :string, wss_cod_ptr :string): void
+	crdRs200152OprCall(wss_cod_cli :string, wss_fam_prd :string, wss_cod_ptr :string): void
 	{
+		
 		/* Mover los datos de la pantalla a los parametros del Web Service. 
 		IMPORTANTE: Para variables Rut, usar: this.utilService.toRut(this.variableRut.value); */
 
@@ -1754,22 +2058,8 @@ export class IngresoCarCredComponent implements OnInit
 	crdRs200152OprResult(wsResult :CmWsResult): void
 	{
 
-		
-
 		// Desactivamos el simbolo de progress.
-		//this.waitShow = false;
-		/* Mover los parametros de salida a la pantalla. 
-		this.xyz.patchValue(wsResult.getResultString('wss_nom_cli'));
-		this.xyz.patchValue(wsResult.getResultString('wss_dir_cli'));
-		this.xyz.patchValue(wsResult.getResultString('wss_ciu_cli'));
-		this.xyz.patchValue(wsResult.getResultString('wss_cod_suc'));
-		
-		this.xyz.patchValue(wsResult.getResultString('wss_result_cod'));
-		this.xyz.patchValue(wsResult.getResultString('wss_result_msg'));
-		 */
-		
-
-		
+		//this.waitShow = false;		
 		// A veces el Fault se viene por aca.
 		let hayError: boolean = wsResult.hayError();
 		if (hayError)
@@ -1788,8 +2078,9 @@ export class IngresoCarCredComponent implements OnInit
 			if(this.varCodTemplate != '') {
 				this.varPlantillaGlobal = true;
 				this.tasa_preferencial();
-				this.varInicio=1;
-				this.varInicioGlobal = 0;
+				this.varInicioPadre=1;
+				//this.varInicio = 0;
+				//this.varInicio = this.switchIteracion;
 				this.varCodTemplateGlobal = this.varCodTemplate;
 			}else {
 				this.varPlantillaGlobal = false;
@@ -1802,49 +2093,33 @@ export class IngresoCarCredComponent implements OnInit
 				this.habIndCobrInt.patchValue(true);
 				
 			} else {
-				
 				this.habIndCobrInt.patchValue(false);
 			}
 
 			this.bcxRs99260OdfOperacionCall('2');
 			this.bcxRs99260OdfComCyGCall('2');
 
-			// this.ofunc_hiden();
+			this.ofunc_hiden();
 
-			// if(this.txtFamiliaProducto.value == '2'){
-			// 	this.tamanio_canvas(this.txtFamiliaProducto.value);
-			// } else {
-			// 	this.selecEnterada();
-			// }
-
-
-			this.crdRs200151Crd001Call();	
-		//	this.bcxRut.disable();
-		
-			
+			if(this.txtFamiliaProducto.value == '2'){
+				this.tamanio_canvas(this.txtFamiliaProducto.value);
+			} else {			
+				//this.selecEnterada();
+				this.selecEnteradaAux();
+			}
+			this.crdRs200151Crd001Call();		
 		}
 	}
 
-	ofunc_hiden(){
-		
-		if (this.txtFamiliaProducto.value == "1") {
-			//cnvOF.y = 718;	
-			//cnvComi.y=886;
-			//cnvDes.visible=false;
-			//this.habChkEnterada.patchValue(false);		
+	ofunc_hiden(){		
+		if (this.txtFamiliaProducto.value == "1") {		
 			this.chkEnterada.enable();				
 		}
 		else{
-			//cnvOF.y = 886;
-			//cnvComi.y=1054;
-			//cnvDes.visible=true;
-			
-			this.chkEnterada.patchValue(true);	
+			this.chkEnterada.patchValue(false);	
 			this.chkEnterada.disable();
-		}			
-		
+		}					
 	}
-
 
 	tamanio_canvas(famProd:any) {
 		if(famProd == '2'){
@@ -1856,9 +2131,7 @@ export class IngresoCarCredComponent implements OnInit
 		}
 	}
 
-
-	selecEnterada(){
-		
+	selecEnterada(){		
 		if(this.chkEnterada.value == true){
 			this.destino_de_fondos_hiden.patchValue(false);
 			this.txtCodigoOperacion.patchValue("");
@@ -1866,16 +2139,80 @@ export class IngresoCarCredComponent implements OnInit
 		}
 		else{
 			this.destino_de_fondos_hiden.patchValue(true);
-			//height = 900;
-		
+			this.habCamposStby.patchValue(true)
 		}
 	}
 
-
-	ofunc_habilita_cbr_interes_ant(rut:string){
-
+	selecEnteradaAux(){		
+		if(this.chkEnterada.value == false){
+			this.destino_de_fondos_hiden.patchValue(false);
+			this.txtCodigoOperacion.patchValue("");
+			this.cbbCodigoOperacion.patchValue("");	
+		}
+		else{
+			this.destino_de_fondos_hiden.patchValue(true);
+			this.habCamposStby.patchValue(true)
+		}
 	}
 
+	ofunc_habilita_cbr_interes_ant(numOperacion:string){
+		/* Mover los datos de la pantalla a los parametros del Web Service.  
+		IMPORTANTE: Para variables Rut, usar: this.utilService.toRut(this.variableRut.value); */ 
+		let wss_cod_prd :string = this.WSS_D01_SGM;
+		let wss_tip_txt :string = 'APINT';
+		let wss_num_opr :string = numOperacion;
+		let wss_usercode :string = this.user_logueado;
+
+
+		
+		// Activamos el simbolo de progress.
+		this.waitShow = true;
+		// Invocamos el WS.
+		this.bcxRs200160TxtLci.call(
+			  (value) => this.bcxRs200160TxtLciResult(value)
+			, (value) => this.processFault(value)
+			, wss_cod_prd
+			, wss_tip_txt
+			, wss_num_opr
+			, wss_usercode
+		);
+	}
+
+	
+	/**
+	 * Callback invocado por this.bcxRs200160Bank.call.
+	 * @param wsResult Parametros de salida, mensaje de error.
+	 */
+	bcxRs200160TxtLciResult(wsResult :CmWsResult): void
+	{
+		
+		let txtInstrucciones78_array:any[] = [];
+		let txtInstrucciones78Aux :string = "";
+
+		//txtInstrucciones78_array = wsResult.getTableRows();
+
+		
+		// Desactivamos el simbolo de progress.
+		this.waitShow = false;
+		// A veces el Fault se viene por aca.
+		let hayError: boolean = wsResult.hayError();
+		if (hayError)
+		{
+			let msg: string = wsResult.getErrorMsg();
+			let code: string = wsResult.getErrorCode();
+			this.utilService.alert(this.dialog, msg + ' [' + code + ']');
+		} else if(wsResult.getReturnValue()==0){
+			let wss_result_msg:string = wsResult.getResultString('wss_result_msg');
+			this.utilService.alert(this.dialog, wss_result_msg)
+		} else {
+			// for(let i=0; i< txtInstrucciones78_array.length; i++){
+			// 	txtInstrucciones78Aux = txtInstrucciones78Aux + txtInstrucciones78_array[i].wss_lin_txt+"\n";
+			// }	
+			// this.txtInstrucciones78.patchValue(txtInstrucciones78Aux);
+		
+			//this.ofunc_cargar_CONADICIO()
+		}
+	}
 
 
 
@@ -1886,9 +2223,11 @@ export class IngresoCarCredComponent implements OnInit
 	{
 
 		if(this.txtFamiliaProducto.value == '2'){
+		
 			this.crdRs200152OprCall(this.utilService.toRut(this.bcxRut.value),this.txtFamiliaProducto.value, '0000000000000000000000000000000000000000000');
 		} else {
-						/* Mover los datos de la pantalla a los parametros del Web Service. 
+	
+			/* Mover los datos de la pantalla a los parametros del Web Service. 
 			IMPORTANTE: Para variables Rut, usar: this.utilService.toRut(this.variableRut.value); */ 
 			let wss_cod_cli :string = this.utilService.toRut(this.bcxRut.value);
 			let wss_usercode :string = this.user_logueado;
@@ -1931,19 +2270,15 @@ export class IngresoCarCredComponent implements OnInit
 			let wss_result_msg:string = wsResult.getResultString('wss_result_msg');
 			this.utilService.alert(this.dialog, wss_result_msg);
 		} else {
-			//this.xyz.patchValue(wsResult.getResultString('wss_ind_ptr'));
-
 			if(wsResult.getResultString('wss_ind_ptr') == 'S'){
-				// var varTemplate:ttlTemplate = ttlTemplate(PopUpManager.createPopUp(this, ttlTemplate, true));	
-				// varTemplate.varRut = txtRut.value();
-				// varTemplate.varPadre = this;
+
 				this.contextService.store(this);
 				this.contextService.setUserData('bcxRut', this.utilService.toRut(this.bcxRut.value));
 				this.contextService.setUserData('familiaProducto', this.txtFamiliaProducto.value);
 				this.contextService.setUserData('varPadre', this);
 				this.contextService.setUserData("user_logueado",this.user_logueado);
+				this.contextService.setUserData("varDatosadicionales",this.varDatosadicionales);
 				this.router.navigate(['/template'])
-
 
 			}else{
 				/**varCodTemplate = '';
@@ -1957,7 +2292,6 @@ export class IngresoCarCredComponent implements OnInit
 			}
 		}
 	}
-
 
 	tasa_preferencial(){
 		/* Mover los datos de la pantalla a los parametros del Web Service. 
@@ -2258,7 +2592,7 @@ export class IngresoCarCredComponent implements OnInit
 			if(arrayAutomata[19] == true){
 				this.btnPlanPago = false;
 			} else {
-				this.btnPlanPago = true;
+				this.btnPlanPago = false;
 			}									
 			if(arrayAutomata[20] == true){
 				this.bcxNumero.enable();
@@ -2381,70 +2715,6 @@ export class IngresoCarCredComponent implements OnInit
 	}
 
 
-
-
-
-
-	/**
-	 * Llamamos al Web Service.
-	 */
-	private crdRs200112CobTyeCall(): void
-	{
-		
-		/* Mover los datos de la pantalla a los parametros del Web Service. 
-		IMPORTANTE: Para variables Rut, usar: this.utilService.toRut(this.variableRut.value); */ 
-		let wss_opr_num :string = this.txtNumeroOperacion.value;
-		let wss_opr_eve :string = "OTO";
-		let wss_ind_sn :string = this.chboxSinImpuestos		
-		let wss_cod_cex :string;
-		if(this.cmbCausalNoCobro.value == ''){
-			wss_cod_cex = '';
-		} else {
-			wss_cod_cex = this.cmbCausalNoCobro.value;
-		}
-		let wss_usercode :string = this.user_logueado;
-		 
-		// Activamos el simbolo de progress.
-		this.waitShow = true;
-		// Invocamos el WS.
-		// this.crdRs200112CobTye.call(
-		// 	  (value) => this.crdRs200112CobTyeResult(value)
-		// 	, (value) => this.processFault(value)
-		// 	, wss_opr_num
-		// 	, wss_opr_eve
-		// 	, wss_ind_sn
-		// 	, wss_cod_cex
-		// 	, wss_usercode
-		// );
-		this.crdRs200112OprIngCall('CURSAR', true);
-		// Aca no puede haber nada que dependa del resultado (asincrono).
-
-	}
-	/**
-	 * Callback invocado por this.crdRs200112CobTye.call.
-	 * @param wsResult Parametros de salida, mensaje de error.
-	 */
-	crdRs200112CobTyeResult(wsResult :CmWsResult): void
-	{
-		// Desactivamos el simbolo de progress.
-		//this.waitShow = false;
-		/* Mover los parametros de salida a la pantalla. 
-		this.xyz.patchValue(wsResult.getResultString('wss_result_msg'));
-		 */
-		let wss_result_msg:string = wsResult.getResultString('wss_result_msg')
-		// A veces el Fault se viene por aca.
-		let hayError: boolean = wsResult.hayError();
-		if (hayError)
-		{
-			let msg: string = wsResult.getErrorMsg();
-			let code: string = wsResult.getErrorCode();
-			this.utilService.alert(this.dialog, msg + ' [' + code + ']');
-		} else if(wsResult.getReturnValue()==0){
-			this.utilService.alert(this.dialog, wss_result_msg);
-		} else{
-			this.crdRs200112OprIngCall('CURSAR', true);
-		}
-	}
 	/**
 	 * Llamamos al Web Service.
 	 */
@@ -2631,16 +2901,31 @@ export class IngresoCarCredComponent implements OnInit
 				this.contextService.setUserData("WSS_D01_SGM", this.WSS_D01_SGM);
 				this.contextService.setUserData("varPlantillaGlobal",this.varPlantillaGlobal);
 				this.contextService.setUserData("varCodTemplateGlobal",this.varCodTemplateGlobal);		
-				this.contextService.setUserData("varInicioGlobal",this.varInicioGlobal);
+				this.contextService.setUserData("varInicio",this.varInicio);
+				this.contextService.setUserData("varInicioPadre",this.varInicioPadre);
 				this.contextService.setUserData("bicCor", this.bicCor);
 				this.contextService.setUserData("fechaProceso",this.txtFechaIngreso.value);	
 				this.contextService.setUserData("precarga", this.precarga);		
 				this.contextService.setUserData("opcion",this.opcion);
+				this.contextService.setUserData("chkEnterada",this.chkEnterada.value);
+				this.contextService.setUserData("objetoPadre",this);
+				this.contextService.setUserData("consulta", this.indicadorDeOpcion.value);
+				this.contextService.store(this);
 				this.router.navigate(['/datosadicionales']);
 
 
 			} else if (codForm == 'CRDI2'){
-
+				this.contextService.store(this);
+				this.contextService.setUserData("financiamiento_indicador_opcion",this.financiamiento_indicador_opcion);
+				this.contextService.setUserData("user_logueado",this.user_logueado);
+				this.contextService.setUserData("numOperacion", this.txtNumeroOperacion.value);
+				this.contextService.setUserData("WSS_D01_SGM", this.WSS_D01_SGM);	
+				this.contextService.setUserData("bicCor", this.bicCor);
+				this.contextService.setUserData("fechaProceso",this.txtFechaIngreso.value);		
+				this.contextService.setUserData("opcion",this.opcion);
+				this.contextService.setUserData("objetoPadre",this);
+				this.contextService.setUserData("varInicio",this.varInicio);
+				this.router.navigate(['/cartastandby']);
 			}
 		}
 	}
@@ -2680,7 +2965,7 @@ export class IngresoCarCredComponent implements OnInit
 			let wss_result_msg:string = wsResult.getResultString('wss_result_msg');
 			this.utilService.alert(this.dialog, wss_result_msg);
 		} else {
-			debugger
+			
 			this.arrayTag50[0] = wsResult.getResultString('wss_txt_ord1');
 			this.arrayTag50[1] = wsResult.getResultString('wss_txt_ord2');
 			this.arrayTag50[2] = wsResult.getResultString('wss_txt_ord3');
@@ -2776,6 +3061,11 @@ export class IngresoCarCredComponent implements OnInit
 		this.cbbSucursalOperacionArray = wsResult.getTableRows();
 		this.cbbSucursalComyGasArray = wsResult.getTableRows();
 		this.cbbCodSucursalArray = wsResult.getTableRows();
+
+		this.txtSucursalOperacion.setValidators(CmTextoComboValidator(this.cbbSucursalOperacionArray, 'wss_cod_suc'));
+		this.txtCodSucursal.setValidators(CmTextoComboValidator(this.cbbCodSucursalArray, 'wss_cod_suc'));
+		this.txtSucursalComyGas.setValidators(CmTextoComboValidator(this.cbbSucursalComyGasArray, 'wss_cod_suc'));
+
 
 		this.bcxRs200160FprdCall();
 		//
@@ -3360,7 +3650,7 @@ export class IngresoCarCredComponent implements OnInit
 	 */
 	cmdCursar_click(): void
 	{
-		this.crdRs200112CobTyeCall();
+		this.crdRs200112OprIngCall('CURSAR', true);
 		
 	}
 	/**
@@ -3452,7 +3742,7 @@ export class IngresoCarCredComponent implements OnInit
 			cbbCuentaCorrienteOperacion:'',
 			txtSucursalOperacion:'',
 			cbbSucursalOperacion:'',
-			bcxTipoCambioOperacion:'',
+			bcxTipoCambioOperacion:'0,00000000',
 			txtBicCorresponsalOperacion:'',
 			txtNombreCorresponsalOperacion:'',
 			optMonedaComyGas:'N',
@@ -3461,7 +3751,7 @@ export class IngresoCarCredComponent implements OnInit
 			cbbCuentaCorrienteComyGas:'',
 			txtSucursalComyGas:'',
 			cbbSucursalComyGas:'',
-			bcxTipoCambioComyGas:'',
+			bcxTipoCambioComyGas:'0,00000000',
 			txtBicCorresponsalComyGas:'',
 			txtNombreCorresponsalComyGas:'',
 			cmbCausalNoCobro:'',
@@ -3475,7 +3765,8 @@ export class IngresoCarCredComponent implements OnInit
 			chkEnterada:'',
 			habChkEnterada:'',
 			cnvDes:'',
-			destino_de_fondos_hiden:''
+			destino_de_fondos_hiden:'',
+			varDatosadicionalesComisiones:''
 		});
 	}
 	/**
@@ -3544,6 +3835,7 @@ export class IngresoCarCredComponent implements OnInit
 		this.habChkEnterada = this.form.controls['habChkEnterada'];
 		this.cnvDes = this.form.controls['cnvDes'];
 		this.destino_de_fondos_hiden = this.form.controls['destino_de_fondos_hiden'];
+		this.varDatosadicionalesComisiones = this.form.controls['varDatosadicionalesComisiones'];
 	}
 
 
@@ -3842,20 +4134,18 @@ export class IngresoCarCredComponent implements OnInit
 
 		this.habilitarChbkSinImpuesto = true;
 		this.cmbCausalNoCobro.disable();
-		this.habCamposStby.patchValue(true);
+		
 		this.optMensajesSWIFT.disable();		
-		this.destino_de_fondos_hiden.patchValue(false);
+		
 		this.chkEnterada.patchValue(false);
 
+		//this.ofunc_habilitar_campos_Stndby();
 }
 
 ofunc_origen_de_fondo() {
 	this.bcxRs99260OdfOperacionCall('2');
 	this.bcxRs99260OdfComCyGCall('2');
 }
-
-
-
 
 ofunc_cta_cte_operacion() {
 
@@ -3924,8 +4214,9 @@ limpiar_campos_formularios(){
 	this.txtOtorgamiento.patchValue("");
 	//this.txtInicioCobroIn.disable();
 	this.txtDiasPlazos.disable();
-	this.txtDiasPlazos.patchValue("");
+	this.txtDiasPlazos.patchValue("");	
 	this.txtVencimiento.disable();  
+	this.txtVencimiento.patchValue("");
 	this.btnPlanPago = false;
 	this.bcxNumero.patchValue("");
 	this.bcxCorrelativo.patchValue("");
@@ -4227,7 +4518,6 @@ cmdDatosAdicionales_click():void{
 
 ofunc_carga_formularios(indicador_aux:string) {
 	
-
 	if(indicador_aux == 'MC'){
 		this.contextService.store(this);
 		let numeroOperacion: string = this.txtNumeroOperacion.value;
@@ -4248,7 +4538,9 @@ ofunc_carga_formularios(indicador_aux:string) {
 		this.contextService.setUserData('user_logueado', this.user_logueado);
 		this.contextService.setUserData("familiaProducto", this.txtFamiliaProducto.value);
 		this.contextService.setUserData("numOperacion",this.txtNumeroOperacion.value);	
-		this.contextService.setUserData("opcion", this.indicadorDeOpcion.value);		
+		this.contextService.setUserData("opcion", this.indicadorDeOpcion.value);
+		this.contextService.setUserData("varDatosadicionales", this.varDatosadicionales);
+		
 		this.router.navigate(['/plandepago']);
 	}
 	if(indicador_aux =='CP'){
@@ -4268,6 +4560,7 @@ ofunc_carga_formularios(indicador_aux:string) {
 		this.contextService.setUserData("fechaVencimiento", this.txtVencimiento.value);
 		this.contextService.setUserData("inicioIntereses", this.txtInicioCobroIn.value);
 		this.contextService.setUserData("otorgamiento", this.txtOtorgamiento.value);
+		this.contextService.setUserData("varDatosadicionales", this.varDatosadicionales);
 	
 		this.router.navigate(['/contraparte']);
 	}
@@ -4278,6 +4571,7 @@ ofunc_carga_formularios(indicador_aux:string) {
 		this.contextService.setUserData("txtNumeroOperacion",this.txtNumeroOperacion.value);
 		this.contextService.setUserData("txtFechaIngreso", this.utilService.toDate(this.txtFechaIngreso.value))
 		this.contextService.setUserData("opcion", this.indicadorDeOpcion.value);
+		this.contextService.setUserData("varDatosadicionales", this.varDatosadicionales);
 	
 		this.router.navigate(['/tipodegarantia']);
 	}
@@ -4287,6 +4581,7 @@ ofunc_carga_formularios(indicador_aux:string) {
 		this.contextService.setUserData("bcxRut",this.bcxRut.value);
 		this.contextService.setUserData("txtNumeroOperacion",this.txtNumeroOperacion.value);
 		this.contextService.setUserData("opcion", this.indicadorDeOpcion.value);
+		this.contextService.setUserData("varDatosadicionales", this.varDatosadicionales);
 	
 		this.router.navigate(['/avales']);
 	}
@@ -4337,27 +4632,31 @@ ofunc_llena_formulario(){
 		this.bcxCorrelativo.patchValue(wsResult.getResultString('wss_corr_opr').toString());
 		this.bcxReferenciaExterna.patchValue(wsResult.getResultString('wss_ref_ext'));
 		this.bcxCostoFondo.patchValue(wsResult.getResultNumberFormat('wss_tas_spr_cof',6));
-		this.bcxSpread.patchValue(wsResult.getResultNumberFormat('wss_tas_spr_spr',6));
-		
+		this.bcxSpread.patchValue(wsResult.getResultNumberFormat('wss_tas_spr_spr',6));		
 		this.txtCodigoOperacion.patchValue(wsResult.getResultString('wss_odf_opr_cod').toString());
 		this.cbbCuentaCorrienteOperacion.patchValue(wsResult.getResultString('wss_odf_opr_ccte'));
 		this.txtSucursalOperacion.patchValue(wsResult.getResultString('wss_odf_opr_suc').toString());	
+		if(this.txtSucursalOperacion.value == '0'){
+			this.txtSucursalOperacion.patchValue('');
+		}
 		this.bcxTipoCambioOperacion.patchValue(wsResult.getResultNumberFormat('wss_odf_opr_tc',6));
 		this.txtBicCorresponsalOperacion.patchValue(wsResult.getResultString('wss_odf_opr_bco').trim());
-
 		this.txtCodigoComyGas.patchValue(wsResult.getResultString('wss_odf_cyg_cod').toString().toString());
 		this.cbbCuentaCorrienteComyGas.patchValue(wsResult.getResultString('wss_odf_cyg_ccte').toString());
 		this.txtSucursalComyGas.patchValue(wsResult.getResultString('wss_odf_cyg_suc').toString());
-		this.bcxTipoCambioComyGas.patchValue(wsResult.getResultNumberFormat('wss_odf_cyg_tc',6));
+		if(this.txtSucursalComyGas.value == '0'){
+			this.txtSucursalComyGas.patchValue(this.txtCodSucursal.value);
+		}
+		debugger
+		//this.bcxTipoCambioComyGas.patchValue(wsResult.getResultNumberFormat('wss_odf_cyg_tc',6));
+		if(wsResult.getResultString('wss_odf_cyg_tc').toString()!='0.000000'){
+			this.bcxTipoCambioOperacion.patchValue(wsResult.getResultNumberFormat('wss_odf_cyg_tc',6));
+		} else {
+			this.ofunc_tipo_cambio();
+		}
 		this.txtBicCorresponsalComyGas.patchValue(wsResult.getResultString('wss_odf_cyg_bco').trim());
-
 		if(this.financiamiento_indicador_opcion == 'Preingreso'){
 			this.txtNumeroSolicitud.patchValue(this.numeroSolicitud.trim());	
-
-
-			// this.ofunc_cta_cte_operacion();
-			// this.ofunc_cta_cte_com_y_gas();
-		//	this.habilitar_campos_preingreso();
 			this.habilitarSinCobroImpuestos();
 			this.ofunc_calcular_fecha(2);
 			this.Cambiar_tasa();
@@ -4367,7 +4666,21 @@ ofunc_llena_formulario(){
 
 		this.ofunc_cta_cte_operacion();
 		this.ofunc_cta_cte_com_y_gas();
-	
+		if(this.financiamiento_indicador_opcion == 'Detalle')	{
+			// if(wsResult.getResultString('wss_ali_ind_eef').toString()=='S'){
+			// 	this.chkEnterada.selected = true;
+			// }
+			// else{
+			// 	this.chkEnterada.selected = false;
+			// }			
+			if(this.txtFamiliaProducto.value == '2'){				
+				this.ofunc_habilita_cbr_interes_ant(this.txtNumeroOperacion.value);	
+				this.indCobrInt.patchValue(true);
+			} else {
+				this.selecEnteradaAux();
+				this.indCobrInt.patchValue(false);
+			}
+		}
 		//this.habilitarBtnCursar = false;
 
 	} else if(wsResult.getResultString('wss_ind_act')=='C'){
@@ -4405,37 +4718,94 @@ ofunc_llena_formulario(){
 		this.bcxCorrelativo.patchValue(wsResult.getResultString('wss_corr_opr').toString())
 		this.bcxReferenciaExterna.patchValue(wsResult.getResultString('wss_ref_ext'));
 		this.bcxCostoFondo.patchValue(wsResult.getResultNumberFormat('wss_tas_spr_cof',6));
-		this.bcxSpread.patchValue(wsResult.getResultNumberFormat('wss_tas_spr_spr',6));
-		
+		this.bcxSpread.patchValue(wsResult.getResultNumberFormat('wss_tas_spr_spr',6));		
 		this.txtCodigoOperacion.patchValue(wsResult.getResultString('wss_odf_opr_cod').toString());
 		this.cbbCuentaCorrienteOperacion.patchValue(wsResult.getResultString('wss_odf_opr_ccte'));
-		this.txtSucursalOperacion.patchValue(wsResult.getResultString('wss_odf_opr_suc').toString());	
-		this.bcxTipoCambioOperacion.patchValue(wsResult.getResultNumberFormat('wss_odf_opr_tc',6));
+		this.txtSucursalOperacion.patchValue(wsResult.getResultString('wss_odf_opr_suc').toString());
+		if(this.txtSucursalOperacion.value == '0'){
+			this.txtSucursalOperacion.patchValue('');
+		}	
+		this.bcxTipoCambioOperacion.patchValue(wsResult.getResultNumberFormat('wss_odf_opr_tc',6))
 		this.txtBicCorresponsalOperacion.patchValue(wsResult.getResultString('wss_odf_opr_bco').trim());
-
 		this.txtCodigoComyGas.patchValue(wsResult.getResultString('wss_odf_cyg_cod').toString());
 		this.cbbCuentaCorrienteComyGas.patchValue(wsResult.getResultString('wss_odf_cyg_ccte').toString());
 		this.txtSucursalComyGas.patchValue(wsResult.getResultString('wss_odf_cyg_suc').toString());
-		this.bcxTipoCambioComyGas.patchValue(wsResult.getResultNumberFormat('wss_odf_cyg_tc',6));
+		if(this.txtSucursalComyGas.value == '0'){
+			this.txtSucursalComyGas.patchValue(this.txtCodSucursal.value);
+		}
+		//this.bcxTipoCambioComyGas.patchValue(wsResult.getResultNumberFormat('wss_odf_cyg_tc',6));
+		if(wsResult.getResultString('wss_odf_cyg_tc').toString()!='0.000000'){
+			this.bcxTipoCambioOperacion.patchValue(wsResult.getResultNumberFormat('wss_odf_cyg_tc',6));
+		} else {
+			this.ofunc_tipo_cambio();
+		}
 		this.txtBicCorresponsalComyGas.patchValue(wsResult.getResultString('wss_odf_cyg_bco').trim());
-
 		this.ofunc_cta_cte_operacion();
 		this.ofunc_cta_cte_com_y_gas();
 		this.deshabilita_campos();
-
 		this.habilitarBtnCursar = true;
+		if(this.financiamiento_indicador_opcion == 'Detalle')	{
+			// if(wsResult.getResultString('wss_ali_ind_eef').toString()=='S'){
+			// 	this.chkEnterada.selected = true;
+			// }
+			// else{
+			// 	this.chkEnterada.selected = false;
+			// }			
+			if(this.txtFamiliaProducto.value == '2'){				
+				this.ofunc_habilita_cbr_interes_ant(this.txtNumeroOperacion.value);	
+				this.indCobrInt.patchValue(true);
+			} else {
+				this.selecEnteradaAux();
+				this.indCobrInt.patchValue(false);
+			}
+		}
 	
 	}
 	this.waitShow = false;
 	
 }
 
+ofunc_tipo_cambio(){			
+	debugger
+	/* Mover los datos de la pantalla a los parametros del Web Service. 
+	IMPORTANTE: Para variables Rut, usar: this.utilService.toRut(this.variableRut.value);  */ 
+	//let wss_mon_opr :string = this.txtCodMoneda.value;
+	let wss_mon_opr :string = (this.txtCodMoneda.value == '')?'0':this.txtCodMoneda.value;
+	let wss_usercode :string = this.user_logueado;	
+	// Activamos el simbolo de progress.
+	//this.waitShow = true;
+	// Invocamos el WS.
+	this.bcxRs25199TipCmb.call(
+			(value) => this.ofunc_result_Cambio(value)
+		, (value) => this.processFault(value)
+		, wss_mon_opr
+		, wss_usercode
+	);
+
+
+}
+ofunc_result_Cambio(wsResult :CmWsResult):void{	
+	//this.waitShow = false	
+	//this.xyz.patchValue(wsResult.getResultString('wss_result_msg'));
+	// A veces el Fault se viene por aca.
+	let hayError: boolean = wsResult.hayError();
+	if (hayError)
+	{
+		let msg: string = wsResult.getErrorMsg();
+		let code: string = wsResult.getErrorCode();
+		this.utilService.alert(this.dialog, msg + ' [' + code + ']');
+	}
+	else if(wsResult.getReturnValue()==0){
+		let wss_result_msg:string = wsResult.getResultString('wss_result_msg');
+		this.waitShow = false;
+		this.utilService.alert(this.dialog, wss_result_msg);
+	} else {			
+		this.bcxTipoCambioComyGas.patchValue(wsResult.getResultNumberFormat('wss_tc_opr', 8));	
+	}	
+}
+
 imprimir_doc_revisa(): void {
-		
-// 	this.url = this.hostService.getHost() + '/BCXGENPDF_WEB/generarPDF?wss_cod_apl=BKO&wss_cod_doc=DOCFNAING&wss_sol_num=&wss_ins_num=&wss_opr_num='+this.txtNumeroOperacion.value.trim()+',0&wss_cod_cli='+this.hostService.getTokenUser()+'&wss_doc_ver=0&wss_val_prm1=&wss_val_prm=';
-// 	if(this.url.indexOf("http:") < 0){
-// 		this.url = 'http://' +  this.url;
-// 	}
+	
 	/**
    * Documento Revisa PDF.
    */

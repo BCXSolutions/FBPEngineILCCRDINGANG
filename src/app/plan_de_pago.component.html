@@ -10,16 +10,16 @@
 	</div>
 	<form [formGroup]="form" autocomplete="off">
 	<div class="cm-botonera">
-		<button type='button' mat-raised-button [disabled]="habilitarGenerar"  (click)="cmdGenerar_click()"><mat-icon>brightness_low</mat-icon>Generar</button>
-		<button type='button' mat-raised-button [disabled]="habilitarIngresar" (click)="cmdIngresar_click()"><mat-icon>add</mat-icon>Ingresar</button>
-		<button type='button' mat-raised-button class="bcx-btn-accion" [disabled]="habilitarEliminar" (click)="cmdEliminar_click()"><mat-icon>delete</mat-icon>Eliminar</button>
-		<button type='button' mat-raised-button  (click)="cmdCancelar_click()"><mat-icon>arrow_back</mat-icon>Volver</button>
+		<button type='button' tabindex='4' mat-raised-button [disabled]="habilitarGenerar"  (click)="cmdGenerar_click()"><mat-icon>brightness_low</mat-icon>Generar</button>
+		<button type='button' tabindex='5' mat-raised-button [disabled]="habilitarIngresar" (click)="cmdIngresar_click()"><mat-icon>add</mat-icon>Ingresar</button>
+		<button type='button' tabindex='6' mat-raised-button class="bcx-btn-accion" [disabled]="habilitarEliminar" (click)="cmdEliminar_click()"><mat-icon>delete</mat-icon>Eliminar</button>
+		<button type='button' tabindex='7' mat-raised-button  (click)="cmdCancelar_click()"><mat-icon>arrow_back</mat-icon>Volver</button>
 	</div>
 
 	<div class="inner-sidenav-content" id="innersidenav">
 	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">	
 	<mat-form-field class="cm-in-filter">
-		<input matInput type="string" placeholder="Escriba para buscar..." formControlName="txtTableFilter">
+		<input matInput tabindex='1' type="string" placeholder="Escriba para buscar..." formControlName="txtTableFilter">
 	</mat-form-field>
 	<ngx-datatable #grd class="material cm-datatable"
 		 [rows]="tableRows"
@@ -55,11 +55,11 @@
 		<div class="mdc-layout-grid__inner">
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 				<!--  BcxNumero -->
-				<bcx-numero formControlName="bcxMontoOperacion" placeholder="Monto Operación" maxlength="16" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
+				<bcx-numero [tabindex]='2' formControlName="bcxMontoOperacion" placeholder="Monto Operación" maxlength="16" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 				<!--  BcxNumero -->
-				<bcx-numero formControlName="bcxMontoTotalCuotas" placeholder="Monto Total Cuotas" maxlength="16" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
+				<bcx-numero [tabindex]='3'formControlName="bcxMontoTotalCuotas" placeholder="Monto Total Cuotas" maxlength="16" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
 			</div>
 		</div>
 		</div> <!--  fin de fila 1 -->

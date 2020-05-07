@@ -106,10 +106,7 @@ export class AvalesComponent implements OnInit, AfterViewChecked
 		this.user_logueado = this.contextService.getUserData("user_logueado");
 		this.opcion = this.contextService.getUserData("opcion");
 
-
 		this.formDef();
-
-
 		this.controlesDef();
 
 		this.txtNumeroOperacion.patchValue(this._bcxNumOpe);
@@ -127,7 +124,6 @@ export class AvalesComponent implements OnInit, AfterViewChecked
 			this.habilitarEliminar = false;
 		}
 		
-
 		// Recuperamos el contexto
 		const ctxSw :boolean = this.contextService.recover(this);
 	}
@@ -287,16 +283,12 @@ export class AvalesComponent implements OnInit, AfterViewChecked
    * 
    * @param result Respuesta de la confirmacion de eliminacion.
    */
-  private deleteResult(result: number) :void  {
-	if (result == this.utilService.YES)
-	{
-		this.crdRs200131GarCall();
+	private deleteResult(result: number) :void  {
+		if (result == this.utilService.YES)
+		{
+			this.crdRs200131GarCall();
+		}
 	}
- }
-
-
-
-
 	/**
 	 * Evento click del boton cmdCancelar.
 	 */
@@ -304,6 +296,7 @@ export class AvalesComponent implements OnInit, AfterViewChecked
 	{
 		this.waitShow = false;
 		this.contextService.setUserData("indicadorDeOpcion",this.opcion);
+		this.contextService.setUserData('varPantalla','');
 		this.location.back();
 	}
 	/**

@@ -5,6 +5,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DateAdapter, MatDialog, MatDialogRef } from '@angular/material';
 import { Location } from '@angular/common';
+import { SharedService } from './SharedService.service';
 // Componentes y objetos Bcx
 import { CmContextService
        , CmDialogAlertComponent
@@ -62,6 +63,7 @@ export class TemplateComponent implements OnInit, AfterViewChecked
 	varPadre:any;
 	familiaProducto:any;
 
+	varDatosadicionales:any;
 
 	@ViewChild('grd', {static: true}) table: any;
 	@ViewChild('rightTmpl', {static: true})  rightTmpl: TemplateRef<any>;
@@ -76,6 +78,7 @@ export class TemplateComponent implements OnInit, AfterViewChecked
 		, private contextService: CmContextService
 		, private crdRs200160MonPtr: CRD_RS_200_160_MON_PTR
 		, private crdRs200160Ptr: CRD_RS_200_160_PTR
+		, private sharedServiceIngreso: SharedService
 		){}
 	/**
 	 * Inicializamos todo.
@@ -109,8 +112,8 @@ export class TemplateComponent implements OnInit, AfterViewChecked
 		this.familiaProducto = this.contextService.getUserData('familiaProducto');
 		this.varPadre = this.contextService.getUserData('varPadre');
 		this.user_logueado = this.contextService.getUserData("user_logueado");
-
-
+		this.varDatosadicionales = this.contextService.getUserData("varDatosadicionales");
+	
 		this.cmdHabSiguiente = true;
 
 		// Recuperamos el contexto.
@@ -200,9 +203,7 @@ export class TemplateComponent implements OnInit, AfterViewChecked
 			, wss_fil_mon
 			, wss_usercode
 		);
-
 		// Aca no puede haber nada que dependa del resultado (asincrono).
-
 	}
 	/**
 	 * Callback invocado por this.crdRs200160Ptr.call.
@@ -211,7 +212,6 @@ export class TemplateComponent implements OnInit, AfterViewChecked
 	crdRs200160PtrResult(wsResult :CmWsResult): void
 	{
 		// Desactivamos el simbolo de progress.
-
 		// A veces el Fault se viene por aca.
 		let hayError: boolean = wsResult.hayError();
 		if (hayError)
@@ -237,15 +237,11 @@ export class TemplateComponent implements OnInit, AfterViewChecked
 			} else {
 				this.cmdHabSiguiente = true;
 			}
-
-
-
 		}
 		// Primera pagina.
 		this.table.offset = 0;
 	}
-
-		/**
+	/**
 	 * Llamamos al Web Service.
 	 */
 	private crdRs200160PtrProximosCall(): void
@@ -269,9 +265,7 @@ export class TemplateComponent implements OnInit, AfterViewChecked
 			, wss_fil_mon
 			, wss_usercode
 		);
-
 		// Aca no puede haber nada que dependa del resultado (asincrono).
-
 	}
 	/**
 	 * Callback invocado por this.crdRs200160Ptr.call.
@@ -306,9 +300,6 @@ export class TemplateComponent implements OnInit, AfterViewChecked
 			} else {
 				this.cmdHabSiguiente = true;
 			}
-
-
-
 		}
 		// Primera pagina.
 		this.table.offset = 0;
@@ -321,7 +312,6 @@ export class TemplateComponent implements OnInit, AfterViewChecked
 	{
 		this.tableAfterView = this.utilService.scrollPos(this.table, this.tableScroll, this.tableAfterView);
 	}
-
 	/**
 	 * Llenado de combo cbbMoneda
 	 */
@@ -360,7 +350,6 @@ export class TemplateComponent implements OnInit, AfterViewChecked
 			this.utilService.alert(this.dialog, msg + '[' + code + ']');
 		}
 	}
-
 	/**
 	 * Evento click del boton cmdBuscar.
 	 */
@@ -368,7 +357,6 @@ export class TemplateComponent implements OnInit, AfterViewChecked
 		this.crdRs200160PtrCall() 
 
 	}
-
 	/**
 	 * Evento click del boton cmdAceptar.
 	 */
@@ -385,8 +373,8 @@ export class TemplateComponent implements OnInit, AfterViewChecked
 			return;
 		}
 		this.contextService.setUserData('varCodTemplate',this.tableSelected[0].wss_cod_ptr.toString());
-		//this.varPadre.crdRs200152OprCall(this.bcxRut, this.familiaProducto ,this.tableSelected[0].wss_cod_ptr.toString());
-		this.location.back();
+		this.contextService.setUserData('varPantalla','template');
+		this.router.navigate(["/ingresocartacredito"]);
 	}
 	/**
 	 * Evento click del boton cmdProximos.
@@ -396,13 +384,6 @@ export class TemplateComponent implements OnInit, AfterViewChecked
 		this.waitShow = false;
 		this.crdRs200160PtrProximosCall();
 	}
-	// /**
-	//  * Evento click del boton cmdVolver.
-	//  */
-	// cmdVolver_click(): void
-	// {
-	// 	this.location.back();
-	// }
 	/**
 	 * Helper para desplegar alertas.
 	 */
@@ -410,8 +391,7 @@ export class TemplateComponent implements OnInit, AfterViewChecked
 	{
 		this.waitShow = false;
 		this.utilService.alert(this.dialog, msg);
-	}
-	
+	}	
 	/**
 	 * Callback para el caso de Fault en llamada a Web Service.
 	 */
@@ -526,37 +506,30 @@ export class TemplateComponent implements OnInit, AfterViewChecked
 			this.tableFilter(value)
 		});
 	}
-
-		/**
+	/**
 	 * Evento click del boton cmdEliminar.
 	 */
 	cmdVolver_click(): void
-	{
-		
+	{		
 		this.waitShow = false;
-
-
 		let objName: string = "¿Esta seguro de generar una operación sin plantilla?";
 		this.utilService.deleteConfirmGeneric(this.dialog
 						, objName 
-						, (res) => this.deleteResult(res) );
-			
+						, (res) => this.deleteResult(res) );			
 	}
-
 	/**
    * 
    * @param result Respuesta de la confirmacion de eliminacion.
    */
   private deleteResult(result: number) :void  {
-	  
 	if (result == this.utilService.YES)
-	{
+	{	
 		this.contextService.setUserData('varCodTemplate', '');
+		this.contextService.setUserData('varPantalla','template');
 		this.router.navigate(["/ingresocartacredito"]);
-		//this.varPadre.crdRs200152OprCall(this.bcxRut, this.familiaProducto ,"");
 	} else {
 		return;
 	}
- }
+ } 
 
 }

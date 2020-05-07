@@ -229,7 +229,7 @@ export class MenuComponent implements OnInit, AfterViewChecked
 		this.contextService.setUserData("financiamiento_indicador_opcion", 'Nueva');
 		this.contextService.setUserData("cOrde", 0);
 		this.contextService.setUserData("precarga", false);
-		
+		this.contextService.setUserData("varInicio", 0);
 
 		// Application.application.numOpe="";
 		// Application.application.fmlProd=0;

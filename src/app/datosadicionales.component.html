@@ -10,8 +10,8 @@
 	</div>
 	<form [formGroup]="form" autocomplete="off">
 	<div class="cm-botonera">
-		<button type='button' tabindex="100" class="bcx-btn-accion" mat-raised-button [disabled]="form.invalid || btnBicReembolso" (click)="cmdAgregar_click()"><mat-icon>check</mat-icon>Cursar</button>
-		<button type='button' tabindex="101" mat-raised-button  (click)="cmdCancelar_click()"><mat-icon>arrow_back</mat-icon>Volver</button>
+		<button type='button' tabindex="100" class="bcx-btn-accion" mat-raised-button (click)="cmdCursar_click()"><mat-icon>check</mat-icon>Cursar</button>
+		<button type='button' tabindex="101" class="bcx-btn-accion" mat-raised-button  (click)="cmdCancelar_click()"><mat-icon>arrow_back</mat-icon>Volver</button>
 	</div>
 	<div class="inner-sidenav-content" id="innersidenav">
 	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">
@@ -77,13 +77,13 @@
 				<span class="size_font_label">Crédito proveedor</span>
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
-				<ngx-datatable  #mydatatable class="material" style="width:250px;height:200px;"
+				<ngx-datatable  #grd class="material" style="width:250px;height:200px;"
 					 [rows]="tableRows"
 					 [columns]="tableCols"
 					 [scrollbarV]="true"
 					 [rowHeight]="35"
 					 [headerHeight]="35"
-			
+					 [selected]="tableSelected"
 					 [columnMode]="ColumnMode.force" 
 					 [limit]="20"									 
 					 [scrollbarH]="false">
@@ -97,12 +97,13 @@
 				</ng-template>
 				<ng-template #editable1Tmpl  let-rowIndex="rowIndex" let-value="value" let-row="row">
 					<mat-form-field>
-						<input matInput [disabled]="false" style="width:35px;" maxlength="3" autofocus (focusout)="updateValue($event, 'col1', rowIndex)" type="text" [value]="value"/>
+						<!-- <bcx-numero formControlName="txtPlazoGrilla" (focusout)="updateValue($event, 'wss_pct_pzo', rowIndex)" maxlength="3" separador="true" decimales="2"></bcx-numero> -->
+						<input matInput [disabled]="false" style="width:35px;" maxlength="3" autofocus (focusout)="updateValue($event, 'wss_pct_pzo', rowIndex)" type="text" [value]="value"/>
 					</mat-form-field>
 				</ng-template>
 				<ng-template #editable2Tmpl  let-rowIndex="rowIndex" let-value="value" let-row="row">
 					<mat-form-field>
-						<input matInput [disabled]="false" style="width:35px;" maxlength="3" autofocus (focusout)="updateValue($event, 'col2', rowIndex)" type="text" [value]="value"/>
+						<input matInput [disabled]="false" style="width:35px;" maxlength="3" autofocus (focusout)="updateValue($event, 'wss_dia_pzo', rowIndex)" type="text" [value]="value"/>
 					</mat-form-field>
 				</ng-template> 
 			</div>
@@ -181,7 +182,7 @@
 				</div>
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 					<mat-form-field>
-					<mat-select placeholder="Descripción" formControlName="cbbTasaFinanciamiento" class="cm-in-combo">
+					<mat-select placeholder="" formControlName="cbbTasaFinanciamiento" class="cm-in-combo">
 						<mat-option *ngFor="let item of cbbTasaFinanciamientoArray" [value]="item.wss_tip_tas">{{item.wss_gls_tas}}</mat-option>
 					</mat-select>
 					</mat-form-field>
@@ -257,7 +258,7 @@
 				<mat-checkbox tabindex="24" class="bcx_middleCheck" [checked]="false"  [disabled]="false"  formControlName="chbkRefinanciamiento" (change)="change_chbkRefinanciamiento()">Refinanciamiento</mat-checkbox>
 			</div>	
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
-				<button tabindex="25" type='button' mat-mini-fab [disabled]="habBtnRefinanciamiento"  (click)="cmdAgregar_click()"><mat-icon>more_horiz</mat-icon></button>
+				<button tabindex="25" type='button' mat-mini-fab [disabled]="this.habBtnRefinanciamiento.value"  (click)="cmdRefinanciamiento_click()"><mat-icon>more_horiz</mat-icon></button>
 			</div>				
 		</div>
 		</div>	
@@ -272,8 +273,8 @@
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
 				<span>Banco corresponsal (Receptor) BIC</span>
 			</div>
-			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">					
-				<bcx-banco class="hide-descripcion" #txtBicRecep  [tabindex]="26" id="txtBicRecep" (focusout)="focusout_txtBicRecep()" (change)="change_txtBicRecep()" formControlName="txtBicRecep" placeholder=""  [isDisabled]="false" [data]="this"></bcx-banco>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">					
+				<bcx-banco class="hide-descripcion" #txtBicRecep  [tabindex]="26" id="txtBicRecep" (focusout)="focusout_txtBicRecep()" (ngModelChange)="change_txtBicRecep()" formControlName="txtBicRecep" placeholder=""  [isDisabled]="habTxtBicRecep" [data]="this"></bcx-banco>
 			</div>
 		</div>
 		</div>	
@@ -344,9 +345,13 @@
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
 					<span>[M] Fecha de emisión [31C]</span>
 				</div>	
-				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 					<mat-form-field>
-					<input tabindex="32" matInput formControlName="txtFechaEmision" placeholder="" (focusout)="focusout_txtFechaEmision()">
+						<input tabindex="32" matInput formControlName="txtFechaEmision" placeholder="" (focusout)="focusout_txtFechaEmision()" maxlength="10" [matDatepicker]='dtpFechaEmision'>
+						<mat-datepicker-toggle matSuffix [for]='dtpFechaEmision'></mat-datepicker-toggle>
+						<mat-datepicker #dtpFechaEmision></mat-datepicker>
+						<mat-error class="cm-md-error">Fecha Incorrecta</mat-error>
+					<!-- <input tabindex="32" matInput formControlName="txtFechaEmision" placeholder="" (focusout)="focusout_txtFechaEmision()"> -->
 					</mat-form-field>
 				</div>
 			</div>
@@ -359,6 +364,7 @@
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
 					<mat-form-field>
 					<input  tabindex="33" matInput formControlName="txtUcp" placeholder="" (focusout)="focusout_txtUlc()"  (change)="ofunc_seteo_mayuscula(this.txtFlc);">
+					<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
 					</mat-form-field>
 				</div>
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
@@ -402,7 +408,7 @@
 				</div>
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 					<mat-form-field>
-					<input tabindex="36" matInput formControlName="txtLugarExpiracion" (ngModelChange)="ofunc_seteo_mayuscula(this.txtLugarExpiracion)" placeholder="Lugar" maxlength="4">
+					<input tabindex="36" matInput formControlName="txtLugarExpiracion" (ngModelChange)="ofunc_seteo_mayuscula(this.txtLugarExpiracion)" placeholder="Lugar" maxlength="35">
 					</mat-form-field>
 				</div>
 			</div>
@@ -412,8 +418,8 @@
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
 					<span>[O] Banco ordenante BIC [51a]</span>
 				</div>
-				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">					
-					<bcx-banco class="hide-descripcion" [tabindex]="36" id="txtBicBancoOrdenante" (change)="change_txtBicBancoOrdenante()" (focusout)="focus_txtBicBancoOrdenante()" formControlName="txtBicBancoOrdenante" placeholder="" placeholderDes="Nombre" [isDisabled]="false" [data]="this"></bcx-banco>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">					
+					<bcx-banco class="hide-descripcion" [tabindex]="36" id="txtBicBancoOrdenante" (ngModelChange)="change_txtBicBancoOrdenante()" (focusout)="focus_txtBicBancoOrdenante()" formControlName="txtBicBancoOrdenante" placeholder="" placeholderDes="Nombre" [isDisabled]="habTxtBicBancoOrdenante" [data]="this"></bcx-banco>
 				</div>
 			</div>
 		</div>	
@@ -454,7 +460,7 @@
 					</mat-form-field>
 				</div>
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
-					<button tabindex="41" type='button' [disabled]="false" mat-mini-fab  (click)="cmdAgregar_click()"><mat-icon>more_horiz</mat-icon></button>
+					<button tabindex="41" type='button' mat-mini-fab  (click)="cmdCampo_click()"><mat-icon>more_horiz</mat-icon></button>
 				</div>	
 			</div>
 		</div>			
@@ -485,7 +491,7 @@
 					<span>[M] Beneficiario [59] </span>
 				</div>
 			</div>
-		</div>	
+		</div>
 		<div class="mdc-layout-grid"> <!--  fila 1 -->
 			<div class="mdc-layout-grid__inner">
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">		
@@ -493,7 +499,7 @@
 				</div>
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 					<mat-form-field>
-					<input tabindex="45" #txtDireOrdenante matInput formControlName="txtBeneBic59" placeholder="Nombre 1" (ngModelChange)="ofunc_seteo_mayuscula(this.txtBeneBic59)" (focusOut)="ofunc_odenante()">
+					<input tabindex="45" matInput formControlName="txtBeneBic59" placeholder="Nombre 1" (ngModelChange)="ofunc_seteo_mayuscula(this.txtBeneBic59)" (focusout)="ofunc_odenante()">
 					</mat-form-field>
 				</div>
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
@@ -520,6 +526,7 @@
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
 					<mat-form-field>
 					<input tabindex="49" matInput formControlName="txtPais" placeholder="País" (focusout)="focusout_txtPais(this.txtPais)">
+					<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
 					</mat-form-field>
 				</div>
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
@@ -587,8 +594,8 @@
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
 					<span>[C] Utilizable con BIC[41A]</span>
 				</div>	
-				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">					
-					<bcx-banco class="hide-descripcion" [tabindex]="54" formControlName="txtUtilizableCon" (focusout)="focusout_txtUtilizableCon()" (ngModelChange)="change_txtUtilizableCon()" placeholder="" placeholderDes="Nombre" [isDisabled]="bloquearBtnUtilizableCon" [data]="this"></bcx-banco>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">					
+					<bcx-banco class="hide-descripcion" [tabindex]="54" formControlName="txtUtilizableCon" (focusout)="focusout_txtUtilizableCon()" (ngModelChange)="change_txtUtilizableCon()" placeholder="" placeholderDes="Nombre" [isDisabled]="habTxtUtilizableCon" [data]="this"></bcx-banco>
 				</div>
 			</div>				
 		</div>
@@ -633,8 +640,8 @@
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
 					<span>[O] Girado BIC [42a]</span>
 				</div>
-				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">				
-					<bcx-banco class="hide-descripcion" [tabindex]="58" id="txtBicGirado" formControlName="txtBicGirado" (focusout)="focusout_txtBicGirado()" (ngModelChange)="change_txtBicGirado()" placeholder="" placeholderDes="Nombre" [isDisabled]="false" [data]="this"></bcx-banco>
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">				
+					<bcx-banco class="hide-descripcion" [tabindex]="58" id="txtBicGirado" formControlName="txtBicGirado" (focusout)="focusout_txtBicGirado()" (ngModelChange)="change_txtBicGirado()" placeholder="" placeholderDes="Nombre" [isDisabled]="habTxtBicGirado" [data]="this"></bcx-banco>
 				</div>
 			</div>
 		</div>	
@@ -808,7 +815,7 @@
 				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">	
 					<span>[O] Ultima fecha de embarque [44C]</span>
 				</div>	
-				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">					
+				<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">					
 					<mat-form-field>
 						<input tabindex="72" matInput formControlName="txtFechaEmbarque" placeholder="" maxlength="10" [matDatepicker]='dtpFechaEmbarque' (focusout)="ofunc_calc_fecha_embarque(2)">
 						<mat-datepicker-toggle matSuffix [for]='dtpFechaEmbarque'></mat-datepicker-toggle>
@@ -866,7 +873,7 @@
 						<span>[O] Documentos requeridos [46]</span>																		
 					</div>
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
-						<button tabindex="76" type='button' [disabled]="false" mat-mini-fab  (click)="cmdDocumentosRequeridos_click()"><mat-icon>more_horiz</mat-icon></button>
+						<button tabindex="76" type='button' mat-mini-fab  (click)="cmdDocumentosRequeridos_click()"><mat-icon>more_horiz</mat-icon></button>
 					</div>
 				</div>
 			</div>
@@ -1022,8 +1029,8 @@
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
 						<span>[O] Banco reembolsador BIC [53A]</span>
 					</div>
-					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">					 
-						<bcx-banco class="hide-descripcion" [tabindex]="88" id="txtBicReembolso" formControlName="txtBicReembolso" (focusout)="focusout_txtBicReembolso()" (ngModelChange)="change_txtBicReembolso()" placeholder="" placeholderDes="Nombre" [isDisabled]="false" [data]="this"></bcx-banco>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">					 
+						<bcx-banco class="hide-descripcion" [tabindex]="88" id="txtBicReembolso" formControlName="txtBicReembolso" (focusout)="focusout_txtBicReembolso()" (ngModelChange)="change_txtBicReembolso()" placeholder="" placeholderDes="Nombre" [isDisabled]="habTxtBicReembolso" [data]="this"></bcx-banco>
 					</div>
 				</div>
 			</div>	
@@ -1095,8 +1102,8 @@
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
 						<span>[O] Banco avisador BIC [57a]</span>
 					</div>
-					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">					
-						<bcx-banco class="hide-descripcion" [tabindex]="92" id="txtBicAvisador" formControlName="txtBicAvisador" placeholder="" placeholderDes="Nombre" [isDisabled]="false" [data]="this" (focusout)="focusout_txtBicAvisador()" (ngModelChange)="change_txtBicAvisador()"></bcx-banco>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">					
+						<bcx-banco class="hide-descripcion" [tabindex]="92" id="txtBicAvisador" formControlName="txtBicAvisador" placeholder="" placeholderDes="Nombre" [isDisabled]="habTxtBicAvisador" [data]="this" (focusout)="focusout_txtBicAvisador()" (ngModelChange)="change_txtBicAvisador()"></bcx-banco>
 					</div>
 				</div>
 			</div>	
@@ -1131,8 +1138,8 @@
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2 cm-label-contabilizadas">
 						<span>[O] Banco participante con confirmación requerida  BIC [58A]</span>
 					</div>
-					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">					
-						<bcx-banco class="hide-descripcion" [tabindex]="96" id="txtBicParticipante" formControlName="txtBicParticipante" placeholder="" placeholderDes="Nombre" [isDisabled]="false" [data]="this" (focusout)="focusout_txtBicParticipante()" (ngModelChange)="change_txtBicParticipante()"></bcx-banco>
+					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">					
+						<bcx-banco class="hide-descripcion" [tabindex]="96" id="txtBicParticipante" formControlName="txtBicParticipante" placeholder="" placeholderDes="Nombre" [isDisabled]="habTxtBicParticipante" [data]="this" (focusout)="focusout_txtBicParticipante()" (ngModelChange)="change_txtBicParticipante()"></bcx-banco>
 					</div>
 				</div>
 			</div>	

@@ -35,7 +35,9 @@ import { DocumentoSeguroComponent } from './detalledocumentoseguro.component';
 import { DocumentoTransporteComponent } from './documentotransporte.component';
 import { DocumentoNuevoComponent } from './documentonuevo.component';
 import { DocumentoIngresoNuevoComponent } from './documentoingresonuevo.component';
-
+import { RefinanciamientoComponent } from './refinanciamiento.component';
+import { CampoComponent } from './campo.component';
+import { CartaStandbyComponent } from './cartastandby.component';
 
 
 // import { Test160Component } from './test160.component';  
@@ -129,7 +131,16 @@ import { DocumentoIngresoNuevoComponent } from './documentoingresonuevo.componen
  import { CRD_RS_200_152_DOC_PRE } from './ws/CRD_RS_200_152_DOC_PRE';
  import { CRD_RS_200_111_DOC_LCI_BL } from './ws/CRD_RS_200_111_DOC_LCI_BL';
  import { CRD_RS_200_151_DOC_REQ } from './ws/CRD_RS_200_151_DOC_REQ';
- 
+ import { CRD_RS_200_112_REF } from './ws/CRD_RS_200_112_REF';
+ import { CRD_RS_200_151_REF } from './ws/CRD_RS_200_151_REF';
+ import { CRD_RS_200_112_ORD50 } from './ws/CRD_RS_200_112_ORD50';
+ import { CRD_RS_200_112_ALI } from './ws/CRD_RS_200_112_ALI';
+ import { CRD_RS_200_112_DLI } from './ws/CRD_RS_200_112_DLI';
+ import { CRD_RS_200_111_ZLI } from './ws/CRD_RS_200_111_ZLI';
+ import { CRD_RS_200_160_ZLI } from './ws/CRD_RS_200_160_ZLI';
+ import { BCX_RS_200_112_CLIAM } from './ws/BCX_RS_200_112_CLIAM';
+ import { BCX_RS_200_160_RUCP_2 } from './ws/BCX_RS_200_160_RUCP_2';
+ import { CRD_RS_200_152_TXT_LCI_T78 } from './ws/CRD_RS_200_152_TXT_LCI_T78';
  
  
 /**  
@@ -168,6 +179,9 @@ import { DocumentoIngresoNuevoComponent } from './documentoingresonuevo.componen
     , DocumentoTransporteComponent
     , DocumentoNuevoComponent
     , DocumentoIngresoNuevoComponent
+    , RefinanciamientoComponent
+    , CampoComponent
+    , CartaStandbyComponent
     // , Test160Component  
   ],  
   exports: [CmSharedModule],  
@@ -259,6 +273,16 @@ import { DocumentoIngresoNuevoComponent } from './documentoingresonuevo.componen
    , CRD_RS_200_152_DOC_PRE
    , CRD_RS_200_111_DOC_LCI_BL
    , CRD_RS_200_151_DOC_REQ
+   , CRD_RS_200_112_REF
+   , CRD_RS_200_151_REF
+   , CRD_RS_200_112_ORD50
+   , CRD_RS_200_112_ALI
+   , CRD_RS_200_112_DLI
+   , CRD_RS_200_111_ZLI
+   , CRD_RS_200_160_ZLI
+   , BCX_RS_200_112_CLIAM
+   , BCX_RS_200_160_RUCP_2
+   , CRD_RS_200_152_TXT_LCI_T78
    
   ]  
 })  

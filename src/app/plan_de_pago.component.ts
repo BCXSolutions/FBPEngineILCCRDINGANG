@@ -112,7 +112,6 @@ export class PlanDePagoComponent implements OnInit, AfterViewChecked
 		this.familiaProducto = this.contextService.getUserData("familiaProducto");
 		this.numOperacion = this.contextService.getUserData("numOperacion");	
 		this.opcion = this.contextService.getUserData("opcion");
-
 		this.bcxMontoOperacion.disable();
 		this.bcxMontoTotalCuotas.disable();
 
@@ -308,6 +307,7 @@ export class PlanDePagoComponent implements OnInit, AfterViewChecked
 		this.waitShow = false;
 		this.contextService.setUserData("numOperacion",this.numOperacion);
 		this.contextService.setUserData("indicadorDeOpcion",this.opcion);
+		this.contextService.setUserData('varPantalla','');
 		this.location.back()
 	}
 	/**

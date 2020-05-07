@@ -374,8 +374,8 @@
 		<div class="mdc-layout-grid__inner">			
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" >
 				<mat-radio-group  formControlName="optMonedaOperacion" (change)="change_optionButton_optMonedaOperacion()">
-					<mat-radio-button [tabIndex]="28" value="X">MX</mat-radio-button>
-					<mat-radio-button [tabIndex]="29" *ngIf="this.habCamposStby.value" value="N">MN</mat-radio-button>
+					<mat-radio-button [tabIndex]="28" *ngIf="this.habCamposStby.value" value="X">MX</mat-radio-button>
+					<mat-radio-button [tabIndex]="29"  value="N">MN</mat-radio-button>
 				</mat-radio-group>
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
@@ -427,7 +427,7 @@
 		<div class="mdc-layout-grid__inner">
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">				
 			</div>
-			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">					
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">					
 				<bcx-banco *ngIf="this.habCamposStby.value" [tabindex]="34" formControlName="txtBicCorresponsalOperacion" placeholder="BIC corresponsal" placeholderDes="Nombre Corresponsal" [isDisabled]="bloquearOperaciones" [data]="this"></bcx-banco>
 			</div>
 		</div>
@@ -497,7 +497,7 @@
 		<div class="mdc-layout-grid__inner">
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">				
 			</div>
-			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">	
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">	
 				<bcx-banco [tabindex]="41" formControlName="txtBicCorresponsalComyGas" placeholder="BIC corresponsal" placeholderDes="Nombre Corresponsal" [isDisabled]="bloquearComyGas" [data]="this"></bcx-banco>			
 			</div>
 		</div>

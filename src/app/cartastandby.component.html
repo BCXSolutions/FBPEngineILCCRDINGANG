@@ -1,0 +1,142 @@
+<!-- Generado por Xml2Ang, Bcx Solutions -->
+<!-- Fecha: 30/04/2020 17:33:36 -->
+	<div class="cm-main">
+	<div class="cm-toolbar">
+		<mat-toolbar color="primary">
+			<span class="cm-title-text">Condiciones carta de crédito standby</span>
+			<span class="cm-title-spacer"></span>
+			<button type='button' mat-icon-button (click)="this.utilService.cmdHelp_click(this.dialog)"><mat-icon>help</mat-icon></button>
+		</mat-toolbar>
+	</div>
+	<form [formGroup]="form" autocomplete="off">
+	<div class="cm-botonera">
+		<button type='button' tabindex='12' mat-raised-button  (click)="cmdAceptar_click()"><mat-icon>check</mat-icon>Cursar</button>
+		<button type='button' tabindex='13' mat-raised-button  (click)="cmdVolver_click()"><mat-icon>arrow_back</mat-icon>Volver</button>
+	</div>
+	<div class="inner-sidenav-content">
+	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">
+		<br>
+		<span class="size_font_label">Emisión carta de crédito standby – MT 760</span>
+		<br>
+		<br>
+		<div class="mdc-layout-grid"> <!--  fila 1 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<div style="margin-top:26px">Banco corresponsal (Receptor) BIC </div>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">					
+				<bcx-banco [tabindex]='1' class="hide-descripcion" formControlName="txtBicRecep" placeholder="" placeholderDes="" [isDisabled]="false" [data]="this" (focusout)="focusout_txtBicRecep()" (change)="change_txtBicRecep()"></bcx-banco>
+			</div>
+		</div>
+		</div> <!--  fin de fila 1 -->
+		<div class="mdc-layout-grid"> <!--  fila 2 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input tabindex='2' matInput formControlName="txtNomCorre" placeholder="Nombre" (ngModelChange)="ofunc_mayuscula(this.txtNomCorre)" maxlength="35">
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input tabindex='3' matInput formControlName="txtDireCorre" placeholder="Dirección" (ngModelChange)="ofunc_mayuscula(this.txtDireCorre)" maxlength="35">
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" >
+				<mat-form-field>
+				<input tabindex='4' matInput formControlName="txtCiuCorre" placeholder="Ciudad" (ngModelChange)="ofunc_mayuscula(this.txtCiuCorre)" maxlength="35">
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input tabindex='5' matInput formControlName="txtPaisCorre" placeholder="País" (ngModelChange)="ofunc_mayuscula(this.txtPaisCorre)" maxlength="35">
+				</mat-form-field>
+			</div>
+		</div>
+		</div> <!--  fin de fila 2 -->
+		<div class="mdc-layout-grid"> <!--  fila 3 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<div style="margin-top:22px">[M] Número de la carta de crédito [20]</div>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input tabindex='6' matInput formControlName="txtNumeroCartaCredito" placeholder="" (ngModelChange)="ofunc_mayuscula(this.txtNumeroCartaCredito)" maxlength="16">
+				</mat-form-field>
+			</div>
+		</div>
+		</div> <!--  fin de fila 3 -->
+		<div class="mdc-layout-grid"> <!--  fila 4 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<div style="margin-top:22px">[O] Fecha [30]</div>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input matInput tabindex='7' formControlName="txtFecha" placeholder="" maxlength="10" [matDatepicker]='dtpFecha'>
+				<mat-datepicker-toggle matSuffix [for]='dtpFecha'></mat-datepicker-toggle>
+				<mat-datepicker #dtpFecha></mat-datepicker>
+				<mat-error class="cm-md-error">Fecha Incorrecta</mat-error>
+				</mat-form-field>
+			</div>
+		</div>
+		</div> <!--  fin de fila 4 -->
+		<div class="mdc-layout-grid"> <!--  fila 5 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<div style="margin-top:22px">[M] Reglas aplicables [40C]</div>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
+				<mat-form-field>
+				<input tabindex='8' matInput formControlName="txtReglasAplicables" placeholder="" maxlength="16" (ngModelChange)="change_txtReglasAplicables()">
+				<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-form-field>
+				<mat-select placeholder="" formControlName="cbbReglasAplicables" class="cm-in-combo" (openedChange)="cbbReglasAplicables_openedChange($event)">
+					<mat-option *ngFor="let item of cbbReglasAplicablesArray" [value]="item.wss_cod_rucp" >{{item.wss_gls_rucp}}</mat-option>
+				</mat-select>
+				</mat-form-field>
+			</div>
+			<div *ngIf="ocultarReglaOther" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<mat-form-field>
+				<input tabindex='9' matInput formControlName="txtReglaOther" placeholder="" (ngModelChange)="ofunc_mayuscula(this.txtReglaOther)" maxlength="35">
+				</mat-form-field>
+			</div>
+		</div>
+		</div> <!--  fin de fila 5 -->
+		<div class="mdc-layout-grid"> <!--  fila 6 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<div style="margin-top:22px">[M] Detalles de la garantía [77C]</div>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8">
+				<mat-form-field appearance="outline">
+				<textarea tabindex='10' rows="10" maxlength="9750" matInput formControlName="txtDetalleGarantia" placeholder="" (ngModelChange)="change_txtDetalleGarantia()" (focusOut)="focusout_txtDetalleGarantia()"></textarea>
+				</mat-form-field>
+			</div>
+		</div>
+		</div> <!--  fin de fila 6 -->
+		<div class="mdc-layout-grid"> <!--  fila 7 -->
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+				<div style="margin-top:22px">[O] Información del remitente [72] al receptor</div>
+			</div>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
+				<mat-form-field appearance="outline">
+				<textarea tabindex='11' rows="10" matInput formControlName="txtInfoRemitente72" placeholder="" maxlength="215" (ngModelChange)="ofunc_mayuscula_area(this.txtInfoRemitente72);"></textarea>
+				</mat-form-field>
+			</div>
+		</div>
+		</div> <!--  fin de fila 7 -->
+	</div>
+	</div>
+	</form>
+			<!-- Iframe Imprimir PDF -->
+			<iframe id="frame" frameborder="0" [src]='url | safe' style="display: none"></iframe> 
+			<!-- Fin Iframe Imprimir PDF -->
+	</div>
+<cm-wait [waitShow]="waitShow"></cm-wait>

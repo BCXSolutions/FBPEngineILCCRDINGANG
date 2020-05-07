@@ -10,8 +10,8 @@
 	</div>
 	<form [formGroup]="form" autocomplete="off">
 	<div class="cm-botonera">
-		<button type='button' mat-raised-button class="bcx-btn-accion" (click)="cmdGenerar_click()"><mat-icon>brightness_low</mat-icon>Generar</button>
-		<button type='button' mat-raised-button  (click)="cmdCancelar_click()"><mat-icon>arrow_back</mat-icon>Volver</button>
+		<button type='button' tabindex='11' mat-raised-button class="bcx-btn-accion" (click)="cmdGenerar_click()"><mat-icon>brightness_low</mat-icon>Generar</button>
+		<button type='button' tabindex='12' mat-raised-button  (click)="cmdCancelar_click()"><mat-icon>arrow_back</mat-icon>Volver</button>
 	</div>
 	<div class="inner-sidenav-content" id="innersidenav">
 	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">
@@ -22,11 +22,11 @@
 		<div class="mdc-layout-grid"> <!--  fila 1 -->
 		<div class="mdc-layout-grid__inner">
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-				<bcx-numero formControlName="bcxNumeroVencimientoCapital" placeholder="Número" maxlength="3" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
+				<bcx-numero [tabindex]='1' formControlName="bcxNumeroVencimientoCapital" placeholder="Número" maxlength="3" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 				<mat-form-field>
-				<input matInput formControlName="txtFechaPrimerVencimiento" placeholder="Fecha primer vencimiento" maxlength="10" [matDatepicker]='dtpFechaPrimerVencimiento'>
+				<input matInput tabindex='2' formControlName="txtFechaPrimerVencimiento" placeholder="Fecha primer vencimiento" maxlength="10" [matDatepicker]='dtpFechaPrimerVencimiento'>
 				<mat-datepicker-toggle matSuffix [for]='dtpFechaPrimerVencimiento'></mat-datepicker-toggle>
 				<mat-datepicker #dtpFechaPrimerVencimiento></mat-datepicker>
 				<mat-error class="cm-md-error">Fecha Incorrecta</mat-error>
@@ -37,13 +37,13 @@
 		<div class="mdc-layout-grid"> <!--  fila 2 -->
 		<div class="mdc-layout-grid__inner">
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
-				<bcx-numero formControlName="txtDiasVc" placeholder="Días" maxlength="3" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
+				<bcx-numero [tabindex]='3' formControlName="txtDiasVc" placeholder="Días" maxlength="3" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
-				<bcx-numero formControlName="txtMesVc" placeholder="Mes(es)" maxlength="3" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
+				<bcx-numero [tabindex]='4' formControlName="txtMesVc" placeholder="Mes(es)" maxlength="3" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
-				<bcx-numero formControlName="txtYearVc" placeholder="Año(s)" maxlength="3" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
+				<bcx-numero [tabindex]='5' formControlName="txtYearVc" placeholder="Año(s)" maxlength="3" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
 			</div>
 		</div>
 		</div> <!--  fin de fila 2 -->
@@ -56,11 +56,11 @@
 		<div class="mdc-layout-grid"> <!--  fila 3 -->
 		<div class="mdc-layout-grid__inner">
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-				<bcx-numero formControlName="bcxNumeroVencimientoSoloInt" placeholder="Número" maxlength="3" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>				
+				<bcx-numero [tabindex]='6' formControlName="bcxNumeroVencimientoSoloInt" placeholder="Número" maxlength="3" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>				
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 				<mat-form-field>
-				<input matInput formControlName="txtFechaPrimerVencimientoInt" placeholder="Fecha primer vencimiento" maxlength="10" [matDatepicker]='dtpFechaPrimerVencimientoInt'>
+				<input matInput tabindex='7' formControlName="txtFechaPrimerVencimientoInt" placeholder="Fecha primer vencimiento" maxlength="10" [matDatepicker]='dtpFechaPrimerVencimientoInt'>
 				<mat-datepicker-toggle matSuffix [for]='dtpFechaPrimerVencimientoInt'></mat-datepicker-toggle>
 				<mat-datepicker #dtpFechaPrimerVencimientoInt></mat-datepicker>
 				<mat-error class="cm-md-error">Fecha Incorrecta</mat-error>
@@ -71,13 +71,13 @@
 		<div class="mdc-layout-grid"> <!--  fila 4 -->
 		<div class="mdc-layout-grid__inner">
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
-				<bcx-numero formControlName="txtDiasSi" placeholder="Días" maxlength="3" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
+				<bcx-numero [tabindex]='8' formControlName="txtDiasSi" placeholder="Días" maxlength="3" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
-				<bcx-numero formControlName="txtMesSi" placeholder="Mes(es)" maxlength="3" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
+				<bcx-numero [tabindex]='9' formControlName="txtMesSi" placeholder="Mes(es)" maxlength="3" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
-				<bcx-numero formControlName="txtYearSi" placeholder="Año(s)" maxlength="3" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
+				<bcx-numero [tabindex]='10' formControlName="txtYearSi" placeholder="Año(s)" maxlength="3" separador="true" decimales="0" mat-error="Valor Incorrecto"></bcx-numero>
 			</div>
 		</div>
 		</div> <!--  fin de fila 4 -->

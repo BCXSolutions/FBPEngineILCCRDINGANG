@@ -10,8 +10,8 @@
 	</div>
 	<form [formGroup]="form" autocomplete="off">
 	<div class="cm-botonera">
-		<button type='button' mat-raised-button [disabled]="btnAceptar"  (click)="cmdAceptar_click()"><mat-icon>check</mat-icon>Aceptar</button>
-		<button type='button' mat-raised-button  (click)="cmdVolver_click()"><mat-icon>arrow_back</mat-icon>Volver</button>
+		<button type='button' tabindex='9' mat-raised-button [disabled]="btnAceptar"  (click)="cmdAceptar_click()"><mat-icon>check</mat-icon>Aceptar</button>
+		<button type='button' tabindex='10' mat-raised-button  (click)="cmdVolver_click()"><mat-icon>arrow_back</mat-icon>Volver</button>
 	</div>
 	<div class="inner-sidenav-content">
 	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">
@@ -21,12 +21,12 @@
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
 				<mat-form-field>
-				<input matInput formControlName="txtOriginal" placeholder="Original" maxlength="2">
+				<input matInput tabindex='1' formControlName="txtOriginal" placeholder="Original" maxlength="2">
 				</mat-form-field>
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
 				<mat-form-field>
-				<input matInput formControlName="txtCopia" placeholder="Copia" maxlength="2">
+				<input matInput tabindex='2' formControlName="txtCopia" placeholder="Copia" maxlength="2">
 				</mat-form-field>
 			</div>
 		</div>
@@ -38,9 +38,9 @@
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
 				<mat-radio-group formControlName="optDescripcion">
-					<mat-radio-button value="1">Póliza</mat-radio-button>
-					<mat-radio-button value="2">Certificado</mat-radio-button>
-					<mat-radio-button value="3">Póliza/Certificado</mat-radio-button>
+					<mat-radio-button [tabIndex]='3' value="1">Póliza</mat-radio-button>
+					<mat-radio-button [tabIndex]='4' value="2">Certificado</mat-radio-button>
+					<mat-radio-button [tabIndex]='5' value="3">Póliza/Certificado</mat-radio-button>
 				</mat-radio-group>
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
@@ -56,7 +56,7 @@
 				<div style="margin-top:22px">Monto por</div>
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-				<bcx-numero formControlName="txtMonto" placeholder="" maxlength="10" separador="true" decimales="2" mat-error="Valor Incorrecto"></bcx-numero>	
+				<bcx-numero [tabindex]='6' formControlName="txtMonto" placeholder="" maxlength="10" separador="true" decimales="2" mat-error="Valor Incorrecto"></bcx-numero>	
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
 				<div style="margin-top:22px">%</div>
@@ -66,7 +66,7 @@
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
 				<mat-form-field>
-				<input matInput formControlName="txtDias" placeholder="" maxlength="3">
+				<input matInput tabindex='7' formControlName="txtDias" placeholder="" maxlength="3">
 				</mat-form-field>
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
@@ -80,7 +80,7 @@
 				
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-				<mat-checkbox formControlName="chkCubriendo" (change)="change_chkCubriendo()">Cubriendo traslado de bodega a bodega</mat-checkbox>
+				<mat-checkbox tabindex='8' formControlName="chkCubriendo" (change)="change_chkCubriendo()">Cubriendo traslado de bodega a bodega</mat-checkbox>
 			</div>
 		</div>
 		</div> <!--  fin de fila 4 -->
@@ -91,7 +91,7 @@
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
 				<mat-form-field appearance="outline">
-				<textarea matInput rows="8" formControlName="txtOtrasCondiciones" placeholder="Otras condiciones"  (ngModelChange)="ofunc_mayuscula(this.txtOtrasCondiciones)" maxlength="254"></textarea>
+				<textarea matInput tabindex='9' rows="8" formControlName="txtOtrasCondiciones" placeholder="Otras condiciones"  (ngModelChange)="ofunc_mayuscula(this.txtOtrasCondiciones)" maxlength="254"></textarea>
 				</mat-form-field>
 			</div>
 		</div>

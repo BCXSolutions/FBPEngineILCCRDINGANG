@@ -21,7 +21,7 @@
 		<div class="mdc-layout-grid__inner">
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 				<mat-form-field>
-				<input matInput formControlName="txtNumeroSolicitud" placeholder="Solicitud" maxlength="16">
+				<input tabindex='1' matInput formControlName="txtNumeroSolicitud" placeholder="Solicitud" maxlength="16">
 				</mat-form-field>
 			</div>
 		</div>
@@ -29,11 +29,11 @@
 		<div class="mdc-layout-grid"> <!--  fila 2 -->
 		<div class="mdc-layout-grid__inner">
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-				<bcx-rut formControlName="bcxRut" placeholder="Rut" mat-error="Rut Incorrecto" (focusout)="focusout_rut()"></bcx-rut>
+				<bcx-rut [tabindex]='2' formControlName="bcxRut" placeholder="Rut" mat-error="Rut Incorrecto" (focusout)="focusout_rut()"></bcx-rut>
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 				<mat-form-field>
-				<input matInput formControlName="txtNombre" placeholder="Nombre">
+				<input tabindex='3' matInput formControlName="txtNombre" placeholder="Nombre">
 				</mat-form-field>
 			</div>
 		</div>
@@ -42,7 +42,7 @@
 		<div class="mdc-layout-grid__inner">
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 				<mat-form-field>
-				<input matInput formControlName="txtEstado" placeholder="Estado">
+				<input tabindex='4' matInput formControlName="txtEstado" placeholder="Estado">
 				<mat-error class="cm-md-error">Dato Incorrecto</mat-error>
 				</mat-form-field>
 			</div>
@@ -58,7 +58,7 @@
 	</div>
 	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">	
 	<mat-form-field class="cm-in-filter">
-		<input matInput type="string" placeholder="Escriba para buscar..." formControlName="txtTableFilter">
+		<input tabindex='5' matInput type="string" placeholder="Escriba para buscar..." formControlName="txtTableFilter">
 	</mat-form-field>
 	<ngx-datatable #grd class="material cm-datatable"
 		 [rows]="tableRows"

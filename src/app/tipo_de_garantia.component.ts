@@ -56,11 +56,9 @@ export class TipoDeGarantiaComponent implements OnInit, AfterViewChecked
 	user_logueado:any;
 	fecPro:any;
 	opcion:any;
-
 	
 	habilitarNuevo:boolean;
 	habilitarEliminar:boolean;
-
 
 	@ViewChild('grd', {static: true}) table: any;
 	@ViewChild('rightTmpl', {static: true})  rightTmpl: TemplateRef<any>;
@@ -107,12 +105,10 @@ export class TipoDeGarantiaComponent implements OnInit, AfterViewChecked
 		this.user_logueado = this.contextService.getUserData("user_logueado");
 		this.fecPro = this.contextService.getUserData("txtFechaIngreso");
 		this.opcion = this.contextService.getUserData("opcion");
-		
-
+	
 		// Campos del formulario.
 		this.formDef();
 		this.controlesDef();
-
 
 		this.txtNumeroOperacion.patchValue(this._bcxNumOpe);
 		this.txtNumeroOperacion.disable();
@@ -125,8 +121,6 @@ export class TipoDeGarantiaComponent implements OnInit, AfterViewChecked
 			this.habilitarNuevo = false;
 			this.habilitarEliminar = false;
 		}
-
-
 		// Numericos y uppercase.
 		this.valueChanges();
 		// Recuperamos el contexto.
@@ -138,7 +132,6 @@ export class TipoDeGarantiaComponent implements OnInit, AfterViewChecked
 	private crdRs200113OgarCall(): void
 	{
 		/* Mover los datos de la pantalla a los parametros del Web Service.  */ 
-
 		let wss_num_opr :string = this.txtNumeroOperacion.value;
 		let wss_gar_tip_corr :string = this.tableSelected[0].wss_gar_tip_corr;
 		let wss_usercode :string = this.user_logueado;
@@ -153,9 +146,7 @@ export class TipoDeGarantiaComponent implements OnInit, AfterViewChecked
 			, wss_gar_tip_corr
 			, wss_usercode
 		);
-
 		// Aca no puede haber nada que dependa del resultado (asincrono).
-
 	}
 	/**
 	 * Callback invocado por this.crdRs200113Ogar.call.
@@ -175,8 +166,6 @@ export class TipoDeGarantiaComponent implements OnInit, AfterViewChecked
 			this.crdRs200151OgarCall();
 			this.utilService.alert(this.dialog, "Garantía eliminada con exito");
 		}
-
-
 		// A veces el Fault se viene por aca.
 		let hayError: boolean = wsResult.hayError();
 		if (hayError)
@@ -204,9 +193,7 @@ export class TipoDeGarantiaComponent implements OnInit, AfterViewChecked
 			, wss_num_opr
 			, wss_usercode
 		);
-
 		// Aca no puede haber nada que dependa del resultado (asincrono).
-
 	}
 	/**
 	 * Callback invocado por this.crdRs200151Ogar.call.
@@ -257,13 +244,13 @@ export class TipoDeGarantiaComponent implements OnInit, AfterViewChecked
 
 		this.router.navigate(['/ingresodegarantia']);
 	}
-
 	/**
 	 * Evento click del boton cmdCancelar.
 	 */
 	cmdCancelar_click(): void
 	{
 		this.contextService.setUserData("indicadorDeOpcion",this.opcion);
+		this.contextService.setUserData('varPantalla','');	
 		this.location.back();
 	}
 	/**
@@ -272,8 +259,7 @@ export class TipoDeGarantiaComponent implements OnInit, AfterViewChecked
 	private openDialogAlert(msg: string): void
 	{
 		this.utilService.alert(this.dialog, msg);
-	}
-	
+	}	
 	/**
 	 * Callback para el caso de Fault en llamada a Web Service.
 	 */

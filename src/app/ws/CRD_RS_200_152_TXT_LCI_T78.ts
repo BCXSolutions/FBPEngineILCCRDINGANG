@@ -3,17 +3,17 @@ import { Injectable }      from '@angular/core';
 import {CmWsHostService
        , CmWsResult } from '@bcxang';
 /*
- * Service : CRD_RS_200_152_TXT_LCI.ts 
+ * Service : CRD_RS_200_152_TXT_LCI_T78.ts 
  * Objetivo: Llamado a Web Service REST
- * Autor   : Generado por BcxWSql (BCX Solutions) a partir de CRD_RS_200_152_TXT_LCI.sql
- * Fecha   : 02/04/2020 14:41:19
+ * Autor   : Generado por BcxWSql (BCX Solutions) a partir de CRD_RS_200_152_TXT_LCI_T78.sql
+ * Fecha   : 06/05/2020 22:28:53
  */
 @Injectable()
-export class CRD_RS_200_152_TXT_LCI 
+export class CRD_RS_200_152_TXT_LCI_T78 
 {
     constructor (private hostService: CmWsHostService) {}
   /**
-   * Invoca a CRD_RS_200_152_TXT_LCI
+   * Invoca a CRD_RS_200_152_TXT_LCI_T78
    * @param responseFunc Callback de respuesta
    * @param errFunc Callback de error
    * @param wss_num_opr Nro operacion
@@ -38,9 +38,9 @@ export class CRD_RS_200_152_TXT_LCI
 	): void 
 	{
    // URL to web Service
-    const url: string        = this.hostService.getRuta() + '/FBP/CRD_RS_200_152_TXT_LCI';  
+    const url: string        = this.hostService.getRuta() + '/CRD_RS_200_152_TXT_LCI_T78/FBP/CRD_RS_200_152_TXT_LCI_T78';  
    const data: any = {
-wss_num_opr: wss_num_opr, wss_for_pag: wss_for_pag, wss_ins_cnf: wss_ins_cnf, wss_pai_ben: wss_pai_ben, wss_tip_reem: wss_tip_reem, wss_iso_cor: wss_iso_cor, wss_iso_ree: wss_iso_ree, wss_usercode: wss_usercode
+"wss_num_opr": wss_num_opr, "wss_for_pag": wss_for_pag, "wss_ins_cnf": wss_ins_cnf, "wss_pai_ben": wss_pai_ben, "wss_tip_reem": wss_tip_reem, "wss_iso_cor": wss_iso_cor, "wss_iso_ree": wss_iso_ree, "wss_usercode": wss_usercode
 	};
 	  
    this.hostService.postRest(url, data)

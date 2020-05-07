@@ -39,7 +39,7 @@ import { stringify } from 'querystring';
 export class DocumentosRequeridosComponent implements OnInit, AfterViewChecked
 {
 	// Nombre de la pagina.
-	pageName: string = 'Buscar';
+	pageName: string = 'DocumentosRequeridos';
 	// Estructura con los datos del form.
 	form: FormGroup;	
 	// Activa o desactiva el progress.
@@ -149,7 +149,7 @@ export class DocumentosRequeridosComponent implements OnInit, AfterViewChecked
 
 		//   ];
 
-		debugger
+		
 		this.nroTransporte = this.contextService.getUserData("nroTransporte");
 		this.numOperacion = this.contextService.getUserData("numOperacion");	
 		this.WSS_D01_SGM = this.contextService.getUserData("WSS_D01_SGM");	
@@ -479,7 +479,7 @@ export class DocumentosRequeridosComponent implements OnInit, AfterViewChecked
 	//METODO QUE GUARDA LOS TEXTAREA
 	ofunc_grabar_texto(cIndicador:any,cTexto:any):void{
 
-		debugger
+		
 
 		let wss_cod_prd: string = this.WSS_D01_SGM;
 		let wss_tip_txt: string = cIndicador;
@@ -549,7 +549,7 @@ export class DocumentosRequeridosComponent implements OnInit, AfterViewChecked
 	}
 	ofunc_result_leer_documentos(wsResult :CmWsResult):void{
 
-		debugger
+		
 		let wss_result_msg:string;		
 
 		// A veces el Fault se viene por aca.
@@ -869,7 +869,7 @@ export class DocumentosRequeridosComponent implements OnInit, AfterViewChecked
 
 		this.txtDoc.valueChanges.subscribe((value) => {		
 			this.utilService.comboTexto_changeSelect(this.cmbDoc,value);
-			this.utilService.toUpper(this.txtDoc);			
+			//this.utilService.toUpper(this.txtDoc);			
 		});
 		
 		this.cmbDoc.valueChanges.subscribe((value) => {

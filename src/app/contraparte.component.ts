@@ -70,6 +70,8 @@ export class ContraParteComponent implements OnInit
 	btnBicCorr:any;
 	txtBcxRut:any;
 
+	varDatosadicionales:any;
+
 
 
 	constructor (private hostService: CmWsHostService
@@ -122,6 +124,7 @@ export class ContraParteComponent implements OnInit
 		this.fechaVencimiento = this.contextService.getUserData("fechaVencimiento");
 		this.inicioIntereses = this.contextService.getUserData("inicioIntereses");
 		this.otorgamiento = this.contextService.getUserData("otorgamiento");
+		this.varDatosadicionales = this.contextService.getUserData('varDatosadicionales');
 
 		
 		//this.cargar_primeros_datos();
@@ -532,6 +535,7 @@ export class ContraParteComponent implements OnInit
 	cmdCancelar_click(): void
 	{
 		this.waitShow = false;
+		this.contextService.setUserData('varPantalla','');
 		this.location.back();
 	}
 	/**

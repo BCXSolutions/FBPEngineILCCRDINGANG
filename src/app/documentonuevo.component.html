@@ -10,8 +10,8 @@
 	</div>
 	<form [formGroup]="form" autocomplete="off">
 	<div class="cm-botonera">
-		<button type='button' mat-raised-button [disabled]="btnAceptar" (click)="cmdAceptar_click()"><mat-icon>check</mat-icon>Aceptar</button>
-		<button type='button' mat-raised-button  (click)="cmdVolver_click()"><mat-icon>arrow_back</mat-icon>Volver</button>
+		<button type='button' tabindex='5' mat-raised-button [disabled]="btnAceptar" (click)="cmdAceptar_click()"><mat-icon>check</mat-icon>Aceptar</button>
+		<button type='button' tabindex='6' mat-raised-button  (click)="cmdVolver_click()"><mat-icon>arrow_back</mat-icon>Volver</button>
 	</div>
 	<div class="inner-sidenav-content">
 	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">
@@ -21,12 +21,12 @@
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
 				<mat-form-field>
-				<input matInput formControlName="txtOri" placeholder="Original" maxlength="2">
+				<input matInput tabindex='1' formControlName="txtOri" placeholder="Original" maxlength="2">
 				</mat-form-field>
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
 				<mat-form-field>
-				<input matInput formControlName="txtCopia" placeholder="Copia" maxlength="2">
+				<input matInput tabindex='2' formControlName="txtCopia" placeholder="Copia" maxlength="2">
 				</mat-form-field>
 			</div>
 		</div>
@@ -38,7 +38,7 @@
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
 				<mat-form-field>
-				<input matInput formControlName="txtDescripcion" placeholder="" maxlength="64">
+				<input matInput  tabindex='3' formControlName="txtDescripcion" placeholder="" maxlength="64">
 				</mat-form-field>
 			</div>
 		</div>
@@ -49,7 +49,7 @@
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
 				<mat-form-field appearance="outline">
-				<textarea matInput rows="8" formControlName="txtTextoLibre" [maxlength]="maxlengthAux" placeholder="" (ngModelChange)="ofunc_mayuscula(this.txtTextoLibre);"></textarea>
+				<textarea matInput tabindex='4' rows="8" formControlName="txtTextoLibre" [maxlength]="maxlengthAux" placeholder="" (ngModelChange)="ofunc_mayuscula(this.txtTextoLibre);"></textarea>
 				</mat-form-field>
 			</div>
 		</div>
