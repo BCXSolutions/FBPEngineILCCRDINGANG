@@ -95,6 +95,8 @@ export class AbrirCarCredComponent implements OnInit, AfterViewChecked
 	bcxRut_markAsTouched:boolean = false;
 	WSS_D01_SGM:any;
 
+	cOrde:any;
+
 	@ViewChild('grd', {static: true}) table: any;
 	@ViewChild('rightTmpl', {static: true})  rightTmpl: TemplateRef<any>;
 	@ViewChild('centerTmpl', {static: true}) centerTmpl: TemplateRef<any>;
@@ -182,6 +184,7 @@ export class AbrirCarCredComponent implements OnInit, AfterViewChecked
 	
 		this.usuario_logueado = this.contextService.getUserData("user_logueado");
 		this.WSS_D01_SGM = this.contextService.getUserData("WSS_D01_SGM");
+		this.cOrde = this.contextService.getUserData("cOrde");
 		this.bcxWs200151IndScxCall();
 		this.txtNombre.disable()
 		// Recuperamos el contexto.
@@ -892,6 +895,7 @@ export class AbrirCarCredComponent implements OnInit, AfterViewChecked
 		this.contextService.setUserData('user_logueado', this.usuario_logueado);
 		this.contextService.setUserData('producto', 'FNA');
 		this.contextService.setUserData('evento', 'OTO');
+		this.contextService.setUserData("cOrde", this.cOrde);
 		// _mdlAbrCarCrePreingreso.evento = "OTO";
 		// _mdlAbrCarCrePreingreso.producto = "FNA";
 

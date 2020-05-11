@@ -16,6 +16,7 @@ import { CmContextService
 // Web Services
 import { CRD_RS_200_112_ORD50 } from './ws/CRD_RS_200_112_ORD50';
 import { CRD_RS_200_111_TXT_LCI } from './ws/CRD_RS_200_111_TXT_LCI';
+import { CRD_RS_200_151_ORD50 } from './ws/CRD_RS_200_151_ORD50';
 
 @Component({
 	selector: 'my-form',
@@ -46,6 +47,7 @@ export class CampoComponent implements OnInit
 	myArrayDos:any[]=[];
 	varArray:any[]=[];
 	cOrde:any;
+	indicadorOpcion:any;
 
 	constructor (private hostService: CmWsHostService
 		, private formBuilder: FormBuilder
@@ -56,6 +58,7 @@ export class CampoComponent implements OnInit
 		, private contextService: CmContextService
 		, private crdRs200112Ord50: CRD_RS_200_112_ORD50
 		, private crdRs200111TxtLci: CRD_RS_200_111_TXT_LCI
+		, private crdRs200151Ord50: CRD_RS_200_151_ORD50
 		, private sharedService: SharedService
 		){}
 	/**
@@ -72,6 +75,7 @@ export class CampoComponent implements OnInit
 		this.WSS_D01_SGM = this.contextService.getUserData("WSS_D01_SGM");	
 		this.user_logueado = this.contextService.getUserData("user_logueado");
 		this.myArrayDos =  this.contextService.getUserData("myArrayDos");
+		this.indicadorOpcion = this.contextService.getUserData('indicadorOpcion');
 		this.varCartaCredito = this.contextService.getUserData('varCartaCredito');
 
 		this.ofunc_datos(this.myArrayDos);
@@ -154,7 +158,7 @@ export class CampoComponent implements OnInit
 		/* Mover los datos de la pantalla a los parametros del Web Service. 
 		 */ 
 		let wss_cod_prd :string = this.WSS_D01_SGM;
-		let wss_tip_txt :string = 'ORDEN';
+		let wss_tip_txt :string = 'ORDNT';
 		let wss_num_opr :string = this.numOperacion;
 		let wss_lin_txt :string = this.txtDatos.value.replace('APPLICANT:','');
 		let wss_usercode :string = this.user_logueado;
@@ -204,40 +208,34 @@ export class CampoComponent implements OnInit
 		let objetos:any[]=[];
 		let txtCondicionesAdicio47Aux:any;
 		// if(varCartaCredito != null){	
-		if(this.varCartaCredito == 'Nueva'){			
+		if(this.indicadorOpcion == 'Nueva'){			
+			this.varCartaCredito.txtCondicionesAdicio47.value+="\n"+this.txtDatos.value;
+			this.varCartaCredito.bFlagCambioEspecial = true;
+			this.varCartaCredito.ofunc_grabar_texto('CONAD',this.varCartaCredito.txtCondicionesAdicio47.value);	
 
-			txtCondicionesAdicio47Aux += '\n'+this.txtDatos.value;
-			objetos[0] = 'Nueva';
-			objetos[1] = txtCondicionesAdicio47Aux.replace('undefined','');
-			objetos[2] = true;
-			objetos[3] = 'CONAD';
-			this.sharedService.sendClickEvent(objetos);
 			this.ofunc_grabar_texto_nuevo50();			
 		}
 		// if(this.varCartaCreditoDos != null){
-		if(this.varCartaCredito == 'Detalle'){		
-			txtCondicionesAdicio47Aux += '\n'+this.txtDatos.value;			
-			objetos[0] = 'Detalle';
-			objetos[1] = txtCondicionesAdicio47Aux.replace('undefined','');
-			objetos[2] = true;
-			objetos[3] = 'CONAD';
-			this.sharedService.sendClickEvent(objetos);
-			this.ofunc_grabar_texto_nuevo50();						
+		if(this.indicadorOpcion == 'Detalle'){					
+			this.varCartaCredito.txtCondicionesAdicio47.value+="\n"+this.txtDatos.value;
+			this.varCartaCredito.bFlagCambioEspecial = true;
+			this.varCartaCredito.ofunc_grabar_texto('CONAD',this.varCartaCredito.txtCondicionesAdicio47.value);	
+			this.ofunc_grabar_texto_nuevo50();		
+
+
 		}	
-		if(this.varCartaCredito == 'Preingreso'){	
-			txtCondicionesAdicio47Aux += '\n'+this.txtDatos.value;				
-			objetos[0] = 'Preingreso';
-			objetos[1] = txtCondicionesAdicio47Aux.replace('undefined','');
-			objetos[2] = true;
-			objetos[3] = 'CONAD';
-			this.sharedService.sendClickEvent(objetos);
-			this.ofunc_grabar_texto_nuevo50();						
+		if(this.indicadorOpcion == 'Preingreso'){	
+			this.varCartaCredito.txtCondicionesAdicio47.value+="\n"+this.txtDatos.value;
+			this.varCartaCredito.bFlagCambioEspecial = true;
+			this.varCartaCredito.ofunc_grabar_texto('CONAD',this.varCartaCredito.txtCondicionesAdicio47.value);	
+			this.ofunc_grabar_texto_nuevo50();	
+						
 		}					
 		//this.location.back();
 			
 	}
 
-		/**
+		/**indicadorOpcion
 	 * Llamamos al Web Service.
 	 */
 	private ofunc_grabar_texto_nuevo50(): void
@@ -291,25 +289,76 @@ export class CampoComponent implements OnInit
 			this.utilService.alert(this.dialog, wss_result_msg);
 		} else {
 			let ejecutarFuncion:string
-			if(this.varCartaCredito == 'Nueva'){
-				ejecutarFuncion = 'ofunc_tag_50()';
-				this.sharedService.sendClickEvent(ejecutarFuncion);
+			if(this.indicadorOpcion == 'Nueva'){
+				this.ofunc_tag_50_campo();				
 			}
 			
-			if(this.varCartaCredito == 'Detalle'){
-				ejecutarFuncion = 'ofunc_tag_50()'
-				this.sharedService.sendClickEvent(ejecutarFuncion);
+			if(this.indicadorOpcion == 'Detalle'){
+				this.ofunc_tag_50_campo();				
 			}	
 
-			if(this.varCartaCredito == 'Preingreso'){
-				ejecutarFuncion = 'ofunc_tag_50()';
-				this.sharedService.sendClickEvent(ejecutarFuncion);
-					
+			if(this.indicadorOpcion == 'Preingreso'){
+				this.ofunc_tag_50_campo();					
 			}	
 			this.location.back();
 		}
 
 	}
+
+
+
+	ofunc_tag_50_campo(){
+		/* Mover los datos de la pantalla a los parametros del Web Service. 
+		IMPORTANTE: Para variables Rut, usar: this.utilService.toRut(this.variableRut.value); */ 
+		let wss_opr_num :string = this.numOperacion;
+		let wss_usercode :string = this.user_logueado;
+		 
+		// Activamos el simbolo de progress.
+		//this.waitShow = true;
+		// Invocamos el WS.
+		this.crdRs200151Ord50.call(
+			  (value) => this.ofunc_result_tag50_campo(value)
+			, (value) => this.processFault(value)
+			, wss_opr_num
+			, wss_usercode
+		);
+
+		// Aca no puede haber nada que dependa del resultado (asincrono).
+	} 
+
+	ofunc_result_tag50_campo(wsResult:CmWsResult){
+		
+		// Desactivamos el simbolo de progress.
+		this.waitShow = false;
+
+		let aux:any;
+		// A veces el Fault se viene por aca.
+		let hayError: boolean = wsResult.hayError();
+		if (hayError)
+		{
+			let msg: string = wsResult.getErrorMsg();
+			let code: string = wsResult.getErrorCode();
+			this.utilService.alert(this.dialog, msg + ' [' + code + ']');
+		} else if(wsResult.getReturnValue()==0){
+			let wss_result_msg:string = wsResult.getResultString('wss_result_msg');
+			this.utilService.alert(this.dialog, wss_result_msg);
+		} else {
+		
+			// this.varCartaCredito.arrayTag50 =[];
+			// this.varCartaCredito.txtBicOrde50.patchValue('');
+			// this.varCartaCredito.txtOrdeNom50.patchValue('');
+			// this.varCartaCredito.txtOrdeDire50.patchValue('');
+			// this.varCartaCredito.txtOrCiuPa50.patchValue('');
+
+			this.varCartaCredito.txtBicOrde50.patchValue(wsResult.getResultString('wss_txt_ord1'));
+			this.varCartaCredito.txtOrdeNom50.patchValue(wsResult.getResultString('wss_txt_ord2'));
+			this.varCartaCredito.txtOrdeDire50.patchValue(wsResult.getResultString('wss_txt_ord3'));
+			this.varCartaCredito.txtOrCiuPa50.patchValue(wsResult.getResultString('wss_txt_ord4'));
+
+		}
+
+	}
+
 	/**
 	 * Evento click del boton cmdAceptar.
 	 */

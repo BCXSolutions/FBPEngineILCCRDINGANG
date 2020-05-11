@@ -111,7 +111,7 @@ export class DocumentoTransporteComponent implements OnInit
 		}			
 		if(this.opcion == 'C'){
 			this.txtTextoLibre.disable();
-			this.btnAceptar.disable();
+			this.btnAceptar = true;
 			this.txtOri.disable();
 			this.txtCopia.disable();
 			this.txtGlosa.disable();

@@ -38,9 +38,9 @@ export class CRD_RS_200_152_TXT_LCI_T78
 	): void 
 	{
    // URL to web Service
-    const url: string        = this.hostService.getRuta() + '/CRD_RS_200_152_TXT_LCI_T78/FBP/CRD_RS_200_152_TXT_LCI_T78';  
+    const url: string        = this.hostService.getRuta() + '/FBP/CRD_RS_200_152_TXT_LCI_T78';  
    const data: any = {
-"wss_num_opr": wss_num_opr, "wss_for_pag": wss_for_pag, "wss_ins_cnf": wss_ins_cnf, "wss_pai_ben": wss_pai_ben, "wss_tip_reem": wss_tip_reem, "wss_iso_cor": wss_iso_cor, "wss_iso_ree": wss_iso_ree, "wss_usercode": wss_usercode
+wss_num_opr: wss_num_opr, wss_for_pag: wss_for_pag, wss_ins_cnf: wss_ins_cnf, wss_pai_ben: wss_pai_ben, wss_tip_reem: wss_tip_reem, wss_iso_cor: wss_iso_cor, wss_iso_ree: wss_iso_ree, wss_usercode: wss_usercode
 	};
 	  
    this.hostService.postRest(url, data)

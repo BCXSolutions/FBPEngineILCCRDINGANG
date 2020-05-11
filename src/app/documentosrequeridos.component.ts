@@ -84,6 +84,16 @@ export class DocumentosRequeridosComponent implements OnInit, AfterViewChecked
 	refrescar:any;
 	varClausula:any
 
+	ignoredFirstEvent = false;
+	initValue;
+	myDate:any;
+
+	btnBack:any;
+	btnBackDisabled:any;
+	btnGo:any;
+	btnOtro:any;
+
+	bloqueoGrilla:any;
 
 	@ViewChild('grd', {static: true}) table: any;
 	// @ViewChild('rightTmpl', {static: true})  rightTmpl: TemplateRef<any>;
@@ -108,7 +118,9 @@ export class DocumentosRequeridosComponent implements OnInit, AfterViewChecked
 		, private crdRs200111TxtLci: CRD_RS_200_111_TXT_LCI
 		, private crdRs200160TxtLci: CRD_RS_200_160_TXT_LCI
 
-		){}
+		){
+			this.initValue = this.myDate;
+		}
 
 
 	ngOnInit() {
@@ -167,6 +179,11 @@ export class DocumentosRequeridosComponent implements OnInit, AfterViewChecked
 		//this.utilService.setTableMsg(this.table);
 		this.dateAdapter.setLocale('es-CL');
 
+		this.btnBack = true;
+		this.btnBackDisabled = false;
+		this.btnGo = false;
+		this.btnOtro = false;
+
 		// Numericos y uppercase.
 		this.valueChanges();	
 	
@@ -201,9 +218,6 @@ export class DocumentosRequeridosComponent implements OnInit, AfterViewChecked
 			this.ofunc_leer_documentos();
 			this.ofunc_cargar_textArea(this.txtTextoLibre,'DOCIM')
 		// }		
-
-
-
 		this.validatorsDef();
 	}
 
@@ -212,6 +226,7 @@ export class DocumentosRequeridosComponent implements OnInit, AfterViewChecked
 	 */
 	private crdRs200151DocCall(): void
 	{
+		this.ofunc_enabled(false);
 		/* Mover los datos de la pantalla a los parametros del Web Service. 
 		IMPORTANTE: Para variables Rut, usar: this.utilService.toRut(this.variableRut.value); */
 		let wss_num_opr: string  = this.numOperacion;
@@ -589,23 +604,26 @@ export class DocumentosRequeridosComponent implements OnInit, AfterViewChecked
 
 	ofunc_cargar_textArea(myTextArea:any,opcion:any):void{
 
+		if(myTextArea.value == '' || myTextArea.value == undefined || myTextArea.value == null){
+			return;
+		} else {
 
-		let wss_cod_prd: string = this.WSS_D01_SGM;
-		let wss_tip_txt: string = opcion;
-		let wss_num_opr: string = this.numOperacion;
-		let wss_usercode: string = this.user_logueado;
+			let wss_cod_prd: string = this.WSS_D01_SGM;
+			let wss_tip_txt: string = opcion;
+			let wss_num_opr: string = this.numOperacion;
+			let wss_usercode: string = this.user_logueado;
 
 
-		this.crdRs200160TxtLci.call(
-			(value) => this.ofunc_result_cargar_textArea(value)
-		//	, (value) => this.openDialogAlert(value)
-			, (value) => this.processFault(value)
-			, wss_cod_prd
-			, wss_tip_txt
-			, wss_num_opr
-			, wss_usercode
-		);
-
+			this.crdRs200160TxtLci.call(
+				(value) => this.ofunc_result_cargar_textArea(value)
+			//	, (value) => this.openDialogAlert(value)
+				, (value) => this.processFault(value)
+				, wss_cod_prd
+				, wss_tip_txt
+				, wss_num_opr
+				, wss_usercode
+			);
+		}		
 
 	}
 	ofunc_result_cargar_textArea(wsResult :CmWsResult):void{
@@ -808,14 +826,16 @@ export class DocumentosRequeridosComponent implements OnInit, AfterViewChecked
 	{
 		 this.tableScroll = event.offsetY;
 	}
+
 	/**
 	 * Seleccion de fila de la grilla. 
 	 * Para manejar enabled/disabled de botones y otros.
 	 * @param selected Arreglo de Filas seleccionadas.
-	 */
+	 */	
 	onTableSelect({ selected }): void
 	{
 		 const fila = selected[0];
+		// this.tableSelected.splice(0, this.tableSelected.length);
 	}
 	/**
 	 * Controles del formulario.
@@ -952,6 +972,28 @@ export class DocumentosRequeridosComponent implements OnInit, AfterViewChecked
 			this.txtTextoLibre.patchValue('');
 		}
 	}
+
+
+	ofunc_enabled(op:Boolean):void{
+		
+		if(this.opcion == 'C'){
+			this.btnBack = false;
+			this.btnBackDisabled = true;
+			this.btnGo = true;
+			this.btnOtro = true;
+			this.txtCondicion.disable();
+			this.txtCondicion.disable();
+			this.txtDoc.disable();
+			this.txtOtro.disable();
+			this.cmbCondicion.disable();
+			this.cmbDoc.disable();
+			this.chkDocumento.disable();
+			this.bloqueoGrilla = true;
+			//dtDocReq.doubleClickEnabled=false;
+		}
+	}
+
+
 
 	/**
 	 * Callback para el caso de error en llamada a Web Service.

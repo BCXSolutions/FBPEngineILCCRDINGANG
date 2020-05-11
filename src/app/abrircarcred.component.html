@@ -10,10 +10,10 @@
 	</div>
 	<form [formGroup]="form" autocomplete="off">
 	<div class="cm-botonera">
-		<button type='button' mat-raised-button  (click)="cmdBuscar_click()"><mat-icon>search</mat-icon>Buscar</button>
+		<button type='button' mat-raised-button class="bcx-btn-accion"  (click)="cmdBuscar_click()"><mat-icon>search</mat-icon>Buscar</button>
 		<button type='button' mat-raised-button [disabled]="cmdHabSiguiente"  (click)="cmdProximos_click()"><mat-icon>skip_next</mat-icon>Proximos</button>
-		<button type='button' mat-raised-button [disabled]="cmdHabAceptar"  (click)="cmdAceptar_click()"><mat-icon>check</mat-icon>Aceptar</button>
-		<button type='button' mat-raised-button  *ngIf="activar_preingreso"  (click)="cmdPreingreso_click()"><mat-icon>description</mat-icon>Preingreso</button>
+		<button type='button' mat-raised-button class="bcx-btn-accion" [disabled]="cmdHabAceptar"  (click)="cmdAceptar_click()"><mat-icon>check</mat-icon>Aceptar</button>
+		<button type='button' mat-raised-button *ngIf="activar_preingreso"  (click)="cmdPreingreso_click()"><mat-icon>description</mat-icon>Preingreso</button>
 		<!-- <button type='button' mat-raised-button  (click)="cmdCancelar_click()"><mat-icon>cancel</mat-icon>Cancelar</button> -->
 	</div>
 	<div class="inner-sidenav-content" id="innersidenav">

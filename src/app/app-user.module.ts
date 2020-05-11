@@ -38,6 +38,7 @@ import { DocumentoIngresoNuevoComponent } from './documentoingresonuevo.componen
 import { RefinanciamientoComponent } from './refinanciamiento.component';
 import { CampoComponent } from './campo.component';
 import { CartaStandbyComponent } from './cartastandby.component';
+import { DocumentosComponent,  SafeHtmlDocPipe} from './documentos.component'; 
 
 
 // import { Test160Component } from './test160.component';  
@@ -158,6 +159,8 @@ import { CartaStandbyComponent } from './cartastandby.component';
     , MenuComponent  
     , SafeHtmlComPipe
     , ComisionesComponent
+    , SafeHtmlDocPipe
+    , DocumentosComponent
     , ContraParteComponent
     , AbrirCarCredComponent
     , AvalesComponent

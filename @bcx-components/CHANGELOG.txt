@@ -102,7 +102,19 @@
     - se agregó el evento focus al codigo banco.
     - se agregó error en codigo banco cuando es inválido.
 
-1.6.0 - 2020-03-25 - AIC
+2.0.0 - 20200325 - AIC
 ## add
     [bcx-banco]
     - se actualizo librerias para Ang 9.   
+
+2.1.0_20200422_AIC
+[bcx-banco]
+- se modificó componente para generar auto-ajuste de tamaño de los input - código banco.
+
+2.2.0_20200422_AIC
+[bcx-banco]
+- se agregó el evento focus al codigo banco y desde donde fue llamado parent.
+
+2.2.0_20200507_AIC
+[bcx-banco]
+- se agregó this.contextService al ingresar codigo banco.

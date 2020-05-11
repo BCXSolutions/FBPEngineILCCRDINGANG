@@ -33,6 +33,7 @@ import { DocumentoIngresoNuevoComponent } from './documentoingresonuevo.componen
 import { RefinanciamientoComponent } from './refinanciamiento.component';
 import { CartaStandbyComponent } from './cartastandby.component';
 import { CampoComponent } from './campo.component';
+import { DocumentosComponent } from './documentos.component'; 
 
  
 
@@ -66,7 +67,7 @@ const appRoutes: Routes = [
     ,{ path: 'refinanciamiento',component:RefinanciamientoComponent, canActivate: [CmAuthGuardService]}
     ,{ path: 'campo', component:CampoComponent,canActivate: [CmAuthGuardService]}
     ,{ path: 'cartastandby', component:CartaStandbyComponent,canActivate: [CmAuthGuardService] }
-    
+    ,{ path: 'documentos/:modo/:numOpe/:numSol', component: DocumentosComponent, canActivate: [CmAuthGuardService]},
 
     
    //, { path: '**', component: Test160Component, canActivate: [CmAuthGuardService] }  

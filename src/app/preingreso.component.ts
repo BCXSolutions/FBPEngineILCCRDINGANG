@@ -19,6 +19,7 @@ import { SCX_RS_200_160_EST } from './ws/SCX_RS_200_160_EST';
 import { CRD_RS_200_160_PI_COL } from './ws/CRD_RS_200_160_PI_COL';
 import { CRD_RS_200_152_PI_ILC } from './ws/CRD_RS_200_152_PI_ILC';
 import { CRD_RS_200_151_OPR } from './ws/CRD_RS_200_151_OPR';
+import { CRD_RS_200_151_OPR_ILC } from './ws/CRD_RS_200_151_OPR_ILC';
 
 @Component({
 	selector: 'my-form',
@@ -74,7 +75,7 @@ export class BuscarPreingresoComponent implements OnInit, AfterViewChecked
 	cmdHabSiguiente:boolean;
 
 	wss_opr_num_last:any;
-
+	cOrde:any;
 
 	@ViewChild('grd', {static: true}) table: any;
 	@ViewChild('rightTmpl', {static: true})  rightTmpl: TemplateRef<any>;
@@ -92,6 +93,7 @@ export class BuscarPreingresoComponent implements OnInit, AfterViewChecked
 		, private crdRs200160PiCol: CRD_RS_200_160_PI_COL
 		, private crdRs200152PiIlc: CRD_RS_200_152_PI_ILC
 		, private crdRs200151Opr: CRD_RS_200_151_OPR
+		, private crdRs200151OprIlc: CRD_RS_200_151_OPR_ILC
 		){}
 	/**
 	 * Inicializamos todo.
@@ -120,7 +122,7 @@ export class BuscarPreingresoComponent implements OnInit, AfterViewChecked
 		this.user_logueado = this.contextService.getUserData('user_logueado');
 		this.producto = this.contextService.getUserData('producto');
 		this.evento = this.contextService.getUserData('evento');
-		
+		this.cOrde = this.contextService.getUserData("cOrde");
 
 		// Campos del formulario.
 		this.formDef();
@@ -286,7 +288,7 @@ export class BuscarPreingresoComponent implements OnInit, AfterViewChecked
 		// Activamos el simbolo de progress.
 		this.waitShow = true;
 		// Invocamos el WS.
-		this.crdRs200151Opr.call(
+		this.crdRs200151OprIlc.call(
 			  (value) => this.crdRs200151OprResult(value,opcion)
 			, (value) => this.openDialogAlert(value)
 			, wss_num_opr
@@ -755,6 +757,7 @@ export class BuscarPreingresoComponent implements OnInit, AfterViewChecked
 		this.contextService.setUserData("WSS_D01_TIP","CRD");
 		this.contextService.setUserData("WSS_D01_CODNUM", '');
 		this.contextService.setUserData("financiamiento_indicador_opcion", 'Preingreso');
+		this.contextService.setUserData("cOrde", this.cOrde);
 
 		this.router.navigate(['/ingresocartacredito']);
 	}

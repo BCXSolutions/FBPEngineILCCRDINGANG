@@ -1,8 +1,15 @@
-import { Component, OnInit, Input, Optional, Self, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Optional, Self, OnChanges, SimpleChanges, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ControlValueAccessor, NgControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { CmUtilService, CmWsResult, CmContextService, CmWsHostService } from '@bcxang';
+import { 
+  CmUtilService, 
+  CmWsResult, 
+  CmContextService, 
+  CmWsHostService, 
+  CmFocusEmitterService 
+} from '@bcxang';
+
 
 import { BCX_RS_200_160_BANK } from './services/BCX_RS_200_160_BANK.service';
 
@@ -12,6 +19,7 @@ import { BCX_RS_200_160_BANK } from './services/BCX_RS_200_160_BANK.service';
   styleUrls: ['bcx-banco.component.scss']
 })
 export class BcxBancoComponent implements OnInit, ControlValueAccessor, OnChanges {
+  @ViewChild('bcxBanco') bcxBancoNative: ElementRef;
 	// Nombre de la pagina.
 	pageName: any;
   form: FormGroup;
@@ -24,6 +32,7 @@ export class BcxBancoComponent implements OnInit, ControlValueAccessor, OnChange
 
   constructor(    
     @Optional() @Self() public ngControl: NgControl, 
+    private focusEmitterService: CmFocusEmitterService,
     private hostService: CmWsHostService,   
     private formBuilder: FormBuilder,
     public  dialog: MatDialog,
@@ -40,9 +49,13 @@ export class BcxBancoComponent implements OnInit, ControlValueAccessor, OnChange
       this.ngControl.valueAccessor = this;
     }
   }
+  
 
   @Input() placeholder: string = "Código";  
   @Input() class: string = "";
+  @Input() hideDescription: boolean = false;
+  @Input() colSpan: string = "2";
+  @Input() widthCodigo: string = "22";
   @Input() tabindex: string = "0";  
   @Input() placeholderDes: string = "Descripción";
   @Input() isDisabled: boolean = false;
@@ -63,10 +76,6 @@ export class BcxBancoComponent implements OnInit, ControlValueAccessor, OnChange
  
       if (this.txtCodBanco !== undefined){
         this.txtCodBanco.patchValue(value.toUpperCase());
-        // this.txtDesBanco.patchValue("");
-        // if (this.txtCodBanco.value != "") {
-        //   this.carga_codigo_banco_change()
-        // }
       }
     }
   }
@@ -99,7 +108,8 @@ export class BcxBancoComponent implements OnInit, ControlValueAccessor, OnChange
       this.txtDesBanco.patchValue(this.contextService.getUserData("glosaBanco"));
       
       setTimeout(() => {
-        document.getElementById(variable).focus()
+        this.bcxBancoNative.nativeElement.focus()
+        // document.getElementById(variable).focus()
       }, 700)
     }
     
@@ -112,7 +122,11 @@ export class BcxBancoComponent implements OnInit, ControlValueAccessor, OnChange
     if (this.ngControl != null) {      
       this.ngControl.control.setValidators([this.validate.bind(this)]);
       this.ngControl.control.updateValueAndValidity();
-    }    
+    }  
+    
+    this.focusEmitterService.invokeFocusFunction.subscribe(
+      (name: string) => {this.setFocus(name);    
+    }); 
   }
 
 	ngOnChanges(changes: SimpleChanges) {    
@@ -211,7 +225,6 @@ export class BcxBancoComponent implements OnInit, ControlValueAccessor, OnChange
 		this.waitShow = false;
     this.utilService.alert(this.dialog, err.error);
     this.txtDesBanco.patchValue("");
-    
     this.errorCodBanco();
   }
   
@@ -256,13 +269,14 @@ export class BcxBancoComponent implements OnInit, ControlValueAccessor, OnChange
 	 * @param wsResult Parametros de salida, mensaje de error.
 	 */
 	bcxRs200160BankResult(wsResult :CmWsResult): void
-	{
+	{    
     // Desactivamos el simbolo de progress.    
     let hayError: boolean = wsResult.hayError();
     if (hayError) {
       let msg: string = wsResult.getErrorMsg();
       let code: string = wsResult.getErrorCode();
       this.utilService.alert(this.dialog, msg + ' [' + code + ']');
+      this.errorCodBanco();
     }
     else {
       if (wsResult.getTableRows().length > 1) {
@@ -277,9 +291,16 @@ export class BcxBancoComponent implements OnInit, ControlValueAccessor, OnChange
       }
       else {
         this.txtDesBanco.patchValue(wsResult.getTableRows()[0].fld_cor_nom_suc);
+        this.contextService.setUserData('controlName',this.ngControl.name);
+        this.contextService.setUserData('bicBanco', this.txtCodBanco.value);
+        this.contextService.setUserData("glosaBanco", this.txtDesBanco.value);
       }
     }    
 		// A veces el Fault se viene por aca.
 
-	}
+  }
+  setFocus(name: string) {
+    if (name === this.ngControl.name)
+    this.bcxBancoNative.nativeElement.focus();
+  }
 }

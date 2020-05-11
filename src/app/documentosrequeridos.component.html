@@ -11,8 +11,8 @@
 	<form [formGroup]="form" autocomplete="off">
 	<div class="cm-botonera">
 		<button type='button' tabindex='7' mat-raised-button (click)="cmdDetalle_click()"><mat-icon>zoom_in</mat-icon>Detalle</button>
-		<button type='button' tabindex='8' mat-raised-button (click)="cmdIngresarDoc_click()"><mat-icon>folder_open</mat-icon>Ingresar otro documento</button>
-		<button type='button' tabindex='9' mat-raised-button (click)="cmdCancelar_click()"><mat-icon>arrow_back</mat-icon>Volver</button>
+		<button type='button' tabindex='8' mat-raised-button class="bcx-btn-accion" [disabled]="btnOtro" (click)="cmdIngresarDoc_click()"><mat-icon>folder_open</mat-icon>Ingresar otro documento</button>
+		<button type='button' tabindex='9' mat-raised-button class="bcx-btn-accion" (click)="cmdCancelar_click()"><mat-icon>arrow_back</mat-icon>Volver</button>
 	</div>
 	<div class="inner-sidenav-content" id="innersidenav">
 	<!-- <div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad"> -->
@@ -38,7 +38,7 @@
 						</mat-form-field>
 					</div>
 					<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1" style="margin-top: 10px;">						
-						<button tabindex="76" tabindex='2' color="primary" matTooltip="Insertar documento" type='button' [disabled]="false" mat-icon-button (click)="btnGo_click()"><mat-icon>fast_forward</mat-icon></button>
+						<button tabindex="76" tabindex='2' color="primary" matTooltip="Insertar documento" type='button' [disabled]="btnGo" mat-icon-button (click)="btnGo_click()"><mat-icon>fast_forward</mat-icon></button>
 					</div>
 				</div>
 				</div>
@@ -135,7 +135,13 @@
 					<div style='text-align: center'>{{value}}</div>
 				</ng-template>	 -->
 				<ng-template #eliminarDocumento let-row='row' let-value='value'>
-					<mat-icon matTooltip="Eliminar documento" (click)="btnBack_click(row)" >delete</mat-icon>					
+					<!-- <mat-icon matTooltip="Eliminar documento" [disabled]="false" (click)="btnBack_click(row)" >delete</mat-icon>	 -->					
+				<mat-icon matTooltip="Eliminar documento" *ngIf="btnBack" (click)="btnBack_click(row)">
+					  delete
+				  </mat-icon>
+				  <mat-icon matTooltip="Eliminar documento" *ngIf="btnBackDisabled" style="opacity:.5">
+					  delete
+				  </mat-icon>					
 				</ng-template>
 			</div>				
 			</div>

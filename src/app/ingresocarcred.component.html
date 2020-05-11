@@ -236,7 +236,7 @@
 		<div class="mdc-layout-grid__inner">
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 				<mat-form-field>
-				<input tabindex="19"  matInput formControlName="txtOtorgamiento" placeholder="Otorgamiento" maxlength="10" [matDatepicker]='dtpOtorgamiento' (focusout)="ofunc_calcular_fecha(1);"  (ngModelChange)="copiarFechaOtorgamiento()">
+				<input tabindex="19"  matInput formControlName="txtOtorgamiento" placeholder="Otorgamiento" maxlength="10" [matDatepicker]='dtpOtorgamiento' (focusout)="ofunc_calcular_fecha('txtOtorgamiento',1);"  (ngModelChange)="copiarFechaOtorgamiento()">
 				<mat-datepicker-toggle matSuffix [for]='dtpOtorgamiento'></mat-datepicker-toggle>
 				<mat-datepicker #dtpOtorgamiento></mat-datepicker>
 				<mat-error class="cm-md-error">Fecha Incorrecta</mat-error>
@@ -252,12 +252,12 @@
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
 				<mat-form-field>
-				<input tabindex="21"  matInput formControlName="txtDiasPlazos" placeholder="Dias Plazos" maxlength="4" (focusout)="ofunc_calcular_fecha(2);">
+				<input tabindex="21"  matInput formControlName="txtDiasPlazos" placeholder="Dias Plazos" maxlength="4" (focusout)="ofunc_calcular_fecha('txtDiasPlazos',2);">
 				</mat-form-field>
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 				<mat-form-field>
-				<input tabindex="22" matInput formControlName="txtVencimiento" placeholder="Vencimiento" maxlength="10" [matDatepicker]='dtpVencimiento' (focusout)="ofunc_calcular_fecha(3);">
+				<input tabindex="22" matInput formControlName="txtVencimiento" placeholder="Vencimiento" maxlength="10" [matDatepicker]='dtpVencimiento' (focusout)="ofunc_calcular_fecha('txtVencimiento',3);">
 				<mat-datepicker-toggle matSuffix [for]='dtpVencimiento'></mat-datepicker-toggle>
 				<mat-datepicker #dtpVencimiento></mat-datepicker>
 				<mat-error class="cm-md-error">Fecha Incorrecta</mat-error>
@@ -293,60 +293,6 @@
 			</div>
 		</div>
 		</div> <!--  fin de fila 9 -->
-
-	<!-- 	<div class="mdc-layout-grid">  
-		<div class="mdc-layout-grid__inner">
-			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-				<br>
-					<span class="size_font_sub_label">Garantías</span>
-				<br>
-			</div>
-			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">				
-			</div>
-			<div *ngIf="ocultarbtnContraparte" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">	
-				<br>
-					<span  class="size_font_sub_label">Contraparte</span>
-				<br>			
-			</div>
-			<div  *ngIf="ocultarbtnContraparte" class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">				
-			</div>
-			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
-				<br>
-					<span class="size_font_sub_label">Comisiones</span>
-				<br>			
-			</div>
-		</div>
-		</div>
-
-		<div class="mdc-layout-grid">  fila 10 
-
-		<div class="mdc-layout-grid__inner">
-			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
-				<br>
-					<span>Avales&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-					<button type='button' mat-mini-fab (click)="cmdAvales_click()" [disabled]="btnAvales"><mat-icon>group_add</mat-icon></button>
-				<br>
-			</div>
-			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
-				<br>
-					<span>Otras Garantías&nbsp;&nbsp;&nbsp;&nbsp;</span>
-					<button type='button' mat-mini-fab (click)="cmdOtrasGarantias_click()" [disabled]="btnOtrasGarantias"><mat-icon>check</mat-icon></button>
-				<br>			
-			</div>	
-			<div *ngIf="ocultarbtnContraparte"  class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
-				<br>
-					<span >Ingresar Contraparte&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-					<button  type='button' mat-mini-fab (click)="cmdContraParte_click()" [disabled]="btnContraparte"><mat-icon>location_city</mat-icon></button>
-				<br>		
-			</div>	
-			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
-				<br>
-					<span>Modificar Comisiones&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-					<button type='button' mat-mini-fab (click)="cmdComisiones_click()" [disabled]="btnComisiones"><mat-icon>attach_money</mat-icon></button>
-				<br>			
-			</div>				
-		</div>
-		</div>fila 10 -->
 	
 		<div class="mdc-layout-grid"> 
 		<div class="mdc-layout-grid__inner">
@@ -427,8 +373,8 @@
 		<div class="mdc-layout-grid__inner">
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">				
 			</div>
-			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">					
-				<bcx-banco *ngIf="this.habCamposStby.value" [tabindex]="34" formControlName="txtBicCorresponsalOperacion" placeholder="BIC corresponsal" placeholderDes="Nombre Corresponsal" [isDisabled]="bloquearOperaciones" [data]="this"></bcx-banco>
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">					
+				<bcx-banco *ngIf="this.habCamposStby.value" [tabindex]="34" [colSpan]="8" [widthCodigo]="22" formControlName="txtBicCorresponsalOperacion" [colSpan]='8' [widthCodigo]="22"  placeholder="BIC corresponsal" placeholderDes="Nombre Corresponsal" [isDisabled]="bloquearOperaciones" [data]="this"></bcx-banco>
 			</div>
 		</div>
 		</div>
@@ -497,8 +443,8 @@
 		<div class="mdc-layout-grid__inner">
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">				
 			</div>
-			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">	
-				<bcx-banco [tabindex]="41" formControlName="txtBicCorresponsalComyGas" placeholder="BIC corresponsal" placeholderDes="Nombre Corresponsal" [isDisabled]="bloquearComyGas" [data]="this"></bcx-banco>			
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10">	
+				<bcx-banco [tabindex]="41" formControlName="txtBicCorresponsalComyGas" [colSpan]="8" [widthCodigo]="22" placeholder="BIC corresponsal" placeholderDes="Nombre Corresponsal" [isDisabled]="bloquearComyGas" [data]="this"></bcx-banco>			
 			</div>
 		</div>
 		</div>

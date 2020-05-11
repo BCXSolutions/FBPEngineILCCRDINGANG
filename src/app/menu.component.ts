@@ -23,7 +23,7 @@ import { BCX_RS_200_160_FORM } from './ws/BCX_RS_200_160_FORM';
 // import { BCX_RS_200_160_PRD } from './ws/BCX_RS_200_160_PRD';
 // import { BCX_RS_200_160_CANAL } from './ws/BCX_RS_200_160_CANAL';
 // import { CRD_RS_200_160_COL } from './ws/CRD_RS_200_160_COL';
-//import { FBP_RS_AUTH_SERVER } from '../../@bcxang/lib/ws/FBP_RS_AUTH_SERVER';
+import { FBP_RS_AUTH_SERVER } from '../../@bcxang/lib/ws/FBP_RS_AUTH_SERVER';
 import { interval } from 'rxjs';
 
 @Component({
@@ -112,7 +112,7 @@ export class MenuComponent implements OnInit, AfterViewChecked
 		// , private bcxRs200160Prd: BCX_RS_200_160_PRD
 		// , private bcxRs200160Canal: BCX_RS_200_160_CANAL
 		// , private crdRs200160Col: CRD_RS_200_160_COL
-	//	, private fbpRsAuthServer: FBP_RS_AUTH_SERVER
+		, private fbpRsAuthServer: FBP_RS_AUTH_SERVER
 		){}
 	/**
 	 * Inicializamos todo.
@@ -128,22 +128,22 @@ export class MenuComponent implements OnInit, AfterViewChecked
 		this.user_logueado = this.hostService.getTokenUser();
 
 		this.waitShow = true;
-		// const subscription = interval(1000)
-		// .subscribe(() => {
-		// 	this.fbpRsAuthServer.call(
-		// 		(value) => this.fbpRsAuthServerResult(value)
-		// 		, (value) => this.openDialogAlert(value)
-		// 		, "Bearer "+ this.hostService.getToken()
-		// 	);
-
-		// 	subscription.unsubscribe();
-		// });
-
-		const subscription = interval(1500)
+		const subscription = interval(1000)
 		.subscribe(() => {
-			this.init();
+			this.fbpRsAuthServer.call(
+				(value) => this.fbpRsAuthServerResult(value)
+				, (value) => this.openDialogAlert(value)
+				, "Bearer "+ this.hostService.getToken()
+			);
+
 			subscription.unsubscribe();
 		});
+
+		// const subscription = interval(1500)
+		// .subscribe(() => {
+		// 	this.init();
+		// 	subscription.unsubscribe();
+		// });
 
 
 
@@ -193,22 +193,22 @@ export class MenuComponent implements OnInit, AfterViewChecked
         // A veces el Fault se viene por acá
         let hayError: boolean = false//wsResult.hayError();
 		//this.init();
-        // if(wsResult.getReturnValue() == 1){
-        //     if(wsResult.getResultString('status') == 'OK'){
-        //         this.init();
-        //     }
-        //     else{
-        //         this.router.navigate(['cm-error']);
-        //     }
-        // }
-        // else{
-        //     this.router.navigate(['cm-error']);
-        // }
+        if(wsResult.getReturnValue() == 1){
+            if(wsResult.getResultString('status') == 'OK'){
+                this.init();
+            }
+            else{
+                this.router.navigate(['cm-error']);
+            }
+        }
+        else{
+            this.router.navigate(['cm-error']);
+        }
         
-        // if (hayError)
-        // {
-        //     this.router.navigate(['cm-error']);
-        // }
+        if (hayError)
+        {
+            this.router.navigate(['cm-error']);
+        }
         
     }
 
@@ -260,6 +260,9 @@ export class MenuComponent implements OnInit, AfterViewChecked
 		this.contextService.setUserData("WSS_D01_SGM",this.WSS_D01_SGM);
 		this.contextService.setUserData("WSS_D01_TIP",this.WSS_D01_TIP);
 		this.contextService.setUserData("WSS_D01_CODNUM",this.WSS_D01_CODNUM);
+		this.contextService.setUserData("cOrde", 0);
+		this.contextService.setUserData("precarga", false);
+		this.contextService.setUserData("varInicio", 0);
 
         this.router.navigate(['/abrircartacredito']);
 	//	this.utilService.alert(this.dialog, 'No implementado');

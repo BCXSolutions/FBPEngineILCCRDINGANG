@@ -10,10 +10,10 @@
 	</div>
 	<form [formGroup]="form" autocomplete="off">
 	<div class="cm-botonera">
-		<button type='button' mat-raised-button  (click)="cmdBuscar_click()"><mat-icon>search</mat-icon>Buscar</button>
+		<button type='button' mat-raised-button class="bcx-btn-accion"  (click)="cmdBuscar_click()"><mat-icon>search</mat-icon>Buscar</button>
 		<button type='button' mat-raised-button  [disabled]="cmdHabSiguiente" (click)="cmdProximos_click()"><mat-icon>skip_next</mat-icon>Proximos</button>
-		<button type='button' mat-raised-button  (click)="cmdAceptar_click()"><mat-icon>check</mat-icon>Aceptar</button>
-		<button type='button' mat-raised-button  (click)="cmdVolver_click()"><mat-icon>arrow_back</mat-icon>Volver</button>
+		<button type='button' mat-raised-button class="bcx-btn-accion"  (click)="cmdAceptar_click()"><mat-icon>check</mat-icon>Aceptar</button>
+		<button type='button' mat-raised-button class="bcx-btn-accion" (click)="cmdVolver_click()"><mat-icon>arrow_back</mat-icon>Volver</button>
 	</div>
 	<div class="inner-sidenav-content" id="innersidenav">
 	<div class="cm-border cm-left-pad cm-margin-top cm-margin-bottom cm-bottom-pad-small cm-right-pad">

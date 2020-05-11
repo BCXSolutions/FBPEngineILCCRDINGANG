@@ -124,9 +124,12 @@ export class DatosAdicionalesComponent implements OnInit
 
 	// Datos de la tabla.
 	tableRows: any[] = [];
+	tableRowsBloqueo:any[]=[];
 	tableCols: any[] = [];
+	tableColsBloqueo:any[] = [];
 	// Datos para el filtro de la tabla.
 	tableRowsTemp: any[] = [];
+	tableRowsBloqueoTemp:any[]=[];
 	// Filas seleccionadas.
 	tableSelected: any[] = [];
 	// Sort vigente.
@@ -378,10 +381,16 @@ export class DatosAdicionalesComponent implements OnInit
 	initValue;
 	myDate:any;
 
-	@ViewChild('grd', {static: true}) table: any;
+	habilitarGrilla:any;
+	bloquearGrilla:any;
+	opacidad:any;
+	habScroll:any;
+
+	habBtnCursar:any;
+
+	@ViewChild('grd',{static: true}) table: any;
 	@ViewChild('rightTmpl', {static: true})  rightTmpl: TemplateRef<any>;
-	@ViewChild('centerTmpl', {static: true})
-	 centerTmpl: TemplateRef<any>;
+	@ViewChild('centerTmpl', {static: true}) centerTmpl: TemplateRef<any>;
 	@ViewChild('editable1Tmpl',{static: true}) editable1Tmpl: TemplateRef<any>;
 	@ViewChild('editable2Tmpl',{static: true}) editable2Tmpl: TemplateRef<any>;
 	
@@ -431,13 +440,9 @@ export class DatosAdicionalesComponent implements OnInit
 		, private crdRs200112OprIng: CRD_RS_200_112_OPR_ING
 		, private bcxRs200112Cliam: BCX_RS_200_112_CLIAM
 		, private crdRs99130Monmto: CRD_RS_99_130_MONMTO
-		, private crdRs200152TxtLciT78: CRD_RS_200_152_TXT_LCI_T78
-
-	
+		, private crdRs200152TxtLciT78: CRD_RS_200_152_TXT_LCI_T78	
 		){    
-
-			this.initValue = this.myDate;
-			  
+			this.initValue = this.myDate;			  
 			if (this.sharedService.clickEventsubscription == undefined) {
 			this.sharedService.clickEventsubscription = this.sharedService.getClickEvent().subscribe((object)=> {
 				
@@ -456,8 +461,6 @@ export class DatosAdicionalesComponent implements OnInit
 				}if(object == 'ofunc_tag_50'){
 					this.ofunc_tag50();
 				}
-
-				//this.cmdCursar_click();
 			})
 		  }
 		}
@@ -466,6 +469,23 @@ export class DatosAdicionalesComponent implements OnInit
 		@ViewChild("txtBicParticipante") txtBicParticipanteNative: ElementRef; 
 		@ViewChild("txtDireCorre") txtDireCorreNative: ElementRef; 
 		@ViewChild("txtDireOrdenante") txtDireOrdenanteNative: ElementRef; 
+		@ViewChild("txtFlc") txtFlcNative:any;
+		@ViewChild("txtNumeroCartaCredito") txtNumeroCartaCreditoNative:any;
+		@ViewChild("txtUcp") txtUcpNative:any;
+		@ViewChild("txtDiasValidez") txtDiasValidezNative:any;
+		@ViewChild("txtLugarExpiracion") txtLugarExpiracionNative:any;
+		@ViewChild("txtBicOrde50") txtBicOrde50Native:any;
+		@ViewChild("txtOrdeDire50") txtOrdeDire50Native:any;
+		@ViewChild("txtOrCiuPa50") txtOrCiuPa50Native:any;
+		@ViewChild("txtBeneBic59") txtBeneBic59Native:any;
+		@ViewChild("txtBeneNombre59") txtBeneNombre59Native:any;
+		@ViewChild("txtBeneDire59") txtBeneDire59Native:any;
+		@ViewChild("txtPais") txtPaisNative:any;
+		@ViewChild("txtCodMonMonto") txtCodMonMontoNative:any;
+		@ViewChild("txtUtilizableConCualquiera") txtUtilizableConCualquieraNative:any;
+		@ViewChild("txtUtilizableCon") txtUtilizableConNative:any;
+		@ViewChild("txtViaTransporte") txtViaTransporteNative:any;
+		@ViewChild("txtClausulaCompra") txtClausulaCompraNative:any;		
 	/**
 	 * Inicializamos todo.
 	 */
@@ -480,11 +500,11 @@ export class DatosAdicionalesComponent implements OnInit
 		this.editing = {};
 		// Definicion de columnas.
 		this.tableCols = [
-			{ prop:'wss_pct_pzo', name:'Porcentaje', width:'6', headerClass:'gridHeader', cellTemplate: this.editable1Tmpl},
-			{ prop:'wss_dia_pzo', name:'Días plazo', width:'6', headerClass:'gridHeader', cellTemplate: this.editable2Tmpl}
+			{ prop:'wss_pct_pzo', name:'Porcentaje', width:'20', headerClass:'gridHeader', cellTemplate: this.editable1Tmpl},
+			{ prop:'wss_dia_pzo', name:'Días plazo', width:'20', headerClass:'gridHeader', cellTemplate: this.editable2Tmpl}
 		];
 
-		debugger
+	debugger
 		this.txtNombre.disable();
 		this.txtNombreBanco.disable();
 		this.btnBancoComyGas = true;
@@ -511,7 +531,7 @@ export class DatosAdicionalesComponent implements OnInit
 		this.objetoPadre = this.contextService.getUserData("objetoPadre");
 		this.ttlNueva = this.contextService.getUserData("objetoPadre");
 		this.varDatosadicionales = this.contextService.getUserData("varDatosadicionales");
-
+		
 		this.consulta = this.contextService.getUserData("consulta");
 
 		//this.consulta='C';
@@ -535,11 +555,13 @@ export class DatosAdicionalesComponent implements OnInit
 		} else if (this.financiamiento_indicador_opcion == 'Detalle'){	
 			if(!ctxSw) {	
 				this.deshabilitar_campos();
+				this.ofunc_get_tag50_Da();
 				this.Cargar_arreglos_();
 			}
 		} else if(this.financiamiento_indicador_opcion == 'Preingreso'){
 			if(!ctxSw) {
 				this.deshabilitar_campos();
+				this.ofunc_get_tag50_Da();
 				this.Cargar_arreglos_();
 			}
 		}
@@ -584,6 +606,14 @@ export class DatosAdicionalesComponent implements OnInit
 			{ wss_pct_pzo:'',wss_dia_pzo: ''},
 
 		  ];
+
+
+
+		this.habilitarGrilla.patchValue(false);
+		this.bloquearGrilla.patchValue(true);
+
+		this.opacidad.patchValue('0.7');
+		this.habScroll.patchValue(false); 
 
 		this.tableRows =this.tableRowsTemp; 		  
 		this.cbbReembolsoArray = this.cbbReembolsoAuxArray;
@@ -1160,7 +1190,6 @@ export class DatosAdicionalesComponent implements OnInit
 
 			if(!this.chk740.value == true){
 
-
 				this.txtBicReembolso.patchValue("");
 				this.txtReemNom.patchValue("");
 				this.txtReemCiu.patchValue("");
@@ -1171,10 +1200,6 @@ export class DatosAdicionalesComponent implements OnInit
 				this.btnBicReembolso = false;
 				this.optURR.patchValue('');
 				this.optURR.disable();
-				// rdRurrNo.selected = false;
-				// rdRurrSi.selected = false
-				// rdRurrNo.enabled = false
-				// rdRurrSi.enabled = false
 				this.ofunc_inhi_rurr();
 				this.ofunc_urr();
 
@@ -1808,12 +1833,23 @@ export class DatosAdicionalesComponent implements OnInit
 				}
 			} else if(this.financiamiento_indicador_opcion == 'Detalle'){
 				this.ofunc_carga();	
-			} else {
+				if(this.consulta=='C')
+					this.ofunc_enable(false);
+			} else if(this.financiamiento_indicador_opcion == 'Preingreso'){
 				this.ofunc_carga();	
+				if(this.consulta=='C')
+					this.ofunc_enable(false);
 			}
 
 			//this.ofunc_carg_tipTas();
 		}
+	}
+
+	ofunc_enable(opcion){
+		if(opcion == false){
+			this.habBtnCursar = true;
+		}
+		
 	}
 	
 
@@ -2192,23 +2228,23 @@ export class DatosAdicionalesComponent implements OnInit
 			if(wsResult.getResultString('wss_ind_ref')=='S') this.chbkRefinanciamiento.patchValue(true);
 
 			//Banco Receptor	 
-			this.txtBicRecep.patchValue(wsResult.getResultString('wss_iso_rec'));
+			this.txtBicRecep.patchValue(wsResult.getResultString('wss_iso_rec').toString().trim());
 			this.txtDireCorreNative.nativeElement.focus();
 			//this.txtBicRecep.focusEmitterService.focusout();
 
-			this.varBancoCorr = wsResult.getResultString('wss_iso_rec');
+			this.varBancoCorr = wsResult.getResultString('wss_iso_rec').toString().trim();
 			this.txtNomCorre.patchValue(wsResult.getResultString('wss_nom_rec'));
 			this.txtDireCorre.patchValue(wsResult.getResultString('wss_dir_rec'));
 			this.txtCiuCorre.patchValue(wsResult.getResultString('wss_ciu_rec'));
 			this.txtPaisCorre.patchValue(wsResult.getResultString('wss_pai_rec'));
 			//Banco Ordenante
-			this.txtBicBancoOrdenante.patchValue(wsResult.getResultString('wss_iso_bord'));
+			this.txtBicBancoOrdenante.patchValue(wsResult.getResultString('wss_iso_bord').toString().trim());
 			this.txtDireOrdenanteNative.nativeElement.focus(); 
 			this.txtDireOrdenante.patchValue(wsResult.getResultString('wss_dir_bord').toString().trim());
 			this.txtCiuOrdenante.patchValue(wsResult.getResultString('wss_ciu_bord'));
 			this.txtPaisOrdenante.patchValue(wsResult.getResultString('wss_pai_bord'));
 			//Banco Girado
-			this.txtBicGirado.patchValue(wsResult.getResultString('wss_iso_gdo'));
+			this.txtBicGirado.patchValue(wsResult.getResultString('wss_iso_gdo').toString().trim());
 			this.txtGirNom.patchValue(wsResult.getResultString('wss_nom_gdo'));
 			this.txtGirDire.patchValue(wsResult.getResultString('wss_dir_gdo'));
 			this.txtGirCiu.patchValue(wsResult.getResultString('wss_ciu_gdo'));
@@ -2217,7 +2253,7 @@ export class DatosAdicionalesComponent implements OnInit
 			this.txtUtilizableCon.patchValue(wsResult.getResultString('wss_iso_nom'));
 			this.txtUtilizableConCualquiera.patchValue(wsResult.getResultString('wss_gls_any'));
 			//Banco Reembolsador
-			this.txtBicReembolso.patchValue(wsResult.getResultString('wss_iso_reem'));
+			this.txtBicReembolso.patchValue(wsResult.getResultString('wss_iso_reem').toString().trim());
 			this.varBanReem = this.txtBicReembolso.value;
 			this.txtReemNom.patchValue(wsResult.getResultString('wss_nom_reem'));
 			this.txtReemDire.patchValue(wsResult.getResultString('wss_dir_reem'));
@@ -2407,6 +2443,7 @@ export class DatosAdicionalesComponent implements OnInit
 	    		
 			}	
 			
+			this.ofunc_get_tag50_Da();
 			this.ofunc_cargar_porcentaje()
 
 		}
@@ -2465,7 +2502,9 @@ export class DatosAdicionalesComponent implements OnInit
 		}	
 		else {
 			this.txtDiasValidez.patchValue(wsResult.getResultString('out_dia_pzo').toString());
-			this.txtFechaExpiracion.patchValue(wsResult.getResultString('out_fec_vto').toString()); 
+			this.txtFechaExpiracion.patchValue(wsResult.getResultDate('out_fec_vto').toString()); 
+			this.objetoPadre.txtDiasPlazos.patchValue(wsResult.getResultString('out_dia_pzo').toString());
+			this.objetoPadre.txtVencimiento.patchValue(wsResult.getResultDate('out_fec_vto').toString()); 
 		}
 	}
 
@@ -2569,9 +2608,191 @@ export class DatosAdicionalesComponent implements OnInit
 	}
 
 	cmdCursar_click(){
-		this.identificador='C';
+		this.waitShow = true;
+		let campos_obligatorios:any = this.ofunc_val_manda();
+	
+		if(campos_obligatorios == true){
+			this.identificador='C';
+			this.crdRs200112AliCall();
+		} else {
+			this.utilService.alert(this.dialog, 'Falta ingresar campos obligatorios');
+		}	
 		this.varInicio = 1;
-		this.crdRs200112AliCall();
+		this.cOrde = 0;
+	}
+
+	// 			// this.form.get('txtCodBanco').markAsTouched();
+		// 			// this.form.get('txtCodBanco').setErrors({});
+		// 			// this.form.get('txtCodBanco').setErrors(null);
+
+	ofunc_val_manda():any {
+			
+
+		let arrManda:any[]=[];
+		let arrMandaName:any[]=[];
+		let arrMandaNative:any[]=[];
+		let name:ElementRef; 	
+
+		arrManda[0]=(this.txtFlc as any);
+		arrMandaNative[0]=this.txtFlcNative;
+
+		arrManda[1]=(this.txtNumeroCartaCredito as any);
+		arrMandaNative[1]=this.txtNumeroCartaCreditoNative;
+
+		arrManda[2]=(this.txtUcp as any);
+		arrMandaNative[2]=this.txtUcpNative;
+
+		arrManda[3]=(this.txtDiasValidez as any);		
+		arrMandaNative[3]=this.txtDiasValidezNative;	
+
+		arrManda[4]=(this.txtLugarExpiracion as any);
+		arrMandaNative[4]=this.txtLugarExpiracionNative;
+		if(this.varManda == true){
+			if(this.txtBicOrde50.value != this.varValor){
+				arrManda[5]=(this.txtBicOrde50 as any);
+				arrMandaNative[5]=this.txtBicOrde50Native;
+
+				arrManda[6]=(this.txtOrdeDire50 as any);
+				arrMandaNative[6]=this.txtOrdeDire50Native;
+
+				arrManda[7]=(this.txtOrCiuPa50 as any);
+				arrMandaNative[7]=this.txtOrCiuPa50Native;
+
+				arrManda[8]=(this.txtBeneBic59 as any);
+				arrMandaNative[8]=this.txtBeneBic59Native;
+
+				arrManda[9]=(this.txtBeneNombre59 as any);
+				arrMandaNative[9]=this.txtBeneNombre59Native;
+
+				arrManda[10]=(this.txtBeneDire59 as any);
+				arrMandaNative[10]=this.txtBeneDire59Native;
+
+				arrManda[11]=(this.txtPais as any);
+				arrMandaNative[11]=(this.txtPaisNative as any);
+
+				arrManda[12]=(this.txtCodMonMonto as any);
+				arrMandaNative[12]=this.txtCodMonMontoNative;
+
+				if((this.txtUtilizableConCualquiera.value == "") && (this.txtUtilizableCon.value == "")){
+					arrManda[13]=(this.txtUtilizableCon as any);	
+					arrMandaNative[13]=this.txtUtilizableConNative;
+
+					arrManda[14]=(this.txtViaTransporte as any);
+					arrMandaNative[14]=this.txtViaTransporteNative;
+
+					arrManda[15]=(this.txtClausulaCompra as any);
+					arrMandaNative[15]=this.txtClausulaCompraNative;
+				}
+				else{
+					arrManda[13]=(this.txtViaTransporte as any);
+					arrMandaNative[13]=this.txtViaTransporteNative;
+
+					arrManda[14]=(this.txtClausulaCompra as any);
+					arrMandaNative[14]=this.txtClausulaCompraNative;
+				}
+			}
+			else{
+				arrManda[5]=(this.txtBeneBic59 as any);
+				arrMandaNative[5]=this.txtBeneBic59Native;
+
+				arrManda[6]=(this.txtBeneNombre59 as any);
+				arrMandaNative[6]=this.txtBeneNombre59Native;
+
+				arrManda[7]=(this.txtBeneDire59 as any);
+				arrMandaNative[7]=this.txtBeneDire59Native;
+
+				arrManda[8]=(this.txtPais as any);
+				arrMandaNative[8]=this.txtPaisNative;
+
+				arrManda[9]=(this.txtCodMonMonto as any);
+				arrMandaNative[9]=this.txtCodMonMontoNative;
+
+				if((this.txtUtilizableConCualquiera.value == "") && (this.txtUtilizableCon.value == "")){
+					arrManda[10]=(this.txtUtilizableCon as any);		
+					arrMandaNative[10]=this.txtUtilizableConNative;
+
+					arrManda[11]=(this.txtViaTransporte as any);
+					arrMandaNative[11]=this.txtViaTransporteNative;
+
+					arrManda[12]=(this.txtClausulaCompra as any);
+					arrMandaNative[12]=this.txtClausulaCompraNative;
+				}
+				else{
+					arrManda[10]=(this.txtViaTransporte as any);
+					arrMandaNative[10]=this.txtViaTransporteNative;
+					
+					arrManda[11]=(this.txtClausulaCompra as any);
+					arrMandaNative[11]=this.txtClausulaCompraNative;
+				}
+			}
+		}
+		else{
+			arrManda[5]=(this.txtBeneNombre59 as any);
+			arrMandaNative[5]=this.txtBeneNombre59Native;
+
+			arrManda[6]=(this.txtBeneDire59 as any);
+			arrMandaNative[6]=this.txtBeneDire59Native as any;
+
+			arrManda[7]=(this.txtPais as any);
+			arrMandaNative[7]=(this.txtPaisNative);
+
+			arrManda[8]=(this.txtCodMonMonto as any);
+			arrMandaNative[8]=(this.txtCodMonMontoNative);
+
+			if((this.txtUtilizableConCualquiera.value == "") && (this.txtUtilizableCon.value == "")){
+				arrManda[9]=(this.txtUtilizableCon as any);			
+				arrMandaNative[9]=(this.txtUtilizableConNative);	
+
+				arrManda[10]=(this.txtViaTransporte as any);
+				arrMandaNative[10]=(this.txtViaTransporteNative);
+
+				arrManda[11]=(this.txtClausulaCompra as any);
+				arrMandaNative[11]=(this.txtClausulaCompraNative);
+			}
+			else{
+				arrManda[9]=(this.txtViaTransporte as any);
+				arrMandaNative[9]=(this.txtViaTransporteNative);
+
+				arrManda[10]=(this.txtClausulaCompra as any);
+				arrMandaNative[10]=(this.txtClausulaCompraNative);
+			}
+		}
+		
+		let foc:Boolean=false;
+		let resultado:Boolean=true;
+		let i:any = 0;
+		while(i<arrManda.length){
+			
+			arrMandaName[i] = this.getname_formcontrolname(arrManda[i]);
+			if((arrManda[i].value == "")&&(arrManda[i].enabled == true)){
+				if(foc == false){
+					foc=true;
+					resultado = false;
+					
+					arrMandaNative[i].nativeElement.focus();
+					this.form.controls[arrMandaName[i]].markAsTouched();
+					this.form.controls[arrMandaName[i]].setErrors({});
+					// TextInput(arrManda[i]).setFocus();
+					// TextInput(arrManda[i]).setStyle("errorColor",colorPicker.selectedColor);
+					// TextInput(arrManda[i]).errorString="*";																
+				}
+				else{
+					resultado = false;
+					this.form.controls[arrMandaName[i]].markAsTouched();					
+					this.form.controls[arrMandaName[i]].setErrors({});
+					// TextInput(arrManda[i]).setStyle("errorColor",colorPicker.selectedColor);
+					// TextInput(arrManda[i]).errorString="*";	
+				}
+			}
+			else{
+				resultado = true;
+				this.form.controls[arrMandaName[i]].markAsTouched();
+				this.form.controls[arrMandaName[i]].setErrors(null);	
+			}
+			i++;
+		}
+		return resultado;	
+
 
 	}
 
@@ -2590,11 +2811,14 @@ export class DatosAdicionalesComponent implements OnInit
 	{
 		this.identificador='N';
 		this.waitShow = false;
-		this.crdRs200112AliCall();
+		if(this.consulta != 'C') {
+			this.crdRs200112AliCall();
+		}		
 		this.contextService.setUserData('varInicioPadre',1);
 		this.contextService.setUserData('varInicio',1);
 		this.contextService.setUserData('varPantalla','');
 		this.contextService.setUserData("varDatosadicionales",'dasnormal');
+		this.contextService.setUserData("cOrde",this.cOrde); 
 		this.location.back();
 	}
 	/**
@@ -2615,7 +2839,6 @@ export class DatosAdicionalesComponent implements OnInit
 	cmdCampo_click(){
 		this.varManda=true;
 		this.varValor='SEE FIELD 47A';
-	
 		this.waitShow = false;
 		if(this.cOrde == 0) {
 			let myArrayDos:any[]=[];
@@ -2631,7 +2854,8 @@ export class DatosAdicionalesComponent implements OnInit
 			this.contextService.setUserData("WSS_D01_SGM",this.WSS_D01_SGM);	
 			this.contextService.setUserData("user_logueado",this.user_logueado);
 			this.contextService.setUserData("myArrayDos",myArrayDos);
-			this.contextService.setUserData('varCartaCredito', this.financiamiento_indicador_opcion);
+			this.contextService.setUserData('indicadorOpcion', this.financiamiento_indicador_opcion);
+			this.contextService.setUserData('varCartaCredito', this);
 			this.router.navigate(['/campo']);
 			this.ofunc_tag50();
 
@@ -2777,23 +3001,26 @@ export class DatosAdicionalesComponent implements OnInit
 			this.utilService.alert(this.dialog, wss_result_msg);
 		} else {
 		
-			this.arrayTag50[0] = wsResult.getResultString('wss_txt_ord1');
-			this.arrayTag50[1] = wsResult.getResultString('wss_txt_ord2');
-			this.arrayTag50[2] = wsResult.getResultString('wss_txt_ord3');
-			this.arrayTag50[3] = wsResult.getResultString('wss_txt_ord4');
+			// this.arrayTag50[0] = wsResult.getResultString('wss_txt_ord1');
+			// this.arrayTag50[1] = wsResult.getResultString('wss_txt_ord2');
+			// this.arrayTag50[2] = wsResult.getResultString('wss_txt_ord3');
+			// this.arrayTag50[3] = wsResult.getResultString('wss_txt_ord4');
+			this.txtBicOrde50.patchValue(wsResult.getResultString('wss_txt_ord1'));
+			this.txtOrdeNom50.patchValue(wsResult.getResultString('wss_txt_ord2'));
+			this.txtOrdeDire50.patchValue(wsResult.getResultString('wss_txt_ord3'));
+			this.txtOrCiuPa50.patchValue(wsResult.getResultString('wss_txt_ord4'));
 
 		}
 
 	}
-
 
 /**
  * Llamamos al Web Service.
  */
 private crdRs200112AliCall(): void
 {
-	// obj.chkEnterada.selected = this.chkEnterada.selected;
-	// obj.selecEnterada();		
+	this.objetoPadre.chkEnterada.patchValue(this.chkEnterada.value);
+	this.objetoPadre.selecEnterada();		
 	
 	this.getFilas_result();
 	this.bFlagCambioEspecial = true;
@@ -2967,7 +3194,7 @@ private crdRs200112AliCall(): void
 crdRs200112AliResult(wsResult :CmWsResult): void
 {
 	// Desactivamos el simbolo de progress.
-	this.waitShow = false;
+	//this.waitShow = false;
 	/* Mover los parametros de salida a la pantalla. 
 	this.xyz.patchValue(wsResult.getResultString('wss_result_cod'));
 	this.xyz.patchValue(wsResult.getResultString('wss_result_msg'));
@@ -3025,12 +3252,12 @@ private crdRs200112DliCall(): void
 		transPermi="C";				
 	}
 
-
+	
 	/* Mover los datos de la pantalla a los parametros del Web Service.  */ 
 	let wss_num_opr :string = this.numOperacion;
 	let wss_for_lc :string = this.utilService.toString(this.txtFlc.value);
 	let wss_cod_ucp :string = this.utilService.toString(this.txtUcp.value);
-	let wss_gls_ucp :string = this.utilService.toString(this.txtUtilizableConCualquiera.value);
+	let wss_gls_ucp :string = this.utilService.toString(this.txtUcpOtra.value);
 	let wss_dia_val_ccr :string = this.txtDiasValidez.value;
 	let wss_fec_vto :any; 
 	if(this.txtFechaExpiracion.value=='')
@@ -3156,7 +3383,7 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 	
 	let objetos:any[]=[];
 	// Desactivamos el simbolo de progress.
-	this.waitShow = false;
+	//this.waitShow = false;
 	/* Mover los parametros de salida a la pantalla. 
 	this.xyz.patchValue(wsResult.getResultString('wss_result_cod'));
 	this.xyz.patchValue(wsResult.getResultString('wss_result_msg'));
@@ -3225,7 +3452,7 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 	ofunc_result_cur50(wsResult :CmWsResult):void{
 		let wss_result_msg:any
 		// Desactivamos el simbolo de progress.
-		this.waitShow = false;
+		//this.waitShow = false;
 		/* Mover los parametros de salida a la pantalla. 
 		this.xyz.patchValue(wsResult.getResultString('wss_result_msg'));
 			*/
@@ -3403,11 +3630,17 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 			txtOtroVia:'',
 			habBtnRefinanciamiento:'',
 			habBotonDocumentos:'',
-			habBotonOrdenante:''
+			habBotonOrdenante:'',
+			bloquearGrilla:'',
+			opacidad:'',
+			habScroll:'',
+			habPorcentajeGrilla:'',
+			habDiasPlazoGrilla:'',
+			habilitarGrilla:''
+
 
 		});
 	}
-
 
 	/**
 	 * Nombres de controles para simplificar su uso.
@@ -3550,6 +3783,13 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 		this.habBtnRefinanciamiento = this.form.controls['habBtnRefinanciamiento'];
 		this.habBotonDocumentos = this.form.controls['habBotonDocumentos'];
 		this.habBotonOrdenante = this.form.controls['habBotonOrdenante'];
+		this.habPorcentajeGrilla = this.form.controls['habPorcentajeGrilla'];
+		this.habDiasPlazoGrilla = this.form.controls['habDiasPlazoGrilla'];
+		this.bloquearGrilla = this.form.controls['bloquearGrilla'];
+		this.opacidad = this.form.controls['opacidad'];
+		this.habScroll = this.form.controls['habScroll'];
+		this.habilitarGrilla = this.form.controls['habilitarGrilla'];
+
 	}
 	/**
 	 * Validadores de texto - combo.
@@ -3695,16 +3935,7 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 			return !val
 				 || this.utilService.hayVal(d.wss_opr_num_out, val)
 				 || this.utilService.hayVal(d.wss_sol_num, val)
-				 || this.utilService.hayVal(d.wss_cod_cli_out, val)
-				 || this.utilService.hayVal(d.wss_nom_cli, val)
-				 || this.utilService.hayVal(d.wss_opr_mon, val)
-				 || this.utilService.hayVal(d.wss_mto_ori_format, val)
-				 || this.utilService.hayVal(d.wss_mto_sdo_format, val)
-				 || this.utilService.hayVal(d.wss_nom_suc, val)
-				 || this.utilService.hayVal(d.wss_cod_plc, val)
-				 || this.utilService.hayVal(d.wss_nom_plc, val)
-				 || this.utilService.hayVal(d.wss_cod_est, val)
-				 || this.utilService.hayVal(d.wss_fec_cont, val)
+
 				;
 			});
 		this.tableRows = temp;
@@ -3717,6 +3948,7 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 	 */
 	onTableActivate(event): void
 	{
+
 		if (event.type == 'dblclick')
 		{
 			this.waitShow = false;
@@ -3747,7 +3979,9 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 	 */
 	onTableSelect({ selected }): void
 	{
-		 const fila = selected[0];
+
+		const fila = selected[0];
+
 	}
 
 	cmdDocumentosRequeridos_click() {
@@ -3772,7 +4006,7 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 		this.contextService.setUserData("numOperacion",this.numOperacion);	
 		this.contextService.setUserData("WSS_D01_SGM",this.WSS_D01_SGM);	
 		this.contextService.setUserData("user_logueado",this.user_logueado);
-		this.contextService.setUserData("opcion", this.opcion);
+		this.contextService.setUserData("opcion", this.consulta);
 		this.contextService.setUserData("codPais", this.codPais);
 		this.contextService.setUserData('varClausula', this.varClausula);
 
@@ -3794,16 +4028,9 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 		|| (this.txtBicReembolso.value == '')){
 			this.optURR.disable();
 			this.optURR.patchValue('');
-			
-			// rdRurrNo.enabled=false;
-			// rdRurrSi.enabled=false;
-			// rdRurrNo.selected=false;
-			// rdRurrSi.selected=false;
 		}
 		else{
 			this.optURR.enable();
-			// rdRurrNo.enabled=true;
-			// rdRurrSi.enabled=true;
 			if(!(this.optURR.value == 'S')==true){
 				this.optURR.patchValue('N');
 			}
@@ -3991,25 +4218,29 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 
 	ofunc_cargar_conad(myTextArea:any){
 
-		this.myTextArea = myTextArea;
-		/* Mover los datos de la pantalla a los parametros del Web Service.  
-		IMPORTANTE: Para variables Rut, usar: this.utilService.toRut(this.variableRut.value); */ 
-		let wss_cod_prd :string = this.WSS_D01_SGM;
-		let wss_tip_txt :string = 'CONAD';
-		let wss_num_opr :string = this.numOperacion;
-		let wss_usercode :string = this.user_logueado;
-		
-		// Activamos el simbolo de progress.
-		this.waitShow = true;
-		// Invocamos el WS.
-		this.bcxRs200160TxtLci.call(
-			  (value) => this.ofunc_cargar_conad_Result(value)
-			, (value) => this.processFault(value)
-			, wss_cod_prd
-			, wss_tip_txt
-			, wss_num_opr
-			, wss_usercode
-		);
+		if(myTextArea.value == '' || myTextArea.value == null || myTextArea.value == undefined){
+			return;
+		} else {
+			this.myTextArea = myTextArea;
+			/* Mover los datos de la pantalla a los parametros del Web Service.  
+			IMPORTANTE: Para variables Rut, usar: this.utilService.toRut(this.variableRut.value); */ 
+			let wss_cod_prd :string = this.WSS_D01_SGM;
+			let wss_tip_txt :string = 'CONAD';
+			let wss_num_opr :string = this.numOperacion;
+			let wss_usercode :string = this.user_logueado;
+			
+			// Activamos el simbolo de progress.
+			this.waitShow = true;
+			// Invocamos el WS.
+			this.bcxRs200160TxtLci.call(
+				(value) => this.ofunc_cargar_conad_Result(value)
+				, (value) => this.processFault(value)
+				, wss_cod_prd
+				, wss_tip_txt
+				, wss_num_opr
+				, wss_usercode
+			);
+		}
 
 	}
 
@@ -4020,7 +4251,7 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 	ofunc_cargar_conad_Result(wsResult :CmWsResult): void
 	{
 		let myTextArea_array:any[]=[];
-		let myTextAreaAux:any;
+		let myTextAreaAux:string;
 
 		myTextArea_array = wsResult.getTableRows();
 
@@ -4050,26 +4281,29 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 	
 	ofunc_cargar_inrem(myTextArea:any){
 		
-		this.myTextArea = myTextArea;
-		/* Mover los datos de la pantalla a los parametros del Web Service.  
-		IMPORTANTE: Para variables Rut, usar: this.utilService.toRut(this.variableRut.value); */ 
-		let wss_cod_prd :string = this.WSS_D01_SGM;
-		let wss_tip_txt :string = 'INREM';
-		let wss_num_opr :string = this.numOperacion;
-		let wss_usercode :string = this.user_logueado;
-		
-		// Activamos el simbolo de progress.
-		//this.waitShow = true;
-		// Invocamos el WS.
-		this.bcxRs200160TxtLci.call(
-			  (value) => this.ofunc_cargar_inrem_Result(value)
-			, (value) => this.processFault(value)
-			, wss_cod_prd
-			, wss_tip_txt
-			, wss_num_opr
-			, wss_usercode
-		);
-
+		if(myTextArea.value == '' || myTextArea.value == null || myTextArea.value == undefined){
+			return;
+		} else {
+			this.myTextArea = myTextArea;
+			/* Mover los datos de la pantalla a los parametros del Web Service.  
+			IMPORTANTE: Para variables Rut, usar: this.utilService.toRut(this.variableRut.value); */ 
+			let wss_cod_prd :string = this.WSS_D01_SGM;
+			let wss_tip_txt :string = 'INREM';
+			let wss_num_opr :string = this.numOperacion;
+			let wss_usercode :string = this.user_logueado;
+			
+			// Activamos el simbolo de progress.
+			//this.waitShow = true;
+			// Invocamos el WS.
+			this.bcxRs200160TxtLci.call(
+				(value) => this.ofunc_cargar_inrem_Result(value)
+				, (value) => this.processFault(value)
+				, wss_cod_prd
+				, wss_tip_txt
+				, wss_num_opr
+				, wss_usercode
+			);
+		}	
 	}
 
 	/**
@@ -4080,7 +4314,7 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 	{
 		
 		let myTextArea_array:any[]=[];
-		let myTextAreaAux:any;
+		let myTextAreaAux:string;
 
 		myTextArea_array = wsResult.getTableRows();
 
@@ -4100,8 +4334,7 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 			for(let i=0; i< myTextArea_array.length; i++){
 				myTextAreaAux = myTextAreaAux + myTextArea_array[i].wss_lin_txt+"\n";
 			}	
-			myTextAreaAux.replace('undefined','')
-			this.myTextArea.patchValue("");
+			myTextAreaAux.replace('undefined','');
 			this.myTextArea.patchValue(myTextAreaAux);
 		}
 	}
@@ -4261,15 +4494,44 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 			{ wss_pct_pzo:'',wss_dia_pzo: ''},
 
 		  ];
+
+		  this.tableRowsTemp = [
+			{ wss_pct_pzo:'',wss_dia_pzo: ''},
+			{ wss_pct_pzo:'',wss_dia_pzo: ''},
+			{ wss_pct_pzo:'',wss_dia_pzo: ''},
+			{ wss_pct_pzo:'',wss_dia_pzo: ''},
+			{ wss_pct_pzo:'',wss_dia_pzo: ''},
+			{ wss_pct_pzo:'',wss_dia_pzo: ''},
+			{ wss_pct_pzo:'',wss_dia_pzo: ''},
+			{ wss_pct_pzo:'',wss_dia_pzo: ''},
+			{ wss_pct_pzo:'',wss_dia_pzo: ''},
+			{ wss_pct_pzo:'',wss_dia_pzo: ''},
+			{ wss_pct_pzo:'',wss_dia_pzo: ''},
+			{ wss_pct_pzo:'',wss_dia_pzo: ''},
+			{ wss_pct_pzo:'',wss_dia_pzo: ''},
+			{ wss_pct_pzo:'',wss_dia_pzo: ''},
+			{ wss_pct_pzo:'',wss_dia_pzo: ''},
+			{ wss_pct_pzo:'',wss_dia_pzo: ''},
+			{ wss_pct_pzo:'',wss_dia_pzo: ''},
+			{ wss_pct_pzo:'',wss_dia_pzo: ''},
+			{ wss_pct_pzo:'',wss_dia_pzo: ''},
+			{ wss_pct_pzo:'',wss_dia_pzo: ''},
+
+		  ];
 	}
 
 	ofun_busca_automata_evento(event:any):void{
 		if(event.type == "focusout")
 			this.ofun_busca_automata();
 	}
+
+
 	ofun_busca_automata():void{
-		if(this.txtFormaPagoBenef.value == "0")
+	
+		if(this.financiamiento_indicador_opcion == 'Nueva'){
+			if(this.txtFormaPagoBenef.value == "0")
 			return;
+		}
 		if(this.txtFormaPagoBenef.value != ""){
 			//ScreenBlocker.blockScreen(this);
 			//let codigo:int=Application.application.getFmlPrd();	
@@ -4369,13 +4631,18 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 			this.txtFechaSolicitud.disable();
 		}
 
-		// if(arrAutomata[5] == true){
-		// 	this.habPorcentajeGrilla = false;
-		// 	this.habDiasPlazoGrilla = false;
-		// } else {
-		// 	this.habPorcentajeGrilla = true;
-		// 	this.habDiasPlazoGrilla = true;
-		// }
+		if(arrAutomata[5] == true){
+			this.habPorcentajeGrilla.patchValue(false);
+			this.habDiasPlazoGrilla.patchValue(false);
+			this.ofunc_clean_grid();
+			this.opacidad.patchValue('');
+ 		} else {			 
+			this.habPorcentajeGrilla.patchValue(true);
+			this.habDiasPlazoGrilla.patchValue(true);		
+			this.tableRows = [];
+			this.tableRows = [];
+			this.opacidad.patchValue('0.7');
+		}
 
 
 		//this.tblPorDias.enabled=arrAutomata[5];
@@ -4873,9 +5140,9 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 		}
 
 		if(arrAutomata[85] == true){
-			this.txtBicReembolso = false;		
+			this.habTxtBicReembolso = false;		
 		} else {
-			this.txtBicReembolso = true;		
+			this.habTxtBicReembolso = true;		
 		}
 		//btnBicReembolso.enabled=arrAutomata[85];
 		if(arrAutomata[90] == true){
@@ -4898,9 +5165,9 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 		}
 
 		if(arrAutomata[93] == true){
-			this.txtBicAvisador = false;		
+			this.habTxtBicAvisador = false;		
 		} else {
-			this.txtBicAvisador = true;		
+			this.habTxtBicAvisador = true;		
 		}
 		//btnBicAvisador.enabled=arrAutomata[93];
 		//txtAviNom.enabled=arrAutomata[94];
@@ -4912,6 +5179,9 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 		} else {
 			this.txtInfoRemitente72.disable();		
 		}
+
+		this.txtCondicionesEspecialesPagoBancoReceptor.enable();
+		this.txtCondicionesEspecialesPagoBeneficiario.enable();
 		//this.btnAceptar.enabled=arrAutomata[0];
 		//btnAceptar0.enabled=arrAutomata[0];
 		//btnVolver.enabled=arrAutomata[0];
@@ -4945,7 +5215,7 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 				this.utilService.alert(this.dialog, "Valor ingresado fuera de rango");
 				this.bcxCostoFondo.patchValue('0,000000');
 				this.bcxSpread.patchValue('0,000000');
-				//myText.setFocus();
+				this.focusEmitterService.setFocus('bcxSpread');
 			}
 		}
 	}
@@ -4960,9 +5230,9 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 		if(resultadoBco!= 0.000000){
 			if(resultadoBco > Number(this.utilService.toDecimal('100,000000'))){
 				this.utilService.alert(this.dialog, "Valor ingresado fuera de rango");
-				this.bcxCostoFondo.patchValue('0,000000');
-				this.bcxSpread.patchValue('0,000000');
-				//myText.setFocus();
+				this.bcxCostoFondoBco.patchValue('0,000000');
+				this.bcxSpreadBco.patchValue('0,000000');
+				this.focusEmitterService.setFocus('bcxSpreadBco');
 			}
 		}
 	}
@@ -5006,13 +5276,12 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 
 	updateValue(event:any, cell, rowIndex){
 		
-
-		console.log('inline editing rowIndex', rowIndex);
-		this.editing[rowIndex + '-' + cell] = false;
-		this.tableRowsTemp[rowIndex][cell] = event.target.value;
-		this.tableRowsTemp = [...this.tableRowsTemp];
-		console.log('UPDATED!', this.tableRowsTemp[rowIndex][cell]);
-		this.tableRows = this.tableRowsTemp;
+			console.log('inline editing rowIndex', rowIndex);
+			this.editing[rowIndex + '-' + cell] = false;
+			this.tableRowsTemp[rowIndex][cell] = event.target.value;
+			this.tableRowsTemp = [...this.tableRowsTemp];
+			console.log('UPDATED!', this.tableRowsTemp[rowIndex][cell]);
+			this.tableRows = this.tableRowsTemp;
 	}
 
 
@@ -5156,7 +5425,7 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 		this.optGrpGst.disable();
 		this.txtExcepto.disable();
 		this.txtNumeroPeriodoPresentacion.disable();
-		this.chkPeriodoPresentacion.disable();
+		//this.chkPeriodoPresentacion.disable();
 		this.txtPeriodoPresentacion.disable();
 		this.chk740.disable();
 		this.txtBicReembolso.disable();
@@ -5179,14 +5448,14 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 		this.txtInfoRemitente72.disable();
 		this.txtInstrucciones78.disable();
 		//this.myText.disable();
-		this.txtUcpOtra.disable();
+		//this.txtUcpOtra.disable();
 		this.txtBeneBic59.disable();
 		this.txtBeneNombre59.disable();
 		this.txtBeneDire59.disable();
 		this.txtBeneCiu59.disable();
 		this.txtMarcasEspe.disable();
 		this.txtLugarDestino44.disable();
-		this.myTextArea.disable();
+		//this.myTextArea.disable();
 		// this.bicCor.disable();
 		this.txtOtroVia.disable();
 		this.habBtnRefinanciamiento.disable();
@@ -5199,8 +5468,8 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 		this.habTxtBicAvisador = true;
 		this.habTxtBicParticipante = true;
 
-		this.habPorcentajeGrilla = true;
-		this.habDiasPlazoGrilla = true;
+		this.habPorcentajeGrilla.patchValue(true);
+		this.habDiasPlazoGrilla.patchValue(true);
 
 
 	}
@@ -5287,6 +5556,7 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 			this.utilService.alert(this.dialog, wss_result_msg);
 		}	
 		else {
+			
 			this.txtNumeroAladi78.patchValue(wsResult.getResultString('wss_nro_aladi'));
 			if(this.txtReembolso.value == 'A'){
 				this.txtBicReembolso.patchValue('BCECCLRMXXX');
@@ -5308,6 +5578,7 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 	}
 
 	ofunc_valida_740(){
+		
 		if(this.txtReembolso.value == 'A')
 			return;
 		if(!this.chk740.value == false){
@@ -5331,10 +5602,10 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 
 			if(this.financiamiento_indicador_opcion == 'Detalle' || this.financiamiento_indicador_opcion == 'Preingreso'){
 				if(this.consulta!='C'){
-					this.habTxtBicReembolso.enable();
+					this.habTxtBicReembolso = false;
 					this.optURR.enable();
 				}else{
-					this.habTxtBicReembolso.disable();	
+					this.habTxtBicReembolso = true;	
 					this.optURR.disable();			
 				}
 			}
@@ -5509,7 +5780,6 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 			// for(let i=0; i< myTextArea_array.length; i++){
 			// 	myTextAreaAux = myTextAreaAux + myTextArea_array[i].wss_lin_txt+"\n";
 			// }	
-			myTextAreaAux.replace('undefined','')
 			this.txtInstrucciones78.patchValue(myTextArea_array[0].wss_lin_txt);
 		}
 	}
@@ -5581,10 +5851,13 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 	}
 
 	focusout_txtBicRecep(){
-		
-		this.myText=this.txtBicRecep;
-		this.ofunc_event_focus_banco(this.txtBicRecep);
-		this.ofunc_precarga_pago()
+		if(this.txtBicRecep.value == ''){
+			return
+		} else {
+			this.myText=this.txtBicRecep;
+			this.ofunc_event_focus_banco(this.txtBicRecep);
+			this.ofunc_precarga_pago()
+		}
 	}
 
 	focusout_txtFechaEmision(){
@@ -5613,11 +5886,12 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 		this.ofunc_calc_fecha(2);
 	}
 
-	ofunc_seteo_mayuscula(txtInputGrl:any){
-		if(txtInputGrl.value == ''){
-			return;
-		}
-		this.utilService.toUpper(txtInputGrl);
+	ofunc_seteo_mayuscula(txtInputGrl:string){
+		
+		let formName:any;
+		formName = this.form.controls[txtInputGrl];
+		this.utilService.toUpper(formName);
+
 	}
 
 
@@ -5632,8 +5906,12 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 
 
 	focus_txtBicBancoOrdenante(){
-		this.myText=this.txtBicBancoOrdenante;
-		this.ofunc_event_focus_banco(this.txtBicBancoOrdenante);
+		if (this.ignoredFirstEvent || this.initValue === undefined) {
+			return;
+		} else {
+			this.myText=this.txtBicBancoOrdenante;
+			this.ofunc_event_focus_banco(this.txtBicBancoOrdenante);
+		}
 	}
 
 	ofunc_event_focus_banco(myTextBcoGral:any){
@@ -5721,8 +5999,12 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 	}
 
 	focusout_txtBicGirado(){
-		this.myText=this.txtBicGirado;
-		this.ofunc_event_focus_banco(this.txtBicGirado);
+		if(this.txtBicRecep.value == ''){
+			return
+		} else {
+			this.myText=this.txtBicGirado;
+			this.ofunc_event_focus_banco(this.txtBicGirado);
+		}
 	}
 
 	ofunc_textArea_mayuscula(txtAreaGrl:any){
@@ -5939,8 +6221,12 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 		}this.ignoredFirstEvent = true;
 	}
 	focusout_txtBicReembolso(){
-		this.ofunc_event_focus_banco(this.txtBicReembolso);
-		this.ofunc_validacion_bancos();
+		if(this.txtBicRecep.value == ''){
+			return
+		} else {
+			this.ofunc_event_focus_banco(this.txtBicReembolso);
+			this.ofunc_validacion_bancos();
+		}
 	}
 
 	
@@ -5969,8 +6255,12 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 	}
 
 	focusout_txtBicParticipante(){
-		this.ofunc_validacion_bancos();
-		this.ofunc_guarda_banco_participante();
+		if(this.txtBicRecep.value == ''){
+			return
+		} else {
+			this.ofunc_validacion_bancos();
+			this.ofunc_guarda_banco_participante();
+		}
 	}
 
 	change_txtBicParticipante(){
@@ -6260,7 +6550,7 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 			this.tableRowsTemp = tableRowsAux;
 			this.tableRows = this.tableRowsTemp;
 
-
+			
 			if(this.consulta=='A')
 				this.ofun_busca_automata();
 				this.waitShow = false;
@@ -6382,7 +6672,7 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 					wss_fec_otor = this.utilService.toDate(this.objetoPadre.txtOtorgamiento.value);
 				}
 		
-				let wss_dias_pzo :string = this.objetoPadre.txtDiasPlazos.value;
+				let wss_dias_pzo :string;
 				if(this.objetoPadre.txtDiasPlazos.value == ''){
 					wss_dias_pzo = '0';
 				} else {
@@ -6600,7 +6890,7 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 	ofunc_grabar_generacion_avisos(wsResult :CmWsResult): void
 	{
 		// Desactivamos el simbolo de progress.
-		this.waitShow = false;
+		//this.waitShow = false;
 		/* Mover los parametros de salida a la pantalla. 
 		this.xyz.patchValue(wsResult.getResultString('wss_result_msg'));
 		 */
@@ -6774,12 +7064,9 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 			let wss_result_msg = wsResult.getResultString('wss_result_msg');		
 			this.utilService.alert(this.dialog, wss_result_msg);
 		} else{
-			// if(this.varCursar == 1){
-				this.imprimir_doc_revisa();
-			// } 
-			// if(this.varCursar == 3){
-			// 	this.valorReturn = 3;
-			// }
+			//this.objetoPadre.limpiar_campos_formularios();
+			this.imprimir_doc_revisa();
+
 		}
 
 	}
@@ -6799,16 +7086,32 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 			if(this.url.indexOf("http:") < 0){
 				this.url = 'http://' +  this.url;
 			}
-		 
-			const subscription = interval(2000)
+			
+			const subscription = interval(1500)
 			.subscribe(() => {
-				this.contextService.setUserData("varDatosadicionales",'dasnormal');
-				this.objetoPadre.limpiar_campos_formularios();
-				this.location.back();
+				this.seleccion_de_formulario();
+				//this.location.back();
 				subscription.unsubscribe();
 			});
 			
 			
+		}
+
+		seleccion_de_formulario(){
+
+			debugger
+				if(this.financiamiento_indicador_opcion == 'Detalle') {
+					this.objetoPadre.limpiar_campos_formularios();
+					this.router.navigate(['/abrircartacredito']);
+				}else if(this.financiamiento_indicador_opcion == 'Preingreso'){
+					this.objetoPadre.limpiar_campos_formularios();
+					this.router.navigate(['/preingreso']);		
+				} else {		
+					this.objetoPadre.limpiar_campos_formularios();
+					this.router.navigate(['/ingresocartacredito']);
+				}
+				this.waitShow = false;
+		
 		}
 
 
