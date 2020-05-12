@@ -1,0 +1,6 @@
+1.0.0_20200511_PRA
+
+- Primera Versión liberada
+
+1.1.0_20200512_AIC
+- se modifico el polyfills.ts y angular.json

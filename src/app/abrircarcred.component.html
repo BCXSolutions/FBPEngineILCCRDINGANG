@@ -47,7 +47,7 @@
 		</div> <!--  fin de fila 1 -->
 		<div class="mdc-layout-grid"> <!--  fila 2 -->
 		<div class="mdc-layout-grid__inner">
-		<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+		<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2">
 			<bcx-rut formControlName="bcxRut" (focusout)="cargar_nombre()" [_markAsTouched] = "bcxRut_markAsTouched" placeholder="Rut" mat-error="Rut Incorrecto"></bcx-rut>
 		</div>
 		<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
@@ -65,7 +65,7 @@
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 				<mat-form-field>
-				<mat-select placeholder="Descripción" formControlName="cbbCodSucursal" class="cm-in-combo">
+				<mat-select placeholder="" formControlName="cbbCodSucursal" class="cm-in-combo">
 					<mat-option *ngFor="let item of cbbCodSucursalArray" [value]="item.wss_cod_suc">{{item.wss_gls_suc}}</mat-option>
 				</mat-select>
 				</mat-form-field>
@@ -74,12 +74,12 @@
 	   </div>
 		<div class="mdc-layout-grid"> <!--   fila 3 -->
 		<div class="mdc-layout-grid__inner">	 
-			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-5">
 				<mat-radio-group formControlName="optBusquedaOperacion">
 					<mat-radio-button value="T">Todas</mat-radio-button>
 					<mat-radio-button value="S">Sin negociar</mat-radio-button>
 					<mat-radio-button value="N">Negociadas</mat-radio-button>
-					<mat-radio-button value="P">BBVA Net-Cash Solicitudes Pendientes</mat-radio-button>
+					<mat-radio-button value="P">Solicitudes pendientes</mat-radio-button>
 				</mat-radio-group>
 			</div>
 	
@@ -91,7 +91,7 @@
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 				<mat-form-field>
-				<mat-select placeholder="Descripción" formControlName="cbbCodCanal" class="cm-in-combo">
+				<mat-select placeholder="" formControlName="cbbCodCanal" class="cm-in-combo">
 					<mat-option *ngFor="let item of cbbCodCanalArray" [value]="item.wss_cod_cnl">{{item.wss_gls_cnl}}</mat-option>
 				</mat-select>
 				</mat-form-field>
