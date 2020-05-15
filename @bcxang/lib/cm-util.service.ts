@@ -39,7 +39,7 @@ export class CmUtilService {
    * @param numero Numro de entrada, con decimales
    */
   editNumber(numero: number, decimal: number = 2): string {
-    return (Number(numero).toLocaleString("es-ES", { minimumFractionDigits: decimal })).toString();
+    return (Number(numero).toLocaleString("de-DE", { minimumFractionDigits: decimal })).toString();
 
   }
 

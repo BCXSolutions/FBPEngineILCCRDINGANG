@@ -4,3 +4,8 @@
 
 1.1.0_20200512_AIC
 - se modifico el polyfills.ts y angular.json
+
+1.1.1_20200513_PRA
+- se solucionó problema de error de conveersión de decimal a numeric
+- se solucionó problema de formateo de grilla editable
+- Se solucionó problema que no cargaba datos en variables globales (WSS_D01_SGM,WSS_D01_TIP,WSS_D01_CODNUM) 

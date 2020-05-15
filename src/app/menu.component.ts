@@ -128,7 +128,7 @@ export class MenuComponent implements OnInit, AfterViewChecked
 		this.user_logueado = this.hostService.getTokenUser();
 
 		this.waitShow = true;
-		const subscription = interval(1000)
+		const subscription = interval(1500)
 		.subscribe(() => {
 			this.fbpRsAuthServer.call(
 				(value) => this.fbpRsAuthServerResult(value)
@@ -144,30 +144,23 @@ export class MenuComponent implements OnInit, AfterViewChecked
 		// 	this.init();
 		// 	subscription.unsubscribe();
 		// });
-
-
-
 		
-
-		
-
 	}
-
-
 	init()
 	{ 
-
-
-		this.bcxRs200160FormCall();
 		
-		if(this.opcion == "CRDAPE") {
-			this.cmdAbrir_click();
-		} else if(this.opcion == "CRDING") {
-			this.cmdNueva_click();
-		} 
+		this.bcxRs200160FormCall();	
 
-		console.log("	 this.opcion: " + this.opcion);
-		
+		const subscription = interval(2000)
+		.subscribe(() => {
+			if(this.opcion == "CRDAPE") {
+				this.cmdAbrir_click();
+			} else if(this.opcion == "CRDING") {
+				this.cmdNueva_click();
+			} 
+			subscription.unsubscribe();
+		 });
+
 	}	
 
 	
@@ -218,6 +211,8 @@ export class MenuComponent implements OnInit, AfterViewChecked
 	 */
 	cmdNueva_click(): void
 	{
+		
+		
 		this.waitShow = false;
 
 		this.contextService.setUserData("pageName","Detalle crédito");
@@ -230,7 +225,7 @@ export class MenuComponent implements OnInit, AfterViewChecked
 		this.contextService.setUserData("cOrde", 0);
 		this.contextService.setUserData("precarga", false);
 		this.contextService.setUserData("varInicio", 0);
-
+	
 		// Application.application.numOpe="";
 		// Application.application.fmlProd=0;
 		// Application.application.setIdMoneda="";
@@ -254,6 +249,8 @@ export class MenuComponent implements OnInit, AfterViewChecked
 	 */
 	cmdAbrir_click(): void
 	{
+		
+	
 		this.waitShow = false;
 		this.contextService.setUserData("user_logueado",this.user_logueado);
 		this.contextService.setUserData("WSS_D01_AREA","IMP");
@@ -370,7 +367,7 @@ export class MenuComponent implements OnInit, AfterViewChecked
 	private bcxRs200160FormCall(): void
 	{
 
-		//debugger
+		
 		/* Mover los datos de la pantalla a los parametros del Web Service. 
 		IMPORTANTE: Para variables Rut, usar: this.utilService.toRut(this.variableRut.value); */ 
 		let WSS_D01_CODFORM :string = "CRDI0";
@@ -406,10 +403,7 @@ export class MenuComponent implements OnInit, AfterViewChecked
 		this.xyz.patchValue(wsResult.getResultString('wss_result_msg'));
 	
 		 */
-		//debugger
-
-
-
+	
 		// A veces el Fault se viene por aca.
 		let hayError: boolean = wsResult.hayError();
 		if (hayError)
@@ -420,14 +414,13 @@ export class MenuComponent implements OnInit, AfterViewChecked
 		} else if (wsResult.getReturnValue()==0){
 			this.utilService.alert(this.dialog,  wsResult.getResultString('wss_result_msg'))
 		} else {
-			this.WSS_D01_AREA = "CRDI0";
+			this.WSS_D01_AREA = 'IMP';
+			// this.WSS_D01_AREA = wsResult.getResultString('wss_D01_AREA').toString().trim();
 			this.WSS_D01_SGM = wsResult.getResultString('wss_D01_SGM').toString().trim();
-
-			console.log("this.WSS_D01_SGM: " + this.WSS_D01_SGM);
-
 			this.WSS_D01_TIP = wsResult.getResultString('wss_D01_TIP').toString().trim();
 			this.WSS_D01_CODNUM = wsResult.getResultString('wss_D01_CODNUM').toString().trim();
 		}
+
 	}
 
 		/**

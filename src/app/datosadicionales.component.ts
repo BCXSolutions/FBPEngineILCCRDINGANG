@@ -3,7 +3,7 @@
 import { AfterViewChecked, Component, OnInit, TemplateRef, ViewChild, ElementRef} from '@angular/core';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { FormBuilder, FormGroup, FormControlName, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControlName, AbstractControl, FormArray, FormControl} from '@angular/forms';
 import { DateAdapter, MatDialog, MatDialogRef } from '@angular/material';
 import { Location } from '@angular/common';
 import { SharedService } from './SharedService.service';
@@ -387,6 +387,8 @@ export class DatosAdicionalesComponent implements OnInit
 	habScroll:any;
 
 	habBtnCursar:any;
+	txtPlazoGrilla:any;
+	txtDiasPlazoGrilla:any
 
 	@ViewChild('grd',{static: true}) table: any;
 	@ViewChild('rightTmpl', {static: true})  rightTmpl: TemplateRef<any>;
@@ -500,11 +502,11 @@ export class DatosAdicionalesComponent implements OnInit
 		this.editing = {};
 		// Definicion de columnas.
 		this.tableCols = [
-			{ prop:'wss_pct_pzo', name:'Porcentaje', width:'20', headerClass:'gridHeader', cellTemplate: this.editable1Tmpl},
-			{ prop:'wss_dia_pzo', name:'Días plazo', width:'20', headerClass:'gridHeader', cellTemplate: this.editable2Tmpl}
+			{ prop:'wss_pct_pzo', name:'Porcentaje', width:'1', headerClass:'gridHeader', cellTemplate: this.editable1Tmpl},
+			{ prop:'wss_dia_pzo', name:'Días plazo', width:'1', headerClass:'gridHeader', cellTemplate: this.editable2Tmpl}
 		];
 
-	debugger
+		
 		this.txtNombre.disable();
 		this.txtNombreBanco.disable();
 		this.btnBancoComyGas = true;
@@ -677,9 +679,11 @@ export class DatosAdicionalesComponent implements OnInit
 		}
 	}
 
-	ofunc_banco_bic(codigoCampo:any) {
+	ofunc_banco_bic(myInput:any) {
 		
 		let myTextAux:string;
+		let codigoCampo:string
+		codigoCampo = this.getname_formcontrolname(myInput);
 		
 		if(codigoCampo == "txtBicRecep"){	
 			myTextAux = this.txtBicRecep.value;				
@@ -1848,6 +1852,7 @@ export class DatosAdicionalesComponent implements OnInit
 	ofunc_enable(opcion){
 		if(opcion == false){
 			this.habBtnCursar = true;
+			this.tableSelected.splice(0, this.tableSelected.length);
 		}
 		
 	}
@@ -2817,7 +2822,6 @@ export class DatosAdicionalesComponent implements OnInit
 		this.contextService.setUserData('varInicioPadre',1);
 		this.contextService.setUserData('varInicio',1);
 		this.contextService.setUserData('varPantalla','');
-		this.contextService.setUserData("varDatosadicionales",'dasnormal');
 		this.contextService.setUserData("cOrde",this.cOrde); 
 		this.location.back();
 	}
@@ -3019,8 +3023,10 @@ export class DatosAdicionalesComponent implements OnInit
  */
 private crdRs200112AliCall(): void
 {
-	this.objetoPadre.chkEnterada.patchValue(this.chkEnterada.value);
-	this.objetoPadre.selecEnterada();		
+	
+	// this.objetoPadre.chbkEnterada.patchValue(this.chbkEnteradaEfectivo.value);
+	// this.objetoPadre.selecEnteradaAux();		
+	this.contextService.setUserData('chbkEnteradaEfectivo', this.chbkEnteradaEfectivo.value);
 	
 	this.getFilas_result();
 	this.bFlagCambioEspecial = true;
@@ -3049,25 +3055,85 @@ private crdRs200112AliCall(): void
 	else
 		wss_for_pag = this.txtFormaPagoBenef.value;
 
-	let wss_vis_pct :string = this.utilService.toDecimal(this.bcxPorcentajeVista.value);
-	let wss_pla_pct :string = this.utilService.toDecimal(this.bcxPorcentajePlazo.value);
+	let wss_vis_pct :string; 
+	if(this.bcxPorcentajeVista.value == '' || this.bcxPorcentajeVista.value == null || this.bcxPorcentajeVista.value == undefined) {
+		wss_vis_pct = this.utilService.toDecimal('0,000000');
+	} else {
+		wss_vis_pct = this.utilService.toDecimal(this.bcxPorcentajeVista.value);
+	}
+	let wss_pla_pct :string;
+	if(this.bcxPorcentajePlazo.value == '' || this.bcxPorcentajePlazo.value == null || this.bcxPorcentajePlazo.value == undefined){
+		wss_pla_pct = this.utilService.toDecimal('0,000000');
+	} else {
+		wss_pla_pct = this.utilService.toDecimal(this.bcxPorcentajePlazo.value);
+	}
+
 	let wss_fec_sol :any = this.utilService.toDate(this.txtFechaSolicitud.value);
 	let wss_icp_ind :string = inte;
 	let wss_icp_tip :string = this.txtTasaProveedor.value;
-	let wss_icp_bas :string = this.utilService.toDecimal(this.bcxValorBase.value);
-	let valorBase:number = Number(this.utilService.toDecimal(this.bcxCostoFondo.value));
-	let spreadSumar:number = Number(this.utilService.toDecimal(this.bcxSpread.value));
-	let resultado:number = valorBase + spreadSumar;				
+	let wss_icp_bas :string; 
+	if(this.bcxValorBase.value == '' || this.bcxValorBase.value == null || this.bcxValorBase.value == undefined){
+		wss_icp_bas = this.utilService.toDecimal('0,000000');
+	} else {
+		wss_icp_bas = this.utilService.toDecimal(this.bcxValorBase.value);
+	}
+	let costoFondo:number;
+	if(this.bcxCostoFondo.value == '' || this.bcxCostoFondo.value == null || this.bcxCostoFondo.value == undefined){
+		costoFondo = Number(this.utilService.toDecimal('0,000000'));
+	} else {
+		costoFondo = Number(this.utilService.toDecimal(this.bcxCostoFondo.value));
+	}
+	let spreadSumar:number;
+	if(this.bcxSpread.value == '' || this.bcxSpread.value==null || this.bcxSpread.value == undefined){
+		spreadSumar= Number(this.utilService.toDecimal('0,000000'));
+	} else {
+		spreadSumar= Number(this.utilService.toDecimal(this.bcxSpread.value));
+	}
+	let resultado:number = costoFondo + spreadSumar;				
 	let wss_icp_spr :any = resultado;
-	let wss_icp_mto :string = this.utilService.toDecimal(this.bcxMonto.value);
-	let wss_tas_ape_neg :string = this.utilService.toDecimal(this.txtDesdeApeANego.value);
-	let wss_tas_neg_vcp :string = this.utilService.toDecimal(this.txtDesdeNegoAVcto.value);
-	let wss_dsd_pzo_rig :string = this.utilService.toString(this.txtPlazoRigeDesde.value);
+	let wss_icp_mto :string;
+	if(this.bcxMonto.value == '' || this.bcxMonto.value == null || this.bcxMonto.value == undefined){
+		wss_icp_mto = this.utilService.toDecimal('0,00');
+	} else {
+		wss_icp_mto = this.utilService.toDecimal(this.bcxMonto.value);
+	}
+	let wss_tas_ape_neg :string; 
+	if(this.txtDesdeApeANego.value == '' || this.txtDesdeApeANego.value == null || this.txtDesdeApeANego.value == undefined){
+		wss_tas_ape_neg = this.utilService.toDecimal('0,000000');
+	} else {
+		wss_tas_ape_neg = this.utilService.toDecimal(this.txtDesdeApeANego.value);
+	}
+	let wss_tas_neg_vcp :string;
+	if(this.txtDesdeNegoAVcto.value == '' || this.txtDesdeNegoAVcto.value == null || this.txtDesdeNegoAVcto.value == undefined){
+		wss_tas_neg_vcp = this.utilService.toDecimal('0,000000');
+	} else {
+		wss_tas_neg_vcp = this.utilService.toDecimal(this.txtDesdeNegoAVcto.value);
+	}
+	let wss_dsd_pzo_rig :string; 
+	if(this.txtPlazoRigeDesde.value == '' || this.txtPlazoRigeDesde.value == null || this.txtPlazoRigeDesde.value == undefined){
+		wss_dsd_pzo_rig = this.utilService.toString('0,000000');
+	}else {
+		wss_dsd_pzo_rig = this.utilService.toString(this.txtPlazoRigeDesde.value);
+	}
 	let wss_int_bco_tip :string = this.txtTasaFinanciamiento.value;
-	let wss_int_bco_bas :string = this.utilService.toDecimal(this.bcxValorBaseBco.value);
-
-	let valorBaseBco:number = Number(this.utilService.toDecimal(this.bcxCostoFondoBco.value));
-	let spreadSumarBco:number = Number(this.utilService.toDecimal(this.bcxSpreadBco.value));
+	let wss_int_bco_bas :string;
+	if(this.bcxValorBaseBco.value == '' || this.bcxValorBaseBco.value == null || this.bcxValorBaseBco.value == undefined){
+		wss_int_bco_bas = this.utilService.toDecimal('0,000000');
+	} else {
+		wss_int_bco_bas = this.utilService.toDecimal(this.bcxValorBaseBco.value);
+	}
+	let valorBaseBco:number;
+	if(this.bcxCostoFondoBco.value == '' || this.bcxCostoFondoBco.value == null || this.bcxCostoFondoBco.value == undefined){
+		valorBaseBco = Number(this.utilService.toDecimal('0,000000'));
+	} else {
+		valorBaseBco = Number(this.utilService.toDecimal(this.bcxCostoFondoBco.value));
+	}
+	let spreadSumarBco:number; 
+	if(this.bcxSpreadBco.value == '' || this.bcxSpreadBco.value == null || this.bcxSpreadBco.value == undefined){
+		spreadSumarBco = Number(this.utilService.toDecimal('0,000000'));
+	} else {
+		spreadSumarBco = Number(this.utilService.toDecimal(this.bcxSpreadBco.value));
+	}
 	let resultadoBco:number = valorBaseBco + spreadSumarBco;	
 	let wss_int_bco_spr :any = resultadoBco;
 	let wss_pla_bco :string = this.txtDiasPlazoBco.value;
@@ -3114,10 +3180,30 @@ private crdRs200112AliCall(): void
 	let wss_ciu_avi :string = this.utilService.toString(this.txtAviCiu.value);
 	let wss_pai_avi :string = this.utilService.toString(this.txtAviPais.value);
 	//Spread + Costo de fondo
-	let wss_tas_cp_cof :string = this.utilService.toDecimal(this.bcxCostoFondo.value);
-	let wss_tas_cp_spr :string = this.utilService.toDecimal(this.bcxSpread.value);
-	let wss_tas_fb_cof :string = this.utilService.toDecimal(this.bcxCostoFondoBco.value);
-	let wss_tas_fb_spr :string = this.utilService.toDecimal(this.bcxSpreadBco.value);
+	let wss_tas_cp_cof :string; 
+	if(this.bcxCostoFondo.value == '' || this.bcxCostoFondo.value == null || this.bcxCostoFondo.value == undefined){
+		wss_tas_cp_cof = this.utilService.toDecimal('0,000000');
+	} else {
+		wss_tas_cp_cof = this.utilService.toDecimal(this.bcxCostoFondo.value);
+	}
+	let wss_tas_cp_spr :string; 
+	if(this.bcxSpread.value == '' || this.bcxSpread.value == null || this.bcxSpread.value == undefined){
+		wss_tas_cp_spr = this.utilService.toDecimal('0,000000');
+	} else {
+		wss_tas_cp_spr = this.utilService.toDecimal(this.bcxSpread.value);
+	}
+	let wss_tas_fb_cof :string; 
+	if(this.bcxCostoFondoBco.value == '' || this.bcxCostoFondoBco.value == null || this.bcxCostoFondoBco.value == undefined){
+		wss_tas_fb_cof = this.utilService.toDecimal('0,000000');
+	} else {
+		wss_tas_fb_cof = this.utilService.toDecimal(this.bcxCostoFondoBco.value);
+	}
+	let wss_tas_fb_spr :string 
+	if(this.bcxSpreadBco.value == '' || this.bcxSpreadBco.value == null || this.bcxSpreadBco.value == undefined){
+		wss_tas_fb_spr = this.utilService.toDecimal('0,000000');
+	} else {
+		wss_tas_fb_spr = this.utilService.toDecimal(this.bcxSpreadBco.value);
+	}
 	let wss_usercode :string = this.user_logueado;
 	
 	// Activamos el simbolo de progress.
@@ -3636,11 +3722,17 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 			habScroll:'',
 			habPorcentajeGrilla:'',
 			habDiasPlazoGrilla:'',
-			habilitarGrilla:''
-
-
+			habilitarGrilla:'',
+			txtPlazoGrilla:'',
+			txtDiasPlazoGrilla:''
 		});
 	}
+
+
+	// get txtPlazoGrilla(): FormArray {
+	// 	return this.form.get('cities') as FormArray;
+	//   }
+	
 
 	/**
 	 * Nombres de controles para simplificar su uso.
@@ -3789,6 +3881,8 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 		this.opacidad = this.form.controls['opacidad'];
 		this.habScroll = this.form.controls['habScroll'];
 		this.habilitarGrilla = this.form.controls['habilitarGrilla'];
+		this.txtPlazoGrilla = this.form.controls['txtPlazoGrilla'];
+		this.txtDiasPlazoGrilla = this.form.controls['txtDiasPlazoGrilla'];
 
 	}
 	/**
@@ -4002,6 +4096,7 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 
 		this.contextService.store(this);
 		//varDocReq.nroTransporte = int(txtViaTransporte.text);
+		
 		this.contextService.setUserData("nroTransporte",this.txtViaTransporte.value);
 		this.contextService.setUserData("numOperacion",this.numOperacion);	
 		this.contextService.setUserData("WSS_D01_SGM",this.WSS_D01_SGM);	
@@ -4344,7 +4439,7 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 
 	ofunc_forma_de_pago():void{
 		if(this.txtFormaPagoBenef.value == '4'){ // 'by Acceptance';
-			this.bcxPorcentajePlazo.value= "100.000000";
+		this.bcxPorcentajePlazo.patchValue("100,000000");
 			if(this.cleanGrilla == 1){					
 				this.ofunc_clean_grid();
 				this.cleanGrilla=0;
@@ -4357,18 +4452,18 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 			this.txtGirPais.patchValue("");	
 			this.txtDetallePagoDiferido.patchValue("");
 			this.txtDetallePagoMixto.patchValue("");	
-			this.bcxPorcentajeVista.patchValue("");	
+			this.bcxPorcentajeVista.patchValue("0,000000");	
 			this.txtTasaProveedor.patchValue("");
 			this.cbbTasaProveedor.patchValue("");
-			this.bcxValorBase.patchValue("");
-			this.bcxSpread.patchValue("");
-			this.bcxCostoFondo.patchValue("");
-			this.bcxMonto.patchValue("");		
+			this.bcxValorBase.patchValue("0,000000");
+			this.bcxSpread.patchValue("0,000000");
+			this.bcxCostoFondo.patchValue("0,000000");
+			this.bcxMonto.patchValue("0,00");		
 			this.chbkInteresCreditoProveedor.patchValue(false);	
 			this.ofunc_hab();		
 		}
 		if(this.txtFormaPagoBenef.value == '2'){ //'by Def payment'
-			this.bcxPorcentajePlazo.patchValue("100.000000");	
+			this.bcxPorcentajePlazo.patchValue("100,000000");	
 			if(this.cleanGrilla == 1){					
 				this.ofunc_clean_grid();
 				this.cleanGrilla=0;
@@ -4381,19 +4476,19 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 			this.txtGirPais.patchValue("");	
 			this.txtDetallePagoDiferido.patchValue("");
 			this.txtDetallePagoMixto.patchValue("");
-			this.bcxPorcentajeVista.patchValue("");	
+			this.bcxPorcentajeVista.patchValue("0,000000");	
 			this.txtTasaProveedor.patchValue("");
 			this.cbbTasaProveedor.patchValue("");											
-			this.bcxValorBase.patchValue("");
-			this.bcxSpread.patchValue("")
-			this.bcxCostoFondo.patchValue("")
-			this.bcxMonto.patchValue("");		
+			this.bcxValorBase.patchValue("0,000000");
+			this.bcxSpread.patchValue("0,000000")
+			this.bcxCostoFondo.patchValue("0,000000")
+			this.bcxMonto.patchValue("0,00");		
 			this.chbkInteresCreditoProveedor.patchValue(false);	
 			this.ofunc_hab();			
 		}
 		if(this.txtFormaPagoBenef.value == '3'){ //'by Mixed payment'
-			this.bcxPorcentajePlazo.patchValue("");
-			this.bcxPorcentajeVista.patchValue("");
+			this.bcxPorcentajePlazo.patchValue("0,000000");
+			this.bcxPorcentajeVista.patchValue("0,000000");
 			if(this.cleanGrilla == 1){					
 				this.ofunc_clean_grid();
 				this.cleanGrilla=0;
@@ -4407,18 +4502,18 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 			this.txtGirPais.patchValue("");	
 			this.txtDetallePagoDiferido.patchValue("");
 			this.txtDetallePagoMixto.patchValue("");
-			this.bcxPorcentajeVista.patchValue("");	
+			this.bcxPorcentajeVista.patchValue("0,000000");	
 			this.txtTasaProveedor.patchValue("");
 			this.cbbTasaProveedor.patchValue("");											
-			this.bcxValorBase.patchValue("");
-			this.bcxSpread.patchValue("")
-			this.bcxCostoFondo.patchValue("")
-			this.bcxMonto.patchValue("");		
+			this.bcxValorBase.patchValue("0,000000");
+			this.bcxSpread.patchValue("0,000000")
+			this.bcxCostoFondo.patchValue("0,000000")
+			this.bcxMonto.patchValue("0,00");		
 			this.chbkInteresCreditoProveedor.patchValue(false);		
 			this.ofunc_hab();			
 		}
 		if(this.txtFormaPagoBenef.value == '5'){ //'by Negotiation'
-			this.bcxPorcentajePlazo.patchValue("100.000000");		
+			this.bcxPorcentajePlazo.patchValue("100,000000");		
 			if(this.cleanGrilla == 1){					
 				this.ofunc_clean_grid();
 				this.cleanGrilla=0;
@@ -4432,18 +4527,18 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 			this.txtGirPais.patchValue("");	
 			this.txtDetallePagoDiferido.patchValue("");
 			this.txtDetallePagoMixto.patchValue("");
-			this.bcxPorcentajeVista.patchValue("");	
+			this.bcxPorcentajeVista.patchValue("0,000000");	
 			this.txtTasaProveedor.patchValue("");
 			this.cbbTasaProveedor.patchValue("");											
-			this.bcxValorBase.patchValue("");
-			this.bcxSpread.patchValue("")
-			this.bcxCostoFondo.patchValue("")
-			this.bcxMonto.patchValue("");		
+			this.bcxValorBase.patchValue("0,000000");
+			this.bcxSpread.patchValue("0,000000")
+			this.bcxCostoFondo.patchValue("0,000000")
+			this.bcxMonto.patchValue("0,00");		
 			this.chbkInteresCreditoProveedor.patchValue(false);		
 			this.ofunc_hab();	
 		}
 		if(this.txtFormaPagoBenef.text == '1'){ //'by Payment'
-			this.bcxPorcentajePlazo.patchValue("100.000000");	
+			this.bcxPorcentajePlazo.patchValue("100,000000");	
 			if(this.cleanGrilla == 1){					
 				this.ofunc_clean_grid();
 				this.cleanGrilla=0;
@@ -4457,13 +4552,13 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 			this.txtGirPais.patchValue("");	
 			this.txtDetallePagoDiferido.patchValue("");
 			this.txtDetallePagoMixto.patchValue("");
-			this.bcxPorcentajeVista.patchValue("");	
+			this.bcxPorcentajeVista.patchValue("0,000000");	
 			this.txtTasaProveedor.patchValue("");
 			this.cbbTasaProveedor.patchValue("");											
-			this.bcxValorBase.patchValue("");
-			this.bcxSpread.patchValue("")
-			this.bcxCostoFondo.patchValue("")
-			this.bcxMonto.patchValue("");		
+			this.bcxValorBase.patchValue("0,000000");
+			this.bcxSpread.patchValue("0,000000")
+			this.bcxCostoFondo.patchValue("0,000000")
+			this.bcxMonto.patchValue("0,00");		
 			this.chbkInteresCreditoProveedor.patchValue(false);	
 			this.ofunc_hab();		
 		}
@@ -4634,13 +4729,14 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 		if(arrAutomata[5] == true){
 			this.habPorcentajeGrilla.patchValue(false);
 			this.habDiasPlazoGrilla.patchValue(false);
-			this.ofunc_clean_grid();
+			//this.ofunc_clean_grid();
 			this.opacidad.patchValue('');
  		} else {			 
 			this.habPorcentajeGrilla.patchValue(true);
 			this.habDiasPlazoGrilla.patchValue(true);		
+			this.tableRowsTemp = [];
 			this.tableRows = [];
-			this.tableRows = [];
+			//this.ofunc_clean_grid();
 			this.opacidad.patchValue('0.7');
 		}
 
@@ -5275,14 +5371,28 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 	}
 
 	updateValue(event:any, cell, rowIndex){
-		
+		debugger
 			console.log('inline editing rowIndex', rowIndex);
 			this.editing[rowIndex + '-' + cell] = false;
-			this.tableRowsTemp[rowIndex][cell] = event.target.value;
+			if(cell == 'wss_pct_pzo'){		
+				this.tableRowsTemp[rowIndex][cell] = this.utilService.editNumber(Number(this.utilService.toDecimal(event.target.value)),2);
+			}else if(cell == 'wss_dia_pzo'){
+				this.tableRowsTemp[rowIndex][cell] = event.target.value;
+			}						
 			this.tableRowsTemp = [...this.tableRowsTemp];
 			console.log('UPDATED!', this.tableRowsTemp[rowIndex][cell]);
 			this.tableRows = this.tableRowsTemp;
 	}
+
+// 	updateValueDias(event:any, cell, rowIndex){
+		
+// 		console.log('inline editing rowIndex', rowIndex);
+// 		this.editing[rowIndex + '-' + cell] = false;
+// 		this.tableRowsTemp[rowIndex][cell] = event.target.value;
+// 		this.tableRowsTemp = [...this.tableRowsTemp];
+// 		console.log('UPDATED!', this.tableRowsTemp[rowIndex][cell]);
+// 		this.tableRows = this.tableRowsTemp;
+// }
 
 
 	ofunc_hab() {
@@ -6410,7 +6520,7 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 				else
 					myArray[0]=0;
 				myArray[1]=this.numOperacion;
-				myArray[2]=this.tableRows[numero].wss_pct_pzo;
+				myArray[2]=this.utilService.toDecimal(this.tableRows[numero].wss_pct_pzo);
 				myArray[3]=this.tableRows[numero].wss_dia_pzo;
 
 				// { wss_pct_pzo:'',wss_dia_pzo: ''},
@@ -6537,8 +6647,19 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 			this.utilService.alert(this.dialog, msg + ' [' + code + ']');
 		} else {
 
-			wsResult.formatDecAdd('wss_pct_pzo', 2);
+
+			// let cbbSucursalOperacionAuxArray:any[]=[];
+			// cbbSucursalOperacionAuxArray = wsResult.getTableRows();
+			// cbbSucursalOperacionAuxArray = cbbSucursalOperacionAuxArray.filter(v => {
+			// 	return v.wss_cod_suc = v.wss_cod_suc.toString().trim(); 
+			// });
+
+			//wsResult.formatDecAdd('wss_pct_pzo', 2);
 			tableRowsAux = wsResult.getTableRows();
+			tableRowsAux = tableRowsAux.filter(v => {
+				return v.wss_pct_pzo = this.utilService.editNumber(v.wss_pct_pzo);
+			});
+
 			tablaRowslenght = tableRowsAux.length;
 			tablaRowsTemplenght = this.tableRowsTemp.length;
 
@@ -7099,15 +7220,18 @@ crdRs200112DliResult(wsResult :CmWsResult): void
 
 		seleccion_de_formulario(){
 
-			debugger
-				if(this.financiamiento_indicador_opcion == 'Detalle') {
-					this.objetoPadre.limpiar_campos_formularios();
+		
+				if(this.financiamiento_indicador_opcion == 'Detalle') {					
+					this.contextService.setUserData('varPantalla','');
+					this.objetoPadre.cmdLimpiar_click();
 					this.router.navigate(['/abrircartacredito']);
 				}else if(this.financiamiento_indicador_opcion == 'Preingreso'){
-					this.objetoPadre.limpiar_campos_formularios();
+					this.contextService.setUserData('varPantalla','');
+					this.objetoPadre.cmdLimpiar_click();
 					this.router.navigate(['/preingreso']);		
 				} else {		
-					this.objetoPadre.limpiar_campos_formularios();
+					this.contextService.setUserData('varPantalla','');
+					this.objetoPadre.cmdLimpiar_click();
 					this.router.navigate(['/ingresocartacredito']);
 				}
 				this.waitShow = false;

@@ -39,7 +39,7 @@
 				<bcx-numero [tabindex]="2" formControlName="bcxPorcentajeVista" (focusout)="ofunc_validar_tasa(this.bcxPorcentajeVista)" placeholder="Porcentaje vista" maxlength="11" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
-				<bcx-numero [tabindex]="3" formControlName="bcxPorcentajePlazo" (focusout)="ofunc_eval_porce();ofunc_validar_tasa(this.bcxPorcentajeVista)" placeholder="Porcentaje plazo" maxlength="11" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
+				<bcx-numero [tabindex]="3" formControlName="bcxPorcentajePlazo" (focusout)="ofunc_eval_porce();ofunc_validar_tasa(this.bcxPorcentajePlazo)" placeholder="Porcentaje plazo" maxlength="11" separador="true" decimales="6" mat-error="Valor Incorrecto"></bcx-numero>
 			</div>
 		</div>
 		</div>
@@ -78,7 +78,7 @@
 			</div>
 			<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
 				
-				<ngx-datatable #grd class="material" [ngStyle]="{'width':'260px' , 'height':'200px' ,'opacity':this.opacidad.value}" 
+				<ngx-datatable #grd class="material" style="width:250px; height:200px" [ngStyle]="{'opacity':this.opacidad.value}" 
 					 [rows]="tableRows"
 					 [columns]="tableCols"
 					 [scrollbarV]="true"
@@ -88,7 +88,7 @@
 					 [columnMode]="ColumnMode.force" 
 					 [limit]="20"									 
 					 [scrollbarH]="false"
-					 (select)="onTableSelect($event)"
+					
 					 (activate)="onTableActivate($event)"
 					 (scroll)="onTableScroll($event)"
 					 (sort)="onTableSort($event)">
@@ -101,14 +101,15 @@
 					<div style='text-align: center'>{{value}}</div>
 				</ng-template>
 				<ng-template #editable1Tmpl let-rowIndex="rowIndex" let-value="value" let-row="row">
+					<!-- <bcx-numero placeholder="" formControlName="txtPlazoGrilla" (focusout)="updateValue($event, 'wss_pct_pzo', rowIndex)" maxlength="3" separador="true" decimales="2" ></bcx-numero> -->
 					<mat-form-field>
-						<!-- <bcx-numero formControlName="txtPlazoGrilla" (focusout)="updateValue($event, 'wss_pct_pzo', rowIndex)" maxlength="3" separador="true" decimales="2"></bcx-numero> -->
-						<input matInput [disabled]="this.habPorcentajeGrilla.value" width="10" maxlength="3"  (focusout)="updateValue($event, 'wss_pct_pzo', rowIndex)" type="text" [value]="value"/>
-					</mat-form-field>
+					<input matInput (focusout)="updateValue($event, 'wss_pct_pzo', rowIndex)" maxlength="3" type="text" [value]="value"/>
+					</mat-form-field>	 
 				</ng-template>
-				<ng-template #editable2Tmpl let-rowIndex="rowIndex" let-value="value" let-row="row">
+				<ng-template #editable2Tmpl let-rowIndex="rowIndex" let-value="value" let-row="row">	
+					<!-- <bcx-numero placeholder="" formControlName="txtDiasPlazoGrilla" (focusout)="updateValue($event, 'wss_dia_pzo', rowIndex)" maxlength="3" separador="true" decimales="0" ></bcx-numero> -->
 					<mat-form-field>
-						<input matInput [disabled]="this.habDiasPlazoGrilla.value" width="10" maxlength="3"  (focusout)="updateValue($event, 'wss_dia_pzo', rowIndex)" type="text" [value]="value"/>
+					<input matInput (focusout)="updateValue($event, 'wss_dia_pzo', rowIndex)" maxlength="3" type="text" [value]="value"/>
 					</mat-form-field>
 				</ng-template> 
 			</div>

@@ -160,7 +160,7 @@ export class DocumentosRequeridosComponent implements OnInit, AfterViewChecked
 		// 	{ wss_txt_cor:'', wss_txt_cod:'', wss_txt_gls:'',wss_txt_ori: '', wss_txt_cop:'', wss_txt_ind:''},
 
 		//   ];
-
+		debugger
 		
 		this.nroTransporte = this.contextService.getUserData("nroTransporte");
 		this.numOperacion = this.contextService.getUserData("numOperacion");	
